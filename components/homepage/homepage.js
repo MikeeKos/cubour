@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import useMeasure from "react-use-measure";
 import { motion } from "framer-motion";
 import HomepageButton from "./homepage-button";
@@ -51,6 +51,23 @@ function Homepage() {
     </motion.svg>
   );
 
+  const desktopReflectorSVG = (
+    // <motion.svg
+    //   xmlns="http://www.w3.org/2000/svg"
+    //   viewBox="-3.75 -47 93.75 47"
+    //   className="w-[90rem] absolute fill-pageMenu"
+    // >
+    //   <path d="M0 0h4c1 0 1-1 0-1H1v-43l3-3H3l-3 3v43h-3c-1 0-1 1 0 1h3m5-42l2-2-2-2c-1-1-3 1-2 2l2 2m3-2l-3 3v1l4-4H8m-3 5L34 0h56v-30L10-44l-5 5"></path>
+    // </motion.svg>
+    <motion.svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="-3.75 -47 93.75 47"
+      className="w-[90rem] absolute fill-pageMenu"
+    >
+      <path d="M0 0h4c1 0 1-1 0-1H1v-43l3-3H3l-3 3v43h-3c-1 0-1 1 0 1h3m5-42l2-2-2-2c-1-1-3 1-2 2l2 2m3-2l-3 3v1l4-4H8m-3 5L34 0h56v-26L10-44l-5 5"></path>
+    </motion.svg>
+  );
+
   const cubourSVG = (
     <div className="w-full h-[15rem]">
       <div className="w-full h-full flex items-center justify-center flex-row mix-blend-difference mt-7">
@@ -64,7 +81,7 @@ function Homepage() {
             repeatType: "mirror",
             duration: 5,
           }}
-          className="text-page2 font-extrabold text-7xl sm:text-8xl tracking-wider"
+          className="text-page2 font-extrabold text-7xl sm:text-8xl md:text-9xl tracking-wider"
         >
           Cub
         </motion.span>
@@ -82,7 +99,7 @@ function Homepage() {
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
             viewBox="0 0 24 24"
-            className="w-[3.7rem] sm:w-[4.5rem] fill-page4 mt-2"
+            className="w-[3.7rem] sm:w-[4.5rem] md:w-[6rem] fill-page4 mt-2"
           >
             <motion.path
               className="stroke-page2"
@@ -104,7 +121,7 @@ function Homepage() {
             repeatType: "mirror",
             duration: 5,
           }}
-          className="text-page2 font-extrabold text-7xl sm:text-8xl tracking-wider"
+          className="text-page2 font-extrabold text-7xl sm:text-8xl md:text-9xl tracking-wider"
         >
           ur
         </motion.span>
@@ -244,17 +261,31 @@ function Homepage() {
     <React.Fragment>
       <main
         ref={ref}
-        className="relative font-page w-screen min-h-screen bg-page1 overflow-hidden md:bg-pageWhite"
+        className="relative font-page w-screen min-h-screen bg-page1 overflow-hidden"
       >
-        {reflectorSVG}
+        {width > 768 && (
+          <div className="absolute w-full h-full z-10 mix-blend-difference">
+            <div className="flex justify-end">
+              <div className="h-[49rem] w-[20rem]">
+                {primaryLeafSVG}
+                {secondaryLeafSVG}
+                {nextLeafSVG}
+                {commonLeafSVG}
+                {lastLeafSVG}
+              </div>
+            </div>
+          </div>
+        )}
+        {width <= 768 && reflectorSVG}
+        {width > 768 && desktopReflectorSVG}
         {cubourSVG}
         {primaryLeafSVG}
         {secondaryLeafSVG}
         {nextLeafSVG}
         {commonLeafSVG}
         {lastLeafSVG}
-        <div className="relative inline-block w-full min-h-[25rem]">
-          <div className="absolute w-full h-full grid grid-rows-4">
+        <div className="relative inline-block w-full md:w-2/3 lg:w-1/2 min-h-[25rem]">
+          <div className="absolute w-full h-full grid grid-rows-4 z-50">
             <HomepageButton text={"play"} />
             <HomepageButton text={"tutorial"} />
             <HomepageButton text={"leaderboard"} />
