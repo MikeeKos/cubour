@@ -1,9 +1,10 @@
 import React from "react";
+import MainGame from "../../components/play/main-game";
 
 function Play() {
   return (
     <React.Fragment>
-      <div>Play</div>
+      <MainGame />
     </React.Fragment>
   );
 }
