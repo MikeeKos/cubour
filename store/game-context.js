@@ -6,9 +6,6 @@ const GameContext = createContext({
   isBottomGameOver: null,
   isLeftGameOver: null,
   isGameOver: null,
-  // notification: null, // {title, message, status}
-  // showNotification: function (notificationData) {},
-  // hideNotification: function () {},
 });
 
 export function GameContextProvider(props) {
