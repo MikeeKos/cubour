@@ -14,6 +14,7 @@ function Block(props) {
   // />;
 
   // const [ref, { height, width }] = useMeasure();
+  const device = 4;
 
   const isEven = (props.i + props.j) % 2 !== 0;
   const bgColorClass = isEven ? "bg-page2" : "bg-page4";
