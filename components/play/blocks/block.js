@@ -1,23 +1,80 @@
-import React from "react";
+import React, { useEffect, useContext } from "react";
+import GameContext from "../../../store/game-context";
 
 function Block(props) {
-  // <Block
-  //   key={`row${i}col${j}`}
-  //   i={row}
-  //   j={col}
-  //   top={top}
-  //   right={right}
-  //   bottom={bottom}
-  //   left={left}
-  //   gridCount={dynamicGridCount}
-  //   isSelected={true}
-  // />;
-
-  // const [ref, { height, width }] = useMeasure();
-  const device = 4;
-
+  const gameCtx = useContext(GameContext);
   const isEven = (props.i + props.j) % 2 !== 0;
   const bgColorClass = isEven ? "bg-page2" : "bg-page4";
+
+  useEffect(() => {
+    if (props.isSelected) {
+      const pointPositionI = gameCtx.pointPosition.x;
+      const pointPositionJ = gameCtx.pointPosition.y;
+      if (pointPositionI === 0 || pointPositionJ === 0 || pointPositionI === props.gridCount - 1 || pointPositionJ === props.gridCount - 1) {
+        const handleKeyDown = (event) => {
+          switch (event.key) {
+            case "ArrowUp":
+            case "w":
+              if (pointPositionJ === 0) {
+                gameCtx.setIsGameOver(true);
+              }
+              break;
+            case "ArrowRight":
+            case "d":
+              if (pointPositionI === props.gridCount - 1) {
+                gameCtx.setIsGameOver(true);
+              }
+              break;
+            case "ArrowDown":
+            case "s":
+              if (pointPositionJ === props.gridCount - 1) {
+                gameCtx.setIsGameOver(true);
+              }
+              break;
+            case "ArrowLeft":
+            case "a":
+              if (pointPositionI === 0) {
+                gameCtx.setIsGameOver(true);
+              }
+              break;
+            default:
+              break;
+          }
+        };
+
+        window.addEventListener("keydown", handleKeyDown);
+
+        return () => {
+          window.removeEventListener("keydown", handleKeyDown);
+        };
+      }
+
+      switch (gameCtx.keyPressed) {
+        case "up":
+          if (gameCtx.grid[pointPositionJ + 1][pointPositionI].top) {
+            gameCtx.setIsGameOver(true);
+          }
+          break;
+        case "right":
+          if (gameCtx.grid[pointPositionJ][pointPositionI - 1].right) {
+            gameCtx.setIsGameOver(true);
+          }
+          break;
+        case "down":
+          if (gameCtx.grid[pointPositionJ - 1][pointPositionI].bottom) {
+            gameCtx.setIsGameOver(true);
+          }
+          break;
+        case "left":
+          if (gameCtx.grid[pointPositionJ][pointPositionI + 1].left) {
+            gameCtx.setIsGameOver(true);
+          }
+          break;
+        default:
+          break;
+      }
+    }
+  }, [props.isSelected, gameCtx.keyPressed, gameCtx.keyPressedCount]);
 
   const pawn = (
     <svg
@@ -84,7 +141,12 @@ function Block(props) {
         >
           <div className="w-full h-full relative">
             <div className="relative w-full h-full flex items-center justify-center">
-              <div className="absolute w-full h-full justify-center items-center">{props.isSelected && <div>{pawn}</div>}</div>
+              <div className="absolute z-50 w-full h-full justify-center items-center">
+                {props.isSelected && <div>{pawn}</div>}
+              </div>
+              <div className="absolute w-full h-full">
+                {props.styleChange}
+              </div>
               <div className="w-full h-full relative">
                 <div className="absolute flex w-full h-full justify-end items-end">
                   <div className="right-0 bottom-0 translate-x-1 translate-y-1">
@@ -116,10 +178,3 @@ function Block(props) {
 }
 
 export default Block;
-
-{
-  /* <div className="w-full h-full block">
-                <div className="font-page text-[8px]">{props.i}</div>
-                <div className="font-page text-[8px]">{props.j}</div>
-              </div> */
-}

@@ -1,51 +1,48 @@
-import { createContext, useState, useEffect } from "react";
+import React, { createContext, useState } from "react";
 
 const GameContext = createContext({
-  isTopGaveOver: null,
-  isRightGameOver: null,
-  isBottomGameOver: null,
-  isLeftGameOver: null,
-  isGameOver: null,
+  keyPressed: null,
+  isGameOver: false,
+  grid: [],
+  pointPosition: { x: 0, y: 0 },
+  keyPressedCount: 0,
+  win: false,
+  setKeyPressed: () => {},
+  setIsGameOver: () => {},
+  setGrid: () => {},
+  setPointPosition: () => {},
+  setKeyPressedCount: () => {},
+  setWin: () => {},
 });
 
 export function GameContextProvider(props) {
-  // const [activeNotification, setActiveNotification] = useState();
+  const [keyPressed, setKeyPressed] = useState(null);
+  const [isGameOver, setIsGameOver] = useState(false);
+  const [grid, setGrid] = useState([]);
+  const [pointPosition, setPointPosition] = useState({ x: 0, y: 0 });
+  const [keyPressedCount, setKeyPressedCountState] = useState(0);
+  const [win, setWin] = useState(false);
 
-  // useEffect(() => {
-  //   if (
-  //     activeNotification &&
-  //     (activeNotification.status === "success" ||
-  //       activeNotification.status === "error")
-  //   ) {
-  //     const timer = setTimeout(() => {
-  //       setActiveNotification(null);
-  //     }, 3000);
-
-  //     return () => {
-  //       clearTimeout(timer);
-  //     };
-  //   }
-  // }, [activeNotification]);
-
-  // function showNotificationHandler(notificationData) {
-  //   setActiveNotification(notificationData);
-  // }
-
-  // function hideNotificationHandler() {
-  //   setActiveNotification(null);
-  // }
-
-  const context = {
-    // notification: activeNotification,
-    // showNotification: showNotificationHandler,
-    // hideNotification: hideNotificationHandler,
+  const setKeyPressedCount = () => {
+    setKeyPressedCountState(prevCount => prevCount + 1);
   };
 
-  return (
-    <GameContext.Provider value={context}>
-      {props.children}
-    </GameContext.Provider>
-  );
+  const context = {
+    keyPressed,
+    isGameOver,
+    grid,
+    pointPosition,
+    keyPressedCount,
+    win,
+    setKeyPressed,
+    setIsGameOver,
+    setGrid,
+    setPointPosition,
+    setKeyPressedCount,
+    setWin,
+  };
+
+  return <GameContext.Provider value={context}>{props.children}</GameContext.Provider>;
 }
 
-export default NotificationContext;
+export default GameContext;
