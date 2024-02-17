@@ -12,7 +12,7 @@ function EndBlock(props) {
   }, [gameCtx]);
 
   const checkered = (
-    <div className="w-full h-full flex items-center justify-center opacity-50">
+    <div className="w-full h-full flex items-center justify-center opacity-30">
       <svg
         className="fill-pageMenu animate-pulse"
         xmlns="http://www.w3.org/2000/svg"
