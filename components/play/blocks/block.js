@@ -10,6 +10,32 @@ function Block(props) {
     if (props.isSelected) {
       const pointPositionI = gameCtx.pointPosition.x;
       const pointPositionJ = gameCtx.pointPosition.y;
+
+      switch (gameCtx.keyPressed) {
+        case "up":
+          if (gameCtx.grid[pointPositionJ + 1][pointPositionI].top) {
+            gameCtx.setIsGameOver(true);
+          }
+          break;
+        case "right":
+          if (gameCtx.grid[pointPositionJ][pointPositionI - 1].right) {
+            gameCtx.setIsGameOver(true);
+          }
+          break;
+        case "down":
+          if (gameCtx.grid[pointPositionJ - 1][pointPositionI].bottom) {
+            gameCtx.setIsGameOver(true);
+          }
+          break;
+        case "left":
+          if (gameCtx.grid[pointPositionJ][pointPositionI + 1].left) {
+            gameCtx.setIsGameOver(true);
+          }
+          break;
+        default:
+          break;
+      }
+
       if (pointPositionI === 0 || pointPositionJ === 0 || pointPositionI === props.gridCount - 1 || pointPositionJ === props.gridCount - 1) {
         const handleKeyDown = (event) => {
           switch (event.key) {
@@ -48,33 +74,8 @@ function Block(props) {
           window.removeEventListener("keydown", handleKeyDown);
         };
       }
-
-      switch (gameCtx.keyPressed) {
-        case "up":
-          if (gameCtx.grid[pointPositionJ + 1][pointPositionI].top) {
-            gameCtx.setIsGameOver(true);
-          }
-          break;
-        case "right":
-          if (gameCtx.grid[pointPositionJ][pointPositionI - 1].right) {
-            gameCtx.setIsGameOver(true);
-          }
-          break;
-        case "down":
-          if (gameCtx.grid[pointPositionJ - 1][pointPositionI].bottom) {
-            gameCtx.setIsGameOver(true);
-          }
-          break;
-        case "left":
-          if (gameCtx.grid[pointPositionJ][pointPositionI + 1].left) {
-            gameCtx.setIsGameOver(true);
-          }
-          break;
-        default:
-          break;
-      }
     }
-  }, [props.isSelected, gameCtx.keyPressed, gameCtx.keyPressedCount]);
+  }, [props.isSelected, gameCtx.keyPressed, gameCtx.keyPressedCount, gameCtx.pointPosition]);
 
   const pawn = (
     <svg
