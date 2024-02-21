@@ -7,12 +7,22 @@ const GameContext = createContext({
   pointPosition: { x: 0, y: 0 },
   keyPressedCount: 0,
   win: false,
+  isTeleporting: false,
+  firstTeleportEndPoint: { x: 0, y: 0 },
+  secondTeleportEndPoint: { x: 0, y: 0 },
+  firstVisitBlockCount: 0,
+  secondVisitBlockCount: 0,
   setKeyPressed: () => {},
   setIsGameOver: () => {},
   setGrid: () => {},
   setPointPosition: () => {},
   setKeyPressedCount: () => {},
   setWin: () => {},
+  setIsTeleporting: () => {},
+  setFirstTeleportEndPoint: () => {},
+  setSecondTeleportEndPoint: () => {},
+  setFirstVisitBlockCount: () => {},
+  setSecondVisitBlockCount: () => {},
 });
 
 export function GameContextProvider(props) {
@@ -22,9 +32,20 @@ export function GameContextProvider(props) {
   const [pointPosition, setPointPosition] = useState({ x: 0, y: 0 });
   const [keyPressedCount, setKeyPressedCountState] = useState(0);
   const [win, setWin] = useState(false);
+  const [isTeleporting, setIsTeleporting] = useState(false);
+  const [firstTeleportEndPoint, setFirstTeleportEndPoint] = useState({
+    x: 0,
+    y: 0,
+  });
+  const [secondTeleportEndPoint, setSecondTeleportEndPoint] = useState({
+    x: 0,
+    y: 0,
+  });
+  const [firstVisitBlockCount, setFirstVisitBlockCount] = useState(0);
+  const [secondVisitBlockCount, setSecondVisitBlockCount] = useState(0);
 
   const setKeyPressedCount = () => {
-    setKeyPressedCountState(prevCount => prevCount + 1);
+    setKeyPressedCountState((prevCount) => prevCount + 1);
   };
 
   const context = {
@@ -34,15 +55,29 @@ export function GameContextProvider(props) {
     pointPosition,
     keyPressedCount,
     win,
+    isTeleporting,
+    firstTeleportEndPoint,
+    secondTeleportEndPoint,
+    firstVisitBlockCount,
+    secondVisitBlockCount,
     setKeyPressed,
     setIsGameOver,
     setGrid,
     setPointPosition,
     setKeyPressedCount,
     setWin,
+    setIsTeleporting,
+    setFirstTeleportEndPoint,
+    setSecondTeleportEndPoint,
+    setFirstVisitBlockCount,
+    setSecondVisitBlockCount,
   };
 
-  return <GameContext.Provider value={context}>{props.children}</GameContext.Provider>;
+  return (
+    <GameContext.Provider value={context}>
+      {props.children}
+    </GameContext.Provider>
+  );
 }
 
 export default GameContext;

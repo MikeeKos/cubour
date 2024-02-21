@@ -7,6 +7,10 @@ function Block(props) {
   const bgColorClass = isEven ? "bg-page2" : "bg-page4";
 
   useEffect(() => {
+    if (gameCtx.isTeleporting) {
+      return;
+    }
+
     if (props.isSelected) {
       const pointPositionI = gameCtx.pointPosition.x;
       const pointPositionJ = gameCtx.pointPosition.y;

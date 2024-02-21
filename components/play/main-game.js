@@ -6,14 +6,24 @@ import GameContext from "../../store/game-context";
 import NormalBlock from "./blocks/normal";
 import StartBlock from "./blocks/start";
 import EndBlock from "./blocks/end";
-import FlashingBlock from "./blocks/flashing";
-import FastFlashingBlock from "./blocks/fast-flashing";
+import FlashingBlock from "./blocks/flashing/flashing";
+import FastFlashingBlock from "./blocks/flashing/fast-flashing";
+import XFasterFlashingBlock from "./blocks/flashing/x-faster-flashing";
+import XFastestFlashingBlock from "./blocks/flashing/x-fastest-flashing";
+import TeleportBlock from "./blocks/teleport/teleport";
+import TeleportEndPointBlock from "./blocks/teleport/teleport-end-point";
+import SecondTeleportBlock from "./blocks/teleport/second-teleport";
+import SecondTeleportEndPointBlock from "./blocks/teleport/second-teleport-endpoint";
+import VisitBlock from "./blocks/visit/visit";
+import VisitTargetBlock from "./blocks/visit/visit-target";
+import SecondVisitBlock from "./blocks/visit/second-visit";
+import SecondVisitTargetBlock from "./blocks/visit/second-visit-target";
 // import { motion } from "framer-motion";
 
 function MainGame() {
   const dynamicGridCount = 10;
   const inputString =
-    "f0000ffffn0001ffffs0002ffffn0003ffffn0004ffffn0005ffffe0006ffffn0007ftftn0008ffttn0009ffffn0100ffftn0101tfftn0102ffffn0103ttftF0104ftttn0105ftffn0106fttfn0107ffffn0108tttfn0109ffffn0200tfffn0201ffffn0202ffftn0203ttffn0204ftffn0205tttfn0206ffffn0207ttttn0208ffftn0209ffffn0300ttffn0301ttttn0302ftttn0303tftfn0304ttffn0305tfftn0306ftttn0307tfttn0308tttfn0309ffffn0400tttfn0401ttttn0402tfttn0403tfffn0404ffftn0405ftttn0406ttffn0407ftffn0408fttfn0409ftffn0500fftfn0501ttttn0502ftffn0503fftfn0504tfftn0505ffttn0506ftffn0507ttffn0508tftfn0509ttttn0600ffttn0601ftttn0602ftffn0603ffffn0604ffffn0605tfftn0606ffttn0607ttftn0608tftfn0609tfffn0700fttfn0701ttffn0702ttffn0703ffttn0704ttttn0705ftffn0706ftffn0707ffffn0708ftttn0709tfttn0800ffftn0801fftfn0802tfttn0803tttfn0804fttfn0805ttffn0806tfffn0807ffttn0808ftftn0809fttfn0900ttffn0901ttffn0902tttfn0903ffttn0904tttfn0905tfftn0906tttfn0907fttfn0908ftftn0909tttt";
+    "X0000ffffn0001ffffs0002ffffn0003ffffn0004ffffn0005ffffe0006ffffn0007ffftn0008ffffW0009ffffn0100ffftn0101tfftw0102ffffn0103ttftt0104ftttn0105ffffn0106ffffn0107ffffn0108tttfn0109ffffo0200tfffn0201fffff0202ffftn0203ttffn0204ftffn0205tttfV0206ffffn0207ttttv0208ffftn0209ffffn0300ttffn0301ttttF0302ffffn0303tftfn0304ttffn0305tfftn0306ffffn0307tfttn0308tttfn0309ffffn0400tttfn0401ttttx0402ffffn0403tfffn0404ffftn0405ftttT0406ffffn0407ftffn0408fttfO0409ftffn0500fftfn0501ttttX0502ftffn0503fftfn0504tfftn0505ffttn0506ftffn0507ttffn0508tftfn0509ttttn0600ffttn0601ftttn0602ftffn0603ffffn0604ffffn0605tfftn0606ffttn0607ttftn0608tftfn0609tfffn0700fttfn0701ttffn0702ttffn0703ffttn0704ttttn0705ftffn0706ftffn0707ffffn0708ftttn0709tfttn0800ffftn0801fftfn0802tfttn0803tttfn0804fttfn0805ttffn0806tfffn0807ffttn0808ftftn0809fttfn0900ttffn0901ttffn0902tttfn0903ffttn0904tttfn0905tfftn0906tttfn0907fttfn0908ftftn0909tttt";
 
   const [ref, { height, width }] = useMeasure();
   const gameCtx = useContext(GameContext);
@@ -49,6 +59,14 @@ function MainGame() {
         const right = substring[6];
         const bottom = substring[7];
         const left = substring[8];
+
+        if (type === "T") {
+          gameCtx.setFirstTeleportEndPoint({ x: col, y: row })
+        }
+
+        if (type === "O") {
+          gameCtx.setSecondTeleportEndPoint({ x: col, y: row })
+        }
 
         if (type === "s") {
           startingColumn = col;
@@ -339,6 +357,16 @@ function MainGame() {
       e: EndBlock,
       f: FlashingBlock,
       F: FastFlashingBlock,
+      x: XFasterFlashingBlock,
+      X: XFastestFlashingBlock,
+      t: TeleportBlock,
+      T: TeleportEndPointBlock,
+      o: SecondTeleportBlock,
+      O: SecondTeleportEndPointBlock,
+      v: VisitBlock,
+      V: VisitTargetBlock,
+      w: SecondVisitBlock,
+      W: SecondVisitTargetBlock,
     };
 
     return result.flatMap((row, i) =>
