@@ -3,6 +3,7 @@ import useMeasure from "react-use-measure";
 // import Block from "./blocks/block";
 import Grid from "./grid";
 import GameContext from "../../store/game-context";
+import SpecialBlockContext from "../../store/special-block-context";
 import NormalBlock from "./blocks/normal";
 import StartBlock from "./blocks/start";
 import EndBlock from "./blocks/end";
@@ -18,12 +19,13 @@ import VisitBlock from "./blocks/visit/visit";
 import VisitTargetBlock from "./blocks/visit/visit-target";
 import SecondVisitBlock from "./blocks/visit/second-visit";
 import SecondVisitTargetBlock from "./blocks/visit/second-visit-target";
+import RightSpecial from "./blocks/special/right";
 // import { motion } from "framer-motion";
 
 function MainGame() {
   const dynamicGridCount = 10;
   const inputString =
-    "X0000ffffn0001ffffs0002ffffn0003ffffn0004ffffn0005ffffe0006ffffn0007ffftn0008ffffW0009ffffn0100ffftn0101tfftw0102ffffn0103ttftt0104ftttn0105ffffn0106ffffn0107ffffn0108tttfn0109ffffo0200tfffn0201fffff0202ffftn0203ttffn0204ftffn0205tttfV0206ffffn0207ttttv0208ffftn0209ffffn0300ttffn0301ttttF0302ffffn0303tftfn0304ttffn0305tfftn0306ffffn0307tfttn0308tttfn0309ffffn0400tttfn0401ttttx0402ffffn0403tfffn0404ffftn0405ftttT0406ffffn0407ftffn0408fttfO0409ftffn0500fftfn0501ttttX0502ftffn0503fftfn0504tfftn0505ffttn0506ftffn0507ttffn0508tftfn0509ttttn0600ffttn0601ftttn0602ftffn0603ffffn0604ffffn0605tfftn0606ffttn0607ttftn0608tftfn0609tfffn0700fttfn0701ttffn0702ttffn0703ffttn0704ttttn0705ftffn0706ftffn0707ffffn0708ftttn0709tfttn0800ffftn0801fftfn0802tfttn0803tttfn0804fttfn0805ttffn0806tfffn0807ffttn0808ftftn0809fttfn0900ttffn0901ttffn0902tttfn0903ffttn0904tttfn0905tfftn0906tttfn0907fttfn0908ftftn0909tttt";
+    "X0000ffffn0001ffffs0002ffffn0003ffffn0004ffffn0005ffffe0006ffffr0007ffftn0008ffffW0009ffffn0100ffftn0101tfftw0102ffffn0103ttftt0104ftttn0105ffffn0106ffffn0107ffffn0108tttfn0109ffffo0200tfffn0201fffff0202ffftn0203ttffn0204ftffn0205tttfV0206ffffn0207ttttv0208ffftn0209ffffn0300ttffn0301ttttF0302ffffn0303tftfn0304ttffn0305tfftn0306ffffn0307tfttn0308tttfn0309ffffn0400tttfn0401ttttx0402ffffn0403tfffn0404ffftn0405ftttT0406ffffn0407ftffn0408fttfO0409ftffn0500fftfn0501ttttX0502ftffn0503fftfn0504tfftn0505ffttn0506ftffn0507ttffn0508tftfn0509ttttn0600ffttn0601ftttn0602ftffn0603ffffn0604ffffn0605tfftn0606ffttn0607ttftn0608tftfn0609tfffn0700fttfn0701ttffn0702ttffn0703ffttn0704ttttn0705ftffn0706ftffn0707ffffn0708ftttn0709tfttn0800ffftn0801fftfn0802tfttn0803tttfn0804fttfn0805ttffn0806tfffn0807ffttn0808ftftn0809fttfn0900ttffn0901ttffn0902tttfn0903ffttn0904tttfn0905tfftn0906tttfn0907fttfn0908ftftn0909tttt";
 
   const [ref, { height, width }] = useMeasure();
   const gameCtx = useContext(GameContext);
@@ -34,6 +36,7 @@ function MainGame() {
     setKeyPressedCount,
     keyPressedCount,
   } = useContext(GameContext);
+  const specialBlockCtx = useContext(SpecialBlockContext);
   const [result, setResult] = useState([]);
 
   // ------------------Initialize grid--------------------
@@ -61,11 +64,11 @@ function MainGame() {
         const left = substring[8];
 
         if (type === "T") {
-          gameCtx.setFirstTeleportEndPoint({ x: col, y: row })
+          gameCtx.setFirstTeleportEndPoint({ x: col, y: row });
         }
 
         if (type === "O") {
-          gameCtx.setSecondTeleportEndPoint({ x: col, y: row })
+          gameCtx.setSecondTeleportEndPoint({ x: col, y: row });
         }
 
         if (type === "s") {
@@ -152,6 +155,9 @@ function MainGame() {
   // ------------------Moving logic---------------------
 
   useEffect(() => {
+    if (specialBlockCtx.specialMode) {
+      return;
+    }
     const handleKeyDown = (e) => {
       let newPosition = { ...pointPosition };
       switch (e.key) {
@@ -190,7 +196,7 @@ function MainGame() {
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [pointPosition, setPointPosition, setKeyPressed]);
+  }, [pointPosition, setPointPosition, setKeyPressed, specialBlockCtx]);
 
   // if(result.length !== 0) {
   //   console.log(gameCtx.grid)
@@ -367,6 +373,7 @@ function MainGame() {
       V: VisitTargetBlock,
       w: SecondVisitBlock,
       W: SecondVisitTargetBlock,
+      r: RightSpecial,
     };
 
     return result.flatMap((row, i) =>
@@ -408,12 +415,24 @@ function MainGame() {
                 {gameCtx.isGameOver ? "game over" : "play"}
               </span>
               <span className="block">{keyPressedCount}</span>
+              <span className="block">
+                {specialBlockCtx.specialMode
+                  ? "special mode: true"
+                  : "special mode: false"}
+              </span>
               <span>Did win?: {gameCtx.win ? "true" : "false"}</span>
             </div>
           </div>
           <div className="order-1 col-span-2 row-span-4 md:order-2 md:col-span-6 border-2 border-pageMenu flex items-center justify-center p-5 md:p-10 lg:p-16">
             <div className="w-full h-full relative flex items-center justify-center">
               <div className="absolute w-[100%] h-fit min-[450px]:h-[27rem] min-[450px]:w-[27rem] md:h-fit md:w-full aspect-[50/50] bg-pageMenu">
+                {specialBlockCtx.specialMode && (
+                  <div className="absolute z-50 w-full h-full flex items-center justify-center border-pageMenu">
+                    <div onClick={() => specialBlockCtx.setSpecialMode(false)} className="w-[50%] h-[50%] flex items-center justify-center bg-pageMenu shadow-[rgba(0,_0,_0,_0.8)_0px_60px_180px]">
+                      {specialBlockCtx.gameComponent}
+                    </div>
+                  </div>
+                )}
                 {result.length === 0 && (
                   <div className="w-full h-full flex items-center justify-center">
                     <span className="font-page text-xl md:text-5xl text-page1 font-extrabold tracking-widest">

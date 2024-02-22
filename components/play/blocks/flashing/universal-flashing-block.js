@@ -33,7 +33,7 @@ function UniversalFlashingBlock({ intervalTime = 900, ...props }) {
   const design = (
     <div className="relative w-full h-full flex items-center justify-center">
       <div className={flashClass}></div>
-      {shouldKill && <div className="absolute z-50">{skullSVG}</div>}
+      {shouldKill && <div className="absolute z-40">{skullSVG}</div>}
     </div>
   );
 

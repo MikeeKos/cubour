@@ -1,13 +1,19 @@
 import React, { useEffect, useContext } from "react";
 import GameContext from "../../../store/game-context";
+import SpecialBlockContext from "../../../store/special-block-context";
 
 function Block(props) {
   const gameCtx = useContext(GameContext);
+  const specialBlockCtx = useContext(SpecialBlockContext);
   const isEven = (props.i + props.j) % 2 !== 0;
   const bgColorClass = isEven ? "bg-page2" : "bg-page4";
 
   useEffect(() => {
     if (gameCtx.isTeleporting) {
+      return;
+    }
+
+    if (specialBlockCtx.specialMode) {
       return;
     }
 
@@ -40,7 +46,12 @@ function Block(props) {
           break;
       }
 
-      if (pointPositionI === 0 || pointPositionJ === 0 || pointPositionI === props.gridCount - 1 || pointPositionJ === props.gridCount - 1) {
+      if (
+        pointPositionI === 0 ||
+        pointPositionJ === 0 ||
+        pointPositionI === props.gridCount - 1 ||
+        pointPositionJ === props.gridCount - 1
+      ) {
         const handleKeyDown = (event) => {
           switch (event.key) {
             case "ArrowUp":
@@ -79,7 +90,13 @@ function Block(props) {
         };
       }
     }
-  }, [props.isSelected, gameCtx.keyPressed, gameCtx.keyPressedCount, gameCtx.pointPosition]);
+  }, [
+    props.isSelected,
+    gameCtx.keyPressed,
+    gameCtx.keyPressedCount,
+    gameCtx.pointPosition,
+    specialBlockCtx,
+  ]);
 
   const pawn = (
     <svg
@@ -146,12 +163,10 @@ function Block(props) {
         >
           <div className="w-full h-full relative">
             <div className="relative w-full h-full flex items-center justify-center">
-              <div className="absolute z-50 w-full h-full justify-center items-center">
+              <div className="absolute z-40 w-full h-full justify-center items-center">
                 {props.isSelected && <div>{pawn}</div>}
               </div>
-              <div className="absolute w-full h-full">
-                {props.styleChange}
-              </div>
+              <div className="absolute w-full h-full">{props.styleChange}</div>
               <div className="w-full h-full relative">
                 <div className="absolute flex w-full h-full justify-end items-end">
                   <div className="right-0 bottom-0 translate-x-1 translate-y-1">
