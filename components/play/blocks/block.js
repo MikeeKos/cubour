@@ -163,7 +163,7 @@ function Block(props) {
         >
           <div className="w-full h-full relative">
             <div className="relative w-full h-full flex items-center justify-center">
-              <div className="absolute z-40 w-full h-full justify-center items-center">
+              <div className="absolute z-30 w-full h-full justify-center items-center">
                 {props.isSelected && <div>{pawn}</div>}
               </div>
               <div className="absolute w-full h-full">{props.styleChange}</div>

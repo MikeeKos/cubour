@@ -70,7 +70,7 @@ function VisitBlock(props) {
       increaseFunction={() => {
         gameCtx.setFirstVisitBlockCount((prev) => prev + 1);
       }}
-      targetLimit={5}
+      targetLimit={3}
     ></UniversalVisitBlock>
   );
 }

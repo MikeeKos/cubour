@@ -19,13 +19,48 @@ import VisitBlock from "./blocks/visit/visit";
 import VisitTargetBlock from "./blocks/visit/visit-target";
 import SecondVisitBlock from "./blocks/visit/second-visit";
 import SecondVisitTargetBlock from "./blocks/visit/second-visit-target";
-import RightSpecial from "./blocks/special/right";
-// import { motion } from "framer-motion";
+import BackAndForthSpecial from "./blocks/special/back-and-forth";
+import CircleSpecial from "./blocks/special/circle";
+import UpAndDownSpecial from "./blocks/special/up-and-down";
+// import { motion } fńrom "framer-motion";
+
+const reflectorSVG = (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 1000 1000"
+    className="w-[68.7rem] fill-pageMenu animate-swing-slow"
+  >
+    <rect width="100%" height="100%" fill="rgba(255,255,255,0)"></rect>
+    <g transform="translate(47.779 46.592) scale(.0978)">
+      <path
+        style={{ isCustomFont: "none", fontFileUrl: "none" }}
+        d="M143.157 116.859v18.233c0 14.623-11.855 26.479-26.478 26.479-14.623 0-26.479-11.855-26.479-26.479V90.057c-25.448-9.834-54.731.941-67.451 25.759l-.001.001c-13.602 26.537-3.115 59.076 23.422 72.678l87.438 44.817 49.258-96.1-39.709-20.353z"
+        transform="translate(-124.341 41.471) scale(2.7613) translate(-99.83 -159.877)"
+      ></path>
+      <path
+        style={{ isCustomFont: "none", fontFileUrl: "none" }}
+        d="M271.077 163.582a16.851 16.851 0 00-12.454-8.985l-59.656-9.131-49.255 96.099 42.245 43.098a16.85 16.85 0 0027.03-4.11L271.07 178.94a16.85 16.85 0 00.007-15.358z"
+        transform="translate(183.516 200.839) scale(2.7613) translate(-211.318 -217.592)"
+      ></path>
+      <path
+        style={{ isCustomFont: "none", fontFileUrl: "none" }}
+        d="M116.678 148.332c7.312 0 13.239-5.928 13.239-13.239V13.239C129.917 5.928 123.99 0 116.678 0c-7.312 0-13.239 5.928-13.239 13.239v121.854c0 7.311 5.927 13.239 13.239 13.239z"
+        transform="translate(-77.816 -195.206) scale(2.7613) translate(-116.678 -74.166)"
+      ></path>
+    </g>
+    <path
+      style={{ isCustomFont: "none", fontFileUrl: "none" }}
+      d="M0 0l2-4h88L55 63 0 0"
+      transform="translate(520.219 387.67) scale(9.958) translate(-45 -29.5)"
+      vectorEffect="non-scaling-stroke"
+    ></path>
+  </svg>
+);
 
 function MainGame() {
   const dynamicGridCount = 10;
   const inputString =
-    "X0000ffffn0001ffffs0002ffffn0003ffffn0004ffffn0005ffffe0006ffffr0007ffftn0008ffffW0009ffffn0100ffftn0101tfftw0102ffffn0103ttftt0104ftttn0105ffffn0106ffffn0107ffffn0108tttfn0109ffffo0200tfffn0201fffff0202ffftn0203ttffn0204ftffn0205tttfV0206ffffn0207ttttv0208ffftn0209ffffn0300ttffn0301ttttF0302ffffn0303tftfn0304ttffn0305tfftn0306ffffn0307tfttn0308tttfn0309ffffn0400tttfn0401ttttx0402ffffn0403tfffn0404ffftn0405ftttT0406ffffn0407ftffn0408fttfO0409ftffn0500fftfn0501ttttX0502ftffn0503fftfn0504tfftn0505ffttn0506ftffn0507ttffn0508tftfn0509ttttn0600ffttn0601ftttn0602ftffn0603ffffn0604ffffn0605tfftn0606ffttn0607ttftn0608tftfn0609tfffn0700fttfn0701ttffn0702ttffn0703ffttn0704ttttn0705ftffn0706ftffn0707ffffn0708ftttn0709tfttn0800ffftn0801fftfn0802tfttn0803tttfn0804fttfn0805ttffn0806tfffn0807ffttn0808ftftn0809fttfn0900ttffn0901ttffn0902tttfn0903ffttn0904tttfn0905tfftn0906tttfn0907fttfn0908ftftn0909tttt";
+    "X0000ffffn0001ffffs0002ffffu0003ffffn0004ffffn0005ffffe0006ffffn0007ffftc0008ffffW0009ffffn0100ffftn0101tfftw0102ffffn0103ttftt0104ftttn0105ffffn0106ffffn0107ffffn0108tttfn0109ffffo0200tfffn0201fffff0202ffftn0203ttffn0204ftffn0205tttfV0206ffffn0207ttttv0208ffftb0209ffffn0300ttffn0301ttttF0302ffffn0303tftfn0304ttffn0305tfftn0306ffffn0307tfttn0308tttfn0309ffffn0400tttfn0401ttttx0402ffffn0403tfffn0404ffftn0405ftttT0406ffffn0407ftffn0408fttfO0409ftffn0500fftfn0501ttttX0502ftffn0503fftfn0504tfftn0505ffttn0506ftffn0507ttffn0508tftfn0509ttttn0600ffttn0601ftttn0602ftffn0603ffffn0604ffffn0605tfftn0606ffttn0607ttftn0608tftfn0609tfffn0700fttfn0701ttffn0702ttffn0703ffttn0704ttttn0705ftffn0706ftffn0707ffffn0708ftttn0709tfttn0800ffftn0801fftfn0802tfttn0803tttfn0804fttfn0805ttffn0806tfffn0807ffttn0808ftftn0809fttfn0900ttffn0901ttffn0902tttfn0903ffttn0904tttfn0905tfftn0906tttfn0907fttfn0908ftftn0909tttt";
 
   const [ref, { height, width }] = useMeasure();
   const gameCtx = useContext(GameContext);
@@ -373,7 +408,9 @@ function MainGame() {
       V: VisitTargetBlock,
       w: SecondVisitBlock,
       W: SecondVisitTargetBlock,
-      r: RightSpecial,
+      b: BackAndForthSpecial,
+      c: CircleSpecial,
+      u: UpAndDownSpecial,
     };
 
     return result.flatMap((row, i) =>
@@ -395,7 +432,7 @@ function MainGame() {
         );
       })
     );
-  }, [pointPosition, result]);
+  }, [pointPosition, result, gameCtx.keyPressedCount]);
 
   return (
     <React.Fragment>
@@ -428,7 +465,12 @@ function MainGame() {
               <div className="absolute w-[100%] h-fit min-[450px]:h-[27rem] min-[450px]:w-[27rem] md:h-fit md:w-full aspect-[50/50] bg-pageMenu">
                 {specialBlockCtx.specialMode && (
                   <div className="absolute z-50 w-full h-full flex items-center justify-center border-pageMenu">
-                    <div onClick={() => specialBlockCtx.setSpecialMode(false)} className="w-[50%] h-[50%] flex items-center justify-center bg-pageMenu shadow-[rgba(0,_0,_0,_0.8)_0px_60px_180px]">
+                    <div className="absolute w-full h-full overflow-hidden">
+                      <div className="w-full h-full absolute rotate-[100deg] bottom-5">
+                        {reflectorSVG}
+                      </div>
+                    </div>
+                    <div className="w-[50%] h-[50%] flex items-center justify-center bg-pageMenu shadow-[rgba(0,_0,_0,_0.8)_0px_60px_180px] z-50">
                       {specialBlockCtx.gameComponent}
                     </div>
                   </div>

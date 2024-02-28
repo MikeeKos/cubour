@@ -17,11 +17,27 @@ module.exports = {
         page3: "#E48368",
         page2: "#FAC3A5",
         page1: "#FBEDE0",
+        pageButton: "#BD927B",
         pageWhite: "#FAF8F6",
       },
       fontFamily: {
         body: ['Nunito', "sans-serif"],
         page: ['Montserrat', "sans-serif"]
+      },
+      animation: {
+        'swing-slow': 'swing 10s infinite',
+      },
+      keyframes: {
+        swing: {
+          '0%, 100%': {
+            transform: 'translateX(-2%) rotate(-3deg)', // Dodajemy lekki obrót
+            animationTimingFunction: 'cubic-bezier(0.8, 0, 1, 1)',
+          },
+          '50%': {
+            transform: 'translateX(2%) rotate(3deg)', // Dodajemy lekki obrót
+            animationTimingFunction: 'cubic-bezier(0, 0, 0.2, 1)',
+          },
+        },
       },
       gridTemplateColumns: {
         '12': 'repeat(12, minmax(0, 1fr))',

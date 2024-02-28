@@ -93,7 +93,7 @@ function VisitTargetBlock(props) {
     <UniversalVisitTargetBlock
       {...props}
       targetCount={gameCtx.firstVisitBlockCount}
-      targetLimit={5}
+      targetLimit={3}
     ></UniversalVisitTargetBlock>
   );
 }
