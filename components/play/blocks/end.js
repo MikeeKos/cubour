@@ -1,13 +1,38 @@
-import { useEffect, useContext } from "react";
+import { useEffect, useContext, useState } from "react";
 import Block from "./block";
 import GameContext from "../../../store/game-context";
 
 function EndBlock(props) {
   const gameCtx = useContext(GameContext);
+  const [shouldBeVisible, setShouldBeVisible] = useState(true);
+
+  useEffect(() => {
+    let timeoutId;
+    if (props.isSelected) {
+      // Ustawiamy opóźnienie na 3 sekundy przed potencjalnym ustawieniem wygranej
+      timeoutId = setTimeout(() => {
+        // Sprawdzamy, czy gra nie została już zakończona jako przegrana
+        if (!gameCtx.isGameOver) {
+          gameCtx.setWin(true);
+        }
+      }, 100);
+    }
+
+    // Funkcja czyszczenia, która zostanie wywołana przy odmontowywaniu komponentu
+    // lub przy zmianie wartości w tablicy zależności useEffect
+    return () => {
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+      }
+    };
+    // Dodajemy gameCtx.isGameOver do tablicy zależności, aby zareagować na jej zmiany
+  }, [props.isSelected, gameCtx.isGameOver, gameCtx.setWin]);
 
   useEffect(() => {
     if (props.isSelected) {
-      gameCtx.setWin(true);
+      setShouldBeVisible(false);
+    } else {
+      setShouldBeVisible(true);
     }
   }, [gameCtx]);
 
@@ -44,7 +69,9 @@ function EndBlock(props) {
   const design = (
     <div className="relative w-full h-full flex items-center justify-center">
       <div className="absolute w-full h-full">{checkered}</div>
-      <div className="absolute w-full h-full">{trophy}</div>
+      {shouldBeVisible && (
+        <div className="absolute w-full h-full">{trophy}</div>
+      )}
     </div>
   );
 

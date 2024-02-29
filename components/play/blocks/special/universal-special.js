@@ -41,6 +41,10 @@ function UniversalSpecial(props) {
       return;
     }
 
+    if (gameCtx.isGameOver) {
+      specialBlockCtx.setSpecialMode(false);
+    }
+
     const handleKeyDown = (e) => {
       let key = "";
       switch (e.key) {

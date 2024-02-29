@@ -318,7 +318,7 @@ function CircleSpecial(props) {
   };
 
   function renderArrow(arrow, svg) {
-    const scaleClass = pressedKey === arrow ? "scale-75" : "scale-90";
+    const scaleClass = pressedKey === arrow ? "scale-[70%]" : "scale-90";
     const animationClass = `transition-transform duration-100 transform ${scaleClass}`;
     return (
       <div

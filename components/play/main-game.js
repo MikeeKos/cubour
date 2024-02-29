@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useContext } from "react";
+import React, { useState, useEffect, useMemo, useContext, useRef } from "react";
 import useMeasure from "react-use-measure";
 // import Block from "./blocks/block";
 import Grid from "./grid";
@@ -24,11 +24,29 @@ import CircleSpecial from "./blocks/special/circle";
 import UpAndDownSpecial from "./blocks/special/up-and-down";
 // import { motion } fńrom "framer-motion";
 
-const reflectorSVG = (
+const skullSVG = (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    fill="none"
+    viewBox="0 0 24 24"
+    className="w-24 h-24 lg:w-40 lg:h-40 animate-swing-slow"
+  >
+    <path
+      className="stroke-pageMenu"
+      stroke="#000"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth="2"
+      d="M10 18v3m4-1v1m7-9v1a4 4 0 01-4 4v4H7v-4a4 4 0 01-4-4v-1a9 9 0 0118 0zm-11-1.5a2 2 0 11-4 0 2 2 0 014 0zm8 0a2 2 0 11-4 0 2 2 0 014 0z"
+    ></path>
+  </svg>
+);
+
+const reflectorSVG = (color) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 1000 1000"
-    className="w-[68.7rem] fill-pageMenu animate-swing-slow"
+    className={`w-[68.7rem] ${color} animate-swing-slow`}
   >
     <rect width="100%" height="100%" fill="rgba(255,255,255,0)"></rect>
     <g transform="translate(47.779 46.592) scale(.0978)">
@@ -58,12 +76,61 @@ const reflectorSVG = (
 );
 
 function MainGame() {
-  const dynamicGridCount = 10;
+  const gameCtx = useContext(GameContext);
+  // const dynamicGridCount = 10;
+  // const inputString =
+  //   "X0000ffffn0001ffffs0002ffffu0003ffffn0004ffffn0005ffffe0006ffffn0007ffftc0008ffffW0009ffffn0100ffftn0101tfftw0102ffffn0103ttftt0104ftttn0105ffffn0106ffffn0107ffffn0108tttfn0109ffffo0200tfffn0201fffff0202ffftn0203ttffn0204ftffn0205tttfV0206ffffn0207ttttv0208ffftb0209ffffn0300ttffn0301ttttF0302ffffn0303tftfn0304ttffn0305tfftn0306ffffn0307tfttn0308tttfn0309ffffn0400tttfn0401ttttx0402ffffn0403tfffn0404ffftn0405ftttT0406ffffn0407ftffn0408fttfO0409ftffn0500fftfn0501ttttX0502ftffn0503fftfn0504tfftn0505ffttn0506ftffn0507ttffn0508tftfn0509ttttn0600ffttn0601ftttn0602ftffn0603ffffn0604ffffn0605tfftn0606ffttn0607ttftn0608tftfn0609tfffn0700fttfn0701ttffn0702ttffn0703ffttn0704ttttn0705ftffn0706ftffn0707ffffn0708ftttn0709tfttn0800ffftn0801fftfn0802tfttn0803tttfn0804fttfn0805ttffn0806tfffn0807ffttn0808ftftn0809fttfn0900ttffn0901ttffn0902tttfn0903ffttn0904tttfn0905tfftn0906tttfn0907fttfn0908ftftn0909tttt";
+
+  const dynamicGridCount = 8;
   const inputString =
-    "X0000ffffn0001ffffs0002ffffu0003ffffn0004ffffn0005ffffe0006ffffn0007ffftc0008ffffW0009ffffn0100ffftn0101tfftw0102ffffn0103ttftt0104ftttn0105ffffn0106ffffn0107ffffn0108tttfn0109ffffo0200tfffn0201fffff0202ffftn0203ttffn0204ftffn0205tttfV0206ffffn0207ttttv0208ffftb0209ffffn0300ttffn0301ttttF0302ffffn0303tftfn0304ttffn0305tfftn0306ffffn0307tfttn0308tttfn0309ffffn0400tttfn0401ttttx0402ffffn0403tfffn0404ffftn0405ftttT0406ffffn0407ftffn0408fttfO0409ftffn0500fftfn0501ttttX0502ftffn0503fftfn0504tfftn0505ffttn0506ftffn0507ttffn0508tftfn0509ttttn0600ffttn0601ftttn0602ftffn0603ffffn0604ffffn0605tfftn0606ffttn0607ttftn0608tftfn0609tfffn0700fttfn0701ttffn0702ttffn0703ffttn0704ttttn0705ftffn0706ftffn0707ffffn0708ftttn0709tfttn0800ffftn0801fftfn0802tfttn0803tttfn0804fttfn0805ttffn0806tfffn0807ffttn0808ftftn0809fttfn0900ttffn0901ttffn0902tttfn0903ffttn0904tttfn0905tfftn0906tttfn0907fttfn0908ftftn0909tttt";
+    "s0000ffffn0001ffffn0002ffffn0003ffffc0004ttffn0005tfttn0006ftffn0007ttttn0100tftfn0101tfttn0102ffffn0103ffffn0104ffffn0105tttfn0106fftfn0107ffftt0200tftfn0201ffffn0202ffffn0203tfttn0204ffffn0205ffffn0206ttttn0207ffttn0300fftfn0301ttftn0302tfffn0303tfttn0304ffftn0305ttttn0306ttttn0307ffttn0400tfftn0401tfftn0402tfttn0403ffftn0404ffffn0405ffffn0406ttttn0407ffffn0500tfftn0501tttfn0502ftttn0503ftttn0504tftfn0505ffffn0506fftfn0507ftffn0600tfttT0601ffttn0602ffffn0603tftfn0604ttttn0605ftffn0606tfffn0607fttfn0700ttttn0701ttttn0702tftfn0703tfffn0704tftfn0705ffftn0706ffffe0707ffff";
+
+  const timeBoundary = "0010200";
+
+  const minutes = parseInt(timeBoundary.substring(0, 2), 10);
+  const seconds = parseInt(timeBoundary.substring(2, 4), 10);
+  const milliseconds = parseInt(timeBoundary.substring(4), 10);
+  const totalTimeInMs = minutes * 60 * 1000 + seconds * 1000 + milliseconds;
+  const [timeLeft, setTimeLeft] = useState(totalTimeInMs);
+  const [hasTimerStarted, setHasTimerStarted] = useState(false);
+  const [finishTime, setFinishTime] = useState(null);
+  const timerRef = useRef(null);
+
+  useEffect(() => {
+    if (hasTimerStarted) {
+      timerRef.current = setInterval(() => {
+        setTimeLeft((prevTime) => {
+          const newTime = prevTime - 10;
+          if (newTime <= 0) {
+            clearInterval(timerRef.current);
+            gameCtx.setIsGameOver(true);
+            return 0;
+          }
+          return newTime;
+        });
+      }, 10);
+    }
+
+    return () => clearInterval(timerRef.current);
+  }, [hasTimerStarted]);
+
+  useEffect(() => {
+    if (gameCtx.win || gameCtx.isGameOver) {
+      setFinishTime(totalTimeInMs - timeLeft);
+      clearInterval(timerRef.current);
+    }
+  }, [gameCtx.win, gameCtx.isGameOver, totalTimeInMs, timeLeft]);
+
+  const formatTimeLeft = (time) => {
+    const minutes = Math.floor(time / 60000);
+    const seconds = Math.floor((time % 60000) / 1000);
+    const milliseconds = time % 1000;
+    return `${minutes.toString().padStart(2, "0")}:${seconds
+      .toString()
+      .padStart(2, "0")}.${milliseconds.toString().padStart(3, "0")}`;
+  };
 
   const [ref, { height, width }] = useMeasure();
-  const gameCtx = useContext(GameContext);
   const {
     pointPosition,
     setPointPosition,
@@ -190,10 +257,29 @@ function MainGame() {
   // ------------------Moving logic---------------------
 
   useEffect(() => {
+    if (gameCtx.win) {
+      return;
+    }
+    if (gameCtx.isGameOver) {
+      return;
+    }
     if (specialBlockCtx.specialMode) {
       return;
     }
     const handleKeyDown = (e) => {
+      if (
+        !hasTimerStarted &&
+        (e.key === "ArrowUp" ||
+          e.key === "ArrowDown" ||
+          e.key === "ArrowLeft" ||
+          e.key === "ArrowRight" ||
+          e.key === "w" ||
+          e.key === "a" ||
+          e.key === "s" ||
+          e.key === "d")
+      ) {
+        setHasTimerStarted(true);
+      }
       let newPosition = { ...pointPosition };
       switch (e.key) {
         case "ArrowUp":
@@ -221,9 +307,9 @@ function MainGame() {
           setKeyPressedCount();
           break;
         default:
-          return; // Nie aktualizuj stanu, jeśli naciśnięty klawisz nie jest obsługiwany
+          return;
       }
-      setPointPosition(newPosition); // Aktualizuj pozycję pionka w kontekście
+      setPointPosition(newPosition);
     };
 
     window.addEventListener("keydown", handleKeyDown);
@@ -231,7 +317,14 @@ function MainGame() {
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [pointPosition, setPointPosition, setKeyPressed, specialBlockCtx]);
+  }, [
+    pointPosition,
+    setPointPosition,
+    setKeyPressed,
+    specialBlockCtx,
+    gameCtx.win,
+    gameCtx.isGameOver,
+  ]);
 
   // if(result.length !== 0) {
   //   console.log(gameCtx.grid)
@@ -447,16 +540,22 @@ function MainGame() {
         >
           <div className="relative order-2 col-span-1 row-span-2 md:order-1 md:col-span-3 border-2 border-pageMenu">
             <div className="absolute w-full h-full">
-              <span className="block">{gameCtx.keyPressed}</span>
+              {/* <span className="block">{gameCtx.keyPressed}</span> */}
               <span className="block">
                 {gameCtx.isGameOver ? "game over" : "play"}
               </span>
-              <span className="block">{keyPressedCount}</span>
+              {/* <span className="block">{keyPressedCount}</span> */}
               <span className="block">
                 {specialBlockCtx.specialMode
                   ? "special mode: true"
                   : "special mode: false"}
               </span>
+              <span className="block">TIMER: {formatTimeLeft(timeLeft)}</span>
+              {finishTime && (
+                <span className="block">
+                  FINISH TIME: {formatTimeLeft(finishTime)}
+                </span>
+              )}
               <span>Did win?: {gameCtx.win ? "true" : "false"}</span>
             </div>
           </div>
@@ -467,11 +566,32 @@ function MainGame() {
                   <div className="absolute z-50 w-full h-full flex items-center justify-center border-pageMenu">
                     <div className="absolute w-full h-full overflow-hidden">
                       <div className="w-full h-full absolute rotate-[100deg] bottom-5">
-                        {reflectorSVG}
+                        {reflectorSVG("fill-pageMenu")}
                       </div>
                     </div>
                     <div className="w-[50%] h-[50%] flex items-center justify-center bg-pageMenu shadow-[rgba(0,_0,_0,_0.8)_0px_60px_180px] z-50">
                       {specialBlockCtx.gameComponent}
+                    </div>
+                  </div>
+                )}
+                {gameCtx.isGameOver && (
+                  <div className="w-full h-full absolute flex items-center justify-center">
+                    <div className="w-full h-full relative flex items-center justify-center">
+                      <span className="p-2 rounded-lg bg-page1 absolute z-50 font-page text-3xl md:text-2xl lg:text-5xl text-pageMenu font-extrabold tracking-widest drop-shadow-[0_10.5px_10.5px_rgba(0,0,0,5.2)]">
+                        you lose...
+                      </span>
+                    </div>
+                  </div>
+                )}
+                {gameCtx.isGameOver && (
+                  <div className="absolute z-50 w-full h-full bg-pageMenu mix-blend-multiply">
+                    <div className="w-full h-full absolute overflow-hidden">
+                      <div className="w-full h-full absolute right-5 rotate-[20deg] top-2 lg:top-5">
+                        {reflectorSVG("fill-page2")}
+                      </div>
+                    </div>
+                    <div className="w-full h-full absolute flex items-end justify-center rotate-[-10deg] -top-2">
+                      {skullSVG}
                     </div>
                   </div>
                 )}

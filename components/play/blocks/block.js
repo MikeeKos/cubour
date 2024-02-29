@@ -9,6 +9,14 @@ function Block(props) {
   const bgColorClass = isEven ? "bg-page2" : "bg-page4";
 
   useEffect(() => {
+    if (gameCtx.win) {
+      return;
+    }
+
+    if (gameCtx.isGameOver) {
+      return;
+    }
+
     if (gameCtx.isTeleporting) {
       return;
     }
@@ -95,6 +103,8 @@ function Block(props) {
     gameCtx.keyPressed,
     gameCtx.keyPressedCount,
     gameCtx.pointPosition,
+    gameCtx.win,
+    gameCtx.isGameOver,
     specialBlockCtx,
   ]);
 
