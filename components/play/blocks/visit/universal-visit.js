@@ -2,10 +2,6 @@ import React, { useContext, useEffect, useState } from "react";
 import Block from "../block";
 import GameContext from "../../../../store/game-context";
 
-// targetCount={gameCtx.firstVisitBlockCount}
-// increaseFunction={() => {gameCtx.setFirstVisitBlockCount((prev) => prev + 1)}}
-// targetLimit={5}
-
 function UniversalVisitBlock(props) {
   const gameCtx = useContext(GameContext);
   const [shouldBeVisible, setShouldBeVisible] = useState(true);

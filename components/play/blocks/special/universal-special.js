@@ -2,7 +2,13 @@ import React, { useContext, useEffect, useState } from "react";
 import Block from "../block";
 import SpecialBlockContext from "../../../../store/special-block-context";
 import GameContext from "../../../../store/game-context";
-import { rightSVG, leftSVG, upSVG, downSVG, giftSVG } from "../../../../SVG/arrows";
+import {
+  rightSVG,
+  leftSVG,
+  upSVG,
+  downSVG,
+  giftSVG,
+} from "../../../../SVG/arrows";
 
 function UniversalSpecial(props) {
   const currentSpecialGame = `${props.i}-${props.j}`;
@@ -28,6 +34,7 @@ function UniversalSpecial(props) {
         specialBlockCtx.setSpecialMode(false);
       }
     } else {
+      specialBlockCtx.setSpecialMode(false);
       gameCtx.setIsGameOver(true);
     }
   };
@@ -76,7 +83,7 @@ function UniversalSpecial(props) {
           return;
       }
       setPressedKey(key);
-      props.func(key)
+      props.func(key);
       const timeoutId = setTimeout(() => setPressedKey(""), 100);
       return () => clearTimeout(timeoutId);
     };

@@ -24,6 +24,42 @@ import CircleSpecial from "./blocks/special/circle";
 import UpAndDownSpecial from "./blocks/special/up-and-down";
 // import { motion } fńrom "framer-motion";
 
+const starsSVG = (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    fill="none"
+    viewBox="0 0 24 24"
+    className="w-10 h-10"
+  >
+    <path
+    className="stroke-pageMenu"
+      stroke="#000"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth="3"
+      d="M5 16v4M6 4v4m1 10H3M8 6H4m9-2l1.753 4.444c.188.477.282.715.426.916.127.178.283.334.461.461.2.144.44.238.916.426L21 12l-4.444 1.753c-.477.188-.715.282-.916.426a1.998 1.998 0 00-.461.461c-.144.2-.238.44-.426.916L13 20l-1.753-4.444c-.188-.477-.282-.715-.426-.916a1.998 1.998 0 00-.461-.461c-.2-.144-.44-.238-.916-.426L5 12l4.444-1.753c.477-.188.715-.282.916-.426.178-.127.334-.283.461-.461.144-.2.238-.44.426-.916L13 4z"
+    ></path>
+  </svg>
+);
+
+const trophySVG = (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    fill="none"
+    viewBox="0 0 24 24"
+    className="w-24 h-24 animate-bounce"
+  >
+    <path
+      className="stroke-pageMenu"
+      stroke="#000"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth="2"
+      d="M12 14v3m0-3a5.002 5.002 0 01-4.9-4m4.9 4a5.002 5.002 0 004.9-4m.1-5h2.75c.232 0 .349 0 .445.02a1 1 0 01.786.785c.019.097.019.213.019.445 0 .697 0 1.045-.058 1.335a3 3 0 01-2.357 2.357c-.29.058-.638.058-1.335.058h-.35M7 5H4.25c-.232 0-.348 0-.445.02a1 1 0 00-.786.785C3 5.902 3 6.018 3 6.25c0 .697 0 1.045.058 1.335a3 3 0 002.357 2.357c.29.058.638.058 1.335.058h.35m4.9 7c.93 0 1.395 0 1.777.102a3 3 0 012.12 2.122C16 19.605 16 20.07 16 21H8c0-.93 0-1.395.102-1.776a3 3 0 012.121-2.122C10.605 17 11.07 17 12 17zm-4.9-7A5.023 5.023 0 017 9V4.571c0-.533 0-.8.099-1.005a1 1 0 01.467-.467C7.772 3 8.038 3 8.571 3h6.858c.533 0 .8 0 1.005.099a1 1 0 01.467.467c.099.206.099.472.099 1.005V9c0 .342-.034.677-.1 1"
+    ></path>
+  </svg>
+);
+
 const skullSVG = (
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -571,6 +607,34 @@ function MainGame() {
                     </div>
                     <div className="w-[50%] h-[50%] flex items-center justify-center bg-pageMenu shadow-[rgba(0,_0,_0,_0.8)_0px_60px_180px] z-50">
                       {specialBlockCtx.gameComponent}
+                    </div>
+                  </div>
+                )}
+                {gameCtx.win && (
+                  <div className="absolute z-50 w-full h-full bg-page1 mix-blend-multiply">
+                    <div className="w-full h-full absolute overflow-hidden">
+                      <div className="w-full h-full absolute left-10 rotate-[80deg] top-2 lg:top-5">
+                        {reflectorSVG("fill-pageMenu")}
+                      </div>
+                    </div>
+                    <div className="w-full h-full absolute flex items-start justify-center rotate-[-10deg] top-10 -left-20">
+                      {trophySVG}
+                    </div>
+                  </div>
+                )}
+                {gameCtx.win && (
+                  <div className="w-full h-full absolute flex items-center justify-center">
+                    <div className="w-full h-full relative flex items-center justify-center">
+                      <div className="w-[75%] h-[50%] border-8 border-pageMenu bg-page2 absolute z-50 drop-shadow-[0_10.5px_10.5px_rgba(0,0,0,5.2)]">
+                        <div className="font-page text-sm md:text-xl lg:text-3xl text-pageMenu font-extrabold tracking-widest flex items-center justify-center py-2 ">
+                          <div className="pr-2 animate-pulse">{starsSVG}</div>
+                          <span>you win!</span>
+                          <div className="pr-2 rotate-180 animate-pulse">{starsSVG}</div>
+                        </div>
+                        <div className="w-full h-[50%] sm:h-[60%] lg:h-[65%] bg-page4 brightness-90">
+                          <span className="pt-5 flex items-center justify-center font-page text-xs md:text-base lg:text-xl text-pageMenu font-extrabold tracking-widest">your time: {formatTimeLeft(finishTime)}</span>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 )}
