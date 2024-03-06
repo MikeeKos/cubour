@@ -1,9 +1,10 @@
 import React from "react";
+import Create from "../components/create/create";
 
 function CreateMap() {
   return (
     <React.Fragment>
-      <div>Create Map</div>
+      <Create />
     </React.Fragment>
   );
 }

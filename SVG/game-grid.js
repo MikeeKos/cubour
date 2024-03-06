@@ -102,6 +102,93 @@ const unlockSVG = (
   </svg>
 );
 
+const starsSVG = (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    fill="none"
+    viewBox="0 0 24 24"
+    className="w-10 h-10"
+  >
+    <path
+      className="stroke-pageMenu"
+      stroke="#000"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth="3"
+      d="M5 16v4M6 4v4m1 10H3M8 6H4m9-2l1.753 4.444c.188.477.282.715.426.916.127.178.283.334.461.461.2.144.44.238.916.426L21 12l-4.444 1.753c-.477.188-.715.282-.916.426a1.998 1.998 0 00-.461.461c-.144.2-.238.44-.426.916L13 20l-1.753-4.444c-.188-.477-.282-.715-.426-.916a1.998 1.998 0 00-.461-.461c-.2-.144-.44-.238-.916-.426L5 12l4.444-1.753c.477-.188.715-.282.916-.426.178-.127.334-.283.461-.461.144-.2.238-.44.426-.916L13 4z"
+    ></path>
+  </svg>
+);
+
+const bigTrophySVG = (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    fill="none"
+    viewBox="0 0 24 24"
+    className="w-24 h-24 animate-bounce"
+  >
+    <path
+      className="stroke-pageMenu"
+      stroke="#000"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth="2"
+      d="M12 14v3m0-3a5.002 5.002 0 01-4.9-4m4.9 4a5.002 5.002 0 004.9-4m.1-5h2.75c.232 0 .349 0 .445.02a1 1 0 01.786.785c.019.097.019.213.019.445 0 .697 0 1.045-.058 1.335a3 3 0 01-2.357 2.357c-.29.058-.638.058-1.335.058h-.35M7 5H4.25c-.232 0-.348 0-.445.02a1 1 0 00-.786.785C3 5.902 3 6.018 3 6.25c0 .697 0 1.045.058 1.335a3 3 0 002.357 2.357c.29.058.638.058 1.335.058h.35m4.9 7c.93 0 1.395 0 1.777.102a3 3 0 012.12 2.122C16 19.605 16 20.07 16 21H8c0-.93 0-1.395.102-1.776a3 3 0 012.121-2.122C10.605 17 11.07 17 12 17zm-4.9-7A5.023 5.023 0 017 9V4.571c0-.533 0-.8.099-1.005a1 1 0 01.467-.467C7.772 3 8.038 3 8.571 3h6.858c.533 0 .8 0 1.005.099a1 1 0 01.467.467c.099.206.099.472.099 1.005V9c0 .342-.034.677-.1 1"
+    ></path>
+  </svg>
+);
+
+const skullSVG = (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    fill="none"
+    viewBox="0 0 24 24"
+    className="w-24 h-24 lg:w-40 lg:h-40 animate-swing-slow"
+  >
+    <path
+      className="stroke-pageMenu"
+      stroke="#000"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth="2"
+      d="M10 18v3m4-1v1m7-9v1a4 4 0 01-4 4v4H7v-4a4 4 0 01-4-4v-1a9 9 0 0118 0zm-11-1.5a2 2 0 11-4 0 2 2 0 014 0zm8 0a2 2 0 11-4 0 2 2 0 014 0z"
+    ></path>
+  </svg>
+);
+
+const reflectorSVG = (color) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 1000 1000"
+    className={`w-[68.7rem] ${color} animate-swing-slow`}
+  >
+    <rect width="100%" height="100%" fill="rgba(255,255,255,0)"></rect>
+    <g transform="translate(47.779 46.592) scale(.0978)">
+      <path
+        style={{ isCustomFont: "none", fontFileUrl: "none" }}
+        d="M143.157 116.859v18.233c0 14.623-11.855 26.479-26.478 26.479-14.623 0-26.479-11.855-26.479-26.479V90.057c-25.448-9.834-54.731.941-67.451 25.759l-.001.001c-13.602 26.537-3.115 59.076 23.422 72.678l87.438 44.817 49.258-96.1-39.709-20.353z"
+        transform="translate(-124.341 41.471) scale(2.7613) translate(-99.83 -159.877)"
+      ></path>
+      <path
+        style={{ isCustomFont: "none", fontFileUrl: "none" }}
+        d="M271.077 163.582a16.851 16.851 0 00-12.454-8.985l-59.656-9.131-49.255 96.099 42.245 43.098a16.85 16.85 0 0027.03-4.11L271.07 178.94a16.85 16.85 0 00.007-15.358z"
+        transform="translate(183.516 200.839) scale(2.7613) translate(-211.318 -217.592)"
+      ></path>
+      <path
+        style={{ isCustomFont: "none", fontFileUrl: "none" }}
+        d="M116.678 148.332c7.312 0 13.239-5.928 13.239-13.239V13.239C129.917 5.928 123.99 0 116.678 0c-7.312 0-13.239 5.928-13.239 13.239v121.854c0 7.311 5.927 13.239 13.239 13.239z"
+        transform="translate(-77.816 -195.206) scale(2.7613) translate(-116.678 -74.166)"
+      ></path>
+    </g>
+    <path
+      style={{ isCustomFont: "none", fontFileUrl: "none" }}
+      d="M0 0l2-4h88L55 63 0 0"
+      transform="translate(520.219 387.67) scale(9.958) translate(-45 -29.5)"
+      vectorEffect="non-scaling-stroke"
+    ></path>
+  </svg>
+);
+
 export {
   startDesignSVG,
   checkeredSVG,
@@ -110,4 +197,8 @@ export {
   cornerFixSVG,
   lockSVG,
   unlockSVG,
+  starsSVG,
+  bigTrophySVG,
+  skullSVG,
+  reflectorSVG,
 };

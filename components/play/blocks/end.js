@@ -6,23 +6,26 @@ import { checkeredSVG, trophySVG } from "../../../SVG/game-grid";
 function EndBlock(props) {
   const gameCtx = useContext(GameContext);
   const [shouldBeVisible, setShouldBeVisible] = useState(true);
+  const [showFinishTimer, setShowFinishTimer] = useState(false);
 
   useEffect(() => {
     let timeoutId;
     if (props.isSelected) {
+      setShowFinishTimer(true);
       timeoutId = setTimeout(() => {
         if (!gameCtx.isGameOver) {
           gameCtx.setWin(true);
         }
-      }, 100);
+      }, 500);
     }
 
     return () => {
       if (timeoutId) {
+        setShowFinishTimer(false)
         clearTimeout(timeoutId);
       }
     };
-  }, [props.isSelected, gameCtx.isGameOver, gameCtx.setWin]);
+  }, [props.isSelected, gameCtx.isGameOver, gameCtx.setWin, showFinishTimer, setShowFinishTimer]);
 
   useEffect(() => {
     if (props.isSelected) {
@@ -37,6 +40,9 @@ function EndBlock(props) {
       <div className="absolute w-full h-full">{checkeredSVG}</div>
       {shouldBeVisible && (
         <div className="absolute w-full h-full">{trophySVG}</div>
+      )}
+      {showFinishTimer && (
+        <div className="animate-growUp w-[60%] h-full bg-pageMenu"></div>
       )}
     </div>
   );

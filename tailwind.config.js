@@ -26,16 +26,29 @@ module.exports = {
       },
       animation: {
         'swing-slow': 'swing 10s infinite',
+        'growUp': 'growUp 0.5s ease-out',
       },
       keyframes: {
         swing: {
           '0%, 100%': {
-            transform: 'translateX(-2%) rotate(-3deg)', // Dodajemy lekki obrót
+            transform: 'translateX(-2%) rotate(-3deg)',
             animationTimingFunction: 'cubic-bezier(0.8, 0, 1, 1)',
           },
           '50%': {
-            transform: 'translateX(2%) rotate(3deg)', // Dodajemy lekki obrót
+            transform: 'translateX(2%) rotate(3deg)',
             animationTimingFunction: 'cubic-bezier(0, 0, 0.2, 1)',
+          },
+        },
+        growUp: {
+          'from': {
+            transform: 'scaleY(0)',
+            transformOrigin: 'bottom',
+            opacity: 0,
+          },
+          'to': {
+            transform: 'scaleY(1)',
+            transformOrigin: 'bottom',
+            opacity: 1,
           },
         },
       },
