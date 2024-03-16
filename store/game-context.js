@@ -48,6 +48,20 @@ export function GameContextProvider(props) {
     setKeyPressedCountState((prevCount) => prevCount + 1);
   };
 
+  const resetGameContext = () => {
+    setKeyPressed(null);
+    setIsGameOver(false);
+    setGrid([]);
+    // setPointPosition({ x: 0, y: 0 });
+    setKeyPressedCountState(0);
+    setWin(false);
+    setIsTeleporting(false);
+    // setFirstTeleportEndPoint({ x: 0, y: 0 });
+    // setSecondTeleportEndPoint({ x: 0, y: 0 });
+    setFirstVisitBlockCount(0);
+    setSecondVisitBlockCount(0);
+  };
+
   const context = {
     keyPressed,
     isGameOver,
@@ -71,6 +85,7 @@ export function GameContextProvider(props) {
     setSecondTeleportEndPoint,
     setFirstVisitBlockCount,
     setSecondVisitBlockCount,
+    resetGameContext,
   };
 
   return (

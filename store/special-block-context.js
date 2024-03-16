@@ -7,12 +7,19 @@ const SpecialBlockContext = createContext({
   setSpecialMode: () => {},
   setGameComponent: () => {},
   setCompletedSpecialGames: () => {},
+  resetSpecialBlockContext: () => {},
 });
 
 export function SpecialBlockContextProvider(props) {
   const [specialMode, setSpecialMode] = useState(false);
   const [gameComponent, setGameComponent] = useState(null);
   const [completedSpecialGames, setCompletedSpecialGames] = useState([]);
+
+  const resetSpecialBlockContext = () => {
+    setSpecialMode(false);
+    setGameComponent(null);
+    setCompletedSpecialGames([]);
+  };
 
   const context = {
     specialMode,
@@ -21,6 +28,7 @@ export function SpecialBlockContextProvider(props) {
     setSpecialMode,
     setGameComponent,
     setCompletedSpecialGames,
+    resetSpecialBlockContext,
   };
 
   return (

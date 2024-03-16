@@ -171,6 +171,8 @@ function UniversalSpecial(props) {
       setShouldBeVisible(false);
     } else {
       setShouldBeVisible(true);
+      setArrIndex(0)
+
     }
   }, [gameCtx.pointPosition, gameCtx.keyPressedCount]);
 

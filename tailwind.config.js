@@ -27,6 +27,7 @@ module.exports = {
       animation: {
         'swing-slow': 'swing 10s infinite',
         'growUp': 'growUp 0.5s ease-out',
+        'scale-swing-rotate': 'scaleSwingRotate 4s infinite',
       },
       keyframes: {
         swing: {
@@ -49,6 +50,20 @@ module.exports = {
             transform: 'scaleY(1)',
             transformOrigin: 'bottom',
             opacity: 1,
+          },
+        },
+        scaleSwingRotate: {
+          '0%, 100%': {
+            transform: 'scale(1) translateX(0) rotate(0deg)',
+          },
+          '25%': {
+            transform: 'scale(1.1) translateX(-5%) rotate(-3deg)',
+          },
+          '50%': {
+            transform: 'scale(0.9) translateX(5%) rotate(3deg)',
+          },
+          '75%': {
+            transform: 'scale(1.1) translateX(-5%) rotate(-3deg)',
           },
         },
       },

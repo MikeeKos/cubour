@@ -28,49 +28,29 @@ import SecondVisitTargetBlock from "./blocks/visit/second-visit-target";
 import BackAndForthSpecial from "./blocks/special/back-and-forth";
 import CircleSpecial from "./blocks/special/circle";
 import UpAndDownSpecial from "./blocks/special/up-and-down";
+import {
+  timerSVG,
+  controllerSVG,
+  keyboardSVG,
+  lightningSVG,
+} from "../../SVG/game-grid";
 
-const timerSVG = (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    fill="none"
-    viewBox="0 0 24 24"
-    className="w-10 h-10"
-  >
-    <g>
-      <path
-        className="stroke-pageMenu md:stroke-page1"
-        stroke="#000"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth="2.5"
-        d="M12 13V9m9-3l-2-2m-9-2h4m-2 19a8 8 0 110-16 8 8 0 010 16z"
-      ></path>
-    </g>
-  </svg>
-);
-
-const controllerSVG = (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    className="w-52 h-52 md:w-96 md:h-96 fill-page1 md:fill-page1"
-    viewBox="0 0 16 16"
-  >
-    <path d="M11.5 6.027a.5.5 0 11-1 0 .5.5 0 011 0zm-1.5 1.5a.5.5 0 100-1 .5.5 0 000 1zm2.5-.5a.5.5 0 11-1 0 .5.5 0 011 0zm-1.5 1.5a.5.5 0 100-1 .5.5 0 000 1zm-6.5-3h1v1h1v1h-1v1h-1v-1h-1v-1h1v-1z"></path>
-    <path d="M3.051 3.26a.5.5 0 01.354-.613l1.932-.518a.5.5 0 01.62.39c.655-.079 1.35-.117 2.043-.117.72 0 1.443.041 2.12.126a.5.5 0 01.622-.399l1.932.518a.5.5 0 01.306.729c.14.09.266.19.373.297.408.408.78 1.05 1.095 1.772.32.733.599 1.591.805 2.466.206.875.34 1.78.364 2.606.024.816-.059 1.602-.328 2.21a1.42 1.42 0 01-1.445.83c-.636-.067-1.115-.394-1.513-.773-.245-.232-.496-.526-.739-.808-.126-.148-.25-.292-.368-.423-.728-.804-1.597-1.527-3.224-1.527-1.627 0-2.496.723-3.224 1.527-.119.131-.242.275-.368.423-.243.282-.494.575-.739.808-.398.38-.877.706-1.513.773a1.42 1.42 0 01-1.445-.83c-.27-.608-.352-1.395-.329-2.21.024-.826.16-1.73.365-2.606.206-.875.486-1.733.805-2.466.315-.722.687-1.364 1.094-1.772a2.34 2.34 0 01.433-.335.504.504 0 01-.028-.079zm2.036.412c-.877.185-1.469.443-1.733.708-.276.276-.587.783-.885 1.465a13.748 13.748 0 00-.748 2.295 12.351 12.351 0 00-.339 2.406c-.022.755.062 1.368.243 1.776a.42.42 0 00.426.24c.327-.034.61-.199.929-.502.212-.202.4-.423.615-.674.133-.156.276-.323.44-.504C4.861 9.969 5.978 9.027 8 9.027s3.139.942 3.965 1.855c.164.181.307.348.44.504.214.251.403.472.615.674.318.303.601.468.929.503a.42.42 0 00.426-.241c.18-.408.265-1.02.243-1.776a12.354 12.354 0 00-.339-2.406 13.753 13.753 0 00-.748-2.295c-.298-.682-.61-1.19-.885-1.465-.264-.265-.856-.523-1.733-.708-.85-.179-1.877-.27-2.913-.27-1.036 0-2.063.091-2.913.27z"></path>
-  </svg>
-);
-
-function MainGame() {
+function MainGame(props) {
   const gameCtx = useContext(GameContext);
-  const dynamicGridCount = 10;
-  const inputString =
-    "X0000ffffn0001ffffs0002ffffu0003ffffn0004ffffn0005ffffe0006ffffn0007ffftc0008ffffW0009ffffn0100ffftn0101tfftw0102ffffn0103ttftt0104ftttn0105ffffn0106ffffn0107ffffn0108tttfn0109ffffo0200tfffn0201fffff0202ffftn0203ttffn0204ftffn0205tttfV0206ffffn0207ttttv0208ffftb0209ffffn0300ttffn0301ttttF0302ffffn0303tftfn0304ttffn0305tfftn0306ffffn0307tfttn0308tttfn0309ffffn0400tttfn0401ttttx0402ffffn0403tfffn0404ffftn0405ftttT0406ffffn0407ftffn0408fttfO0409ftffn0500fftfn0501ttttX0502ftffn0503fftfn0504tfftn0505ffttn0506ftffn0507ttffn0508tftfn0509ttttn0600ffttn0601ftttn0602ftffn0603ffffn0604ffffn0605tfftn0606ffttn0607ttftn0608tftfn0609tfffn0700fttfn0701ttffn0702ttffn0703ffttn0704ttttn0705ftffn0706ftffn0707ffffn0708ftttn0709tfttn0800ffftn0801fftfn0802tfttn0803tttfn0804fttfn0805ttffn0806tfffn0807ffttn0808ftftn0809fttfn0900ttffn0901ttffn0902tttfn0903ffttn0904tttfn0905tfftn0906tttfn0907fttfn0908ftftx0909tttt";
 
+  const dynamicGridCount = props.dynamicGridCount;
+  const inputString = props.inputString;
+  const timeBoundary = props.timeBoundary;
+
+  // const dynamicGridCount = 10;
+  // const inputString =
+  //   "X0000ffffn0001ffffs0002ffffu0003ffffn0004ffffn0005ffffe0006ffffn0007ffftc0008ffffW0009ffffn0100ffftn0101tfftw0102ffffn0103ttftt0104ftttn0105ffffn0106ffffn0107ffffn0108tttfn0109ffffo0200tfffn0201fffff0202ffftn0203ttffn0204ftffn0205tttfV0206ffffn0207ttttv0208ffftb0209ffffn0300ttffn0301ttttF0302ffffn0303tftfn0304ttffn0305tfftn0306ffffn0307tfttn0308tttfn0309ffffn0400tttfn0401ttttx0402ffffn0403tfffn0404ffftn0405ftttT0406ffffn0407ftffn0408fttfO0409ftffn0500fftfn0501ttttX0502ftffn0503fftfn0504tfftn0505ffttn0506ftffn0507ttffn0508tftfn0509ttttn0600ffttn0601ftttn0602ftffn0603ffffn0604ffffn0605tfftn0606ffttn0607ttftn0608tftfn0609tfffn0700fttfn0701ttffn0702ttffn0703ffttn0704ttttn0705ftffn0706ftffn0707ffffn0708ftttn0709tfttn0800ffftn0801fftfn0802tfttn0803tttfn0804fttfn0805ttffn0806tfffn0807ffttn0808ftftn0809fttfn0900ttffn0901ttffn0902tttfn0903ffttn0904tttfn0905tfftn0906tttfn0907fttfn0908ftftx0909tttt";
+  // const inputString = props.seed;
   // const dynamicGridCount = 8;
   // const inputString =
   //   "s0000ffffn0001ffffn0002ffffn0003ffffc0004ttffn0005tfttn0006ftffn0007ttttn0100tftfn0101tfttn0102ffffn0103ffffn0104ffffn0105tttfn0106fftfn0107ffftt0200tftfn0201ffffn0202ffffn0203tfttn0204ffffn0205ffffn0206ttttn0207ffttn0300fftfn0301ttftn0302tfffn0303tfttn0304ffftn0305ttttn0306ttttn0307ffttn0400tfftn0401tfftn0402tfttn0403ffftn0404ffffn0405ffffn0406ttttn0407ffffn0500tfftn0501tttfn0502ftttn0503ftttn0504tftfn0505ffffn0506fftfn0507ftffn0600tfttT0601ffttn0602ffffn0603tftfn0604ttttn0605ftffn0606tfffn0607fttfn0700ttttn0701ttttn0702tftfn0703tfffn0704tftfn0705ffftn0706ffffe0707ffff";
 
-  const timeBoundary = "0110200";
+  // const timeBoundary = "0110200";
 
   const minutes = parseInt(timeBoundary.substring(0, 2), 10);
   const seconds = parseInt(timeBoundary.substring(2, 4), 10);
@@ -80,6 +60,8 @@ function MainGame() {
   const [hasTimerStarted, setHasTimerStarted] = useState(false);
   const [finishTime, setFinishTime] = useState(null);
   const timerRef = useRef(null);
+
+  // const [initializeGrid, setInitializeGrid] = useState(0);
 
   useEffect(() => {
     if (hasTimerStarted) {
@@ -265,6 +247,7 @@ function MainGame() {
       ) {
         setHasTimerStarted(true);
       }
+
       let newPosition = { ...pointPosition };
       switch (e.key) {
         case "ArrowUp":
@@ -512,6 +495,10 @@ function MainGame() {
     );
   }, [pointPosition, result, gameCtx.keyPressedCount]);
 
+  const handleRestart = () => {
+    props.onRestart();
+  };
+
   return (
     <React.Fragment>
       <div
@@ -523,19 +510,19 @@ function MainGame() {
             height > 710 ? "h-full" : "h-[43rem]"
           } grid col-span-2 row-span-6 md:grid-cols-12 md:grid-rows-1 bg-page1 border-2 border-pageMenu shadow-xl`}
         >
-          <div className="relative order-2 col-span-1 row-span-2 md:order-1 md:col-span-3 border-2 border-pageMenu">
-            <div className="absolute w-full h-full bg-page2 md:bg-pageMenu overflow-hidden">
+          <div className="relative order-2 col-span-1 row-span-2 md:order-1 md:col-span-3 md:shadow-[rgba(0,_0,_0,_0.4)_0px_30px_90px]">
+            <div className="absolute w-full h-full overflow-hidden">
               <div className="w-full h-full absolute flex items-end justify-center left-44 md:left-28 lg:left-44 max-[660px]:opacity-0">
                 {controllerSVG}
               </div>
-              <div className="absolute max-[660px]:w-full w-[65%] h-full md:w-full md:h-[60%] lg:w-full lg:h-[50%] border-2 border-page1">
+              <div className="absolute max-[660px]:w-full w-[65%] h-full md:w-full md:h-[50%] lg:w-full lg:h-[50%] bg-pageMenu shadow-[rgba(0,_0,_0,_0.4)_0px_30px_90px]">
                 <div className="pt-3 flex items-center justify-center">
-                  <span className="font-page md:text-page1 text-pageMenu tracking-wider text-3xl font-extrabold">
+                  <span className="font-page text-page1 tracking-wider text-3xl font-extrabold">
                     TIMER
                   </span>
                   <span>{timerSVG}</span>
                 </div>
-                <span className="w-full flex justify-center font-page text-pageMenu md:text-page1 tracking-wider text-3xl font-extrabold">
+                <span className="w-full flex justify-center font-page text-page1 tracking-wider text-3xl font-extrabold">
                   {formatTimeLeft(timeLeft)}
                 </span>
               </div>
@@ -554,7 +541,7 @@ function MainGame() {
               {/* <span>Did win?: {gameCtx.win ? "true" : "false"}</span> */}
             </div>
           </div>
-          <div className="order-1 col-span-2 row-span-4 md:order-2 md:col-span-6 border-2 border-pageMenu flex items-center justify-center p-5 md:p-10 lg:p-16">
+          <div className="order-1 col-span-2 row-span-4 md:order-2 md:col-span-6 flex items-center justify-center p-5 md:p-10 lg:p-16">
             <div className="w-full h-full relative flex items-center justify-center">
               <div className="absolute w-[100%] h-fit min-[450px]:h-[27rem] min-[450px]:w-[27rem] md:h-fit md:w-full aspect-[50/50] bg-pageMenu shadow-[rgba(0,_0,_0,_0.4)_0px_30px_90px]">
                 {specialBlockCtx.specialMode && (
@@ -654,17 +641,69 @@ function MainGame() {
               </div>
             </div>
           </div>
-          <div className="relative order-2 col-span-1 row-span-2 md:order-3 md:col-span-3 border-2 border-pageMenu">
+          <div className="relative order-2 col-span-1 row-span-2 md:order-3 md:col-span-3 md:shadow-[rgba(0,_0,_0,_0.4)_0px_30px_90px]">
             {/* {pointPosition.x}
               {pointPosition.y} */}
-            <div className="absolute w-full h-full bg-page3 md:bg-pageMenu overflow-hidden">
+            <div className="absolute w-full h-full overflow-hidden ">
               <div className="w-full h-full absolute flex items-end justify-center right-44 md:right-28 lg:right-44 max-[660px]:opacity-0">
                 {controllerSVG}
               </div>
-              <div className="absolute max-[660px]:w-full w-[65%] h-full md:w-full md:h-[60%] lg:w-full lg:h-[50%] border-2 border-page1 right-0">
-                <span className="block">
+              <div className="absolute max-[660px]:w-full w-[65%] h-full md:w-full md:h-[50%] lg:w-full lg:h-[50%] right-0 bg-page4 sm:bg-pageMenu shadow-[rgba(0,_0,_0,_0.4)_0px_30px_90px]">
+                {/* <span className="block">
                   {gameCtx.isGameOver ? "game over" : "play"}
-                </span>
+                </span> */}
+                {/* <div className="px-2 pt-3 flex items-center justify-center w-full">
+                  <span className="w-full font-page text-page1 tracking-wider text-3xl font-extrabold flex items-center justify-center text-center">
+                    <span className="w-full flex-nowrap">MOVE TO</span>
+                    <span className="w-full">START</span>
+                    <span className="">{keyboardSVG}</span>
+                  </span>
+                </div> */}
+                {!hasTimerStarted && (
+                  <div className="pt-3 flex flex-col items-center justify-center w-full">
+                    <div className="font-page text-page1 tracking-wider text-3xl font-extrabold flex flex-col items-center justify-center text-center animate-pulse">
+                      <span>MOVE TO</span>
+                      <div className="flex">
+                        <span>START</span>
+                        <span className="pl-3">{keyboardSVG}</span>
+                      </div>
+                    </div>
+                  </div>
+                )}
+                {hasTimerStarted && !gameCtx.isGameOver && (
+                  <div className="pt-3 flex flex-col items-center justify-center w-full">
+                    <div className="font-page text-page1 tracking-wider text-3xl font-extrabold flex flex-col items-center justify-center text-center">
+                      <span>GOOD</span>
+                      <div className="flex">
+                        <span>LUCK</span>
+                        <span className="pl-2">{lightningSVG}</span>
+                      </div>
+                    </div>
+                  </div>
+                )}
+                {gameCtx.isGameOver && (
+                  <div className="pt-3 flex flex-col items-center justify-center w-full">
+                    <div className="font-page text-page1 tracking-wider text-3xl font-extrabold flex flex-col items-center justify-center text-center">
+                      <span>YOU LOSE!</span>
+                      <span className="mx-1">
+                        PRESS <span className="animate-pulse">"P"</span> TO
+                      </span>
+                      <span
+                        className="bg-pageMenu sm:bg-page5 p-1 hover:scale-110 hover:animate-pulse duration-100 hover:cursor-pointer active:scale-95"
+                        onClick={handleRestart}
+                      >
+                        TRY AGAIN
+                      </span>
+                      {/* <div className="flex">
+                        <span>LOSE LOSE</span>
+                        <span className="pl-2">{lightningSVG}</span>
+                      </div> */}
+                    </div>
+                  </div>
+                )}
+                {/* <span className="block bg-page5 hover:scale-105 hover:cursor-pointer" onClick={checkAPI}>
+                  seed check
+                </span> */}
               </div>
 
               {/* <span className="block">{gameCtx.keyPressed}</span> */}

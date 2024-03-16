@@ -3,7 +3,7 @@ import { signIn } from "next-auth/react";
 import { useRouter } from "next/router";
 import TextField from "@mui/material/TextField";
 import NotificationContext from "../../store/notification-context";
-import { AnimatePresence, motion, useInstantTransition } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import useMeasure from "react-use-measure";
 import Link from "next/link";
 import {
