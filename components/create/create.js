@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext, useMemo } from "react";
 import useMeasure from "react-use-measure";
 import GameContext from "../../store/game-context";
+import NotificationContext from "../../store/notification-context";
 import Grid from "./grid";
 // import NormalBlock from "../play/blocks/normal";
 // import StartBlock from "../play/blocks/start";
@@ -21,15 +22,38 @@ import Grid from "./grid";
 // import CircleSpecial from "../play/blocks/special/circle";
 // import UpAndDownSpecial from "../play/blocks/special/up-and-down";
 import CreateBorderBlock from "../play/blocks/create-borders";
+import {
+  checkeredSVG,
+  startDesignSVG,
+  trophySVG,
+  unlockSVG,
+} from "../../SVG/game-grid";
+import { leftSVG, rightSVG, upSVG, downSVG } from "../../SVG/arrows";
 
 function Create(props) {
   const [ref, { height, width }] = useMeasure();
   const [result, setResult] = useState([]);
   // const [resultBorder, setResultBorders] = useState([]);
   const gameCtx = useContext(GameContext);
+  const notificationCtx = useContext(NotificationContext);
   const [inputString, setInputString] = useState(
     "n0000ffffn0001ffffn0002ffffn0003ffffn0004ffffn0005ffffn0006ffffn0007ffffn0008ffffn0009ffffn0100ffffn0101ffffn0102ffffn0103ffffn0104ffffn0105ffffn0106ffffn0107ffffn0108ffffn0109ffffn0200ffffn0201ffffn0202ffffn0203ffffn0204ffffn0205ffffn0206ffffn0207ffffn0208ffffn0209ffffn0300ffffn0301ffffn0302ffffn0303ffffn0304ffffn0305ffffn0306ffffn0307ffffn0308ffffn0309ffffn0400ffffn0401ffffn0402ffffn0403ffffn0404ffffn0405ffffn0406ffffn0407ffffn0408ffffn0409ffffn0500ffffn0501ffffn0502ffffn0503ffffn0504ffffn0505ffffn0506ffffn0507ffffn0508ffffn0509ffffn0600ffffn0601ffffn0602ffffn0603ffffn0604ffffn0605ffffn0606ffffn0607ffffn0608ffffn0609ffffn0700ffffn0701ffffn0702ffffn0703ffffn0704ffffn0705ffffn0706ffffn0707ffffn0708ffffn0709ffffn0800ffffn0801ffffn0802ffffn0803ffffn0804ffffn0805ffffn0806ffffn0807ffffn0808ffffn0809ffffn0900ffffn0901ffffn0902ffffn0903ffffn0904ffffn0905ffffn0906ffffn0907ffffn0908ffffn0909ffff"
   );
+  // const [itemsBoundaries, setItemBoundaries] = useState([
+  //   { type: "s", avaiable: 5 },
+  //   { type: "l", avaiable: 5 },
+  //   { type: "n", avaiable: 3 },
+  // ]);
+
+  // const decreaseAvaiableByOne = (type) => {
+  //   console.log("Hello")
+  //   console.log(type)
+  //   setItemBoundaries(currentItems =>
+  //     currentItems.map(item =>
+  //       item.type === type ? { ...item, max: item.avaiable - 1 } : item
+  //     )
+  //   );
+  // };
 
   const {
     pointPosition,
@@ -43,6 +67,46 @@ function Create(props) {
 
   const pullData = (data) => {
     setInputString(data);
+  };
+
+  const clearElementHandler = (i, j, blockType) => {
+    gameCtx.setItemBoundaries((currentItems) =>
+      currentItems.map((item) =>
+        item.type === blockType
+          ? { ...item, avaiable: item.avaiable + 1 }
+          : item
+      )
+    );
+
+    const targetI = i;
+    const targetJ = j;
+    function arrayToInputString(twoDimensionalArray) {
+      let inputString = "";
+
+      for (let i = 0; i < dynamicGridCount; i++) {
+        for (let j = 0; j < dynamicGridCount; j++) {
+          const cell = twoDimensionalArray[i][j];
+
+          let type = cell.type;
+          let row = cell.row.toString().padStart(2, "0");
+          let col = cell.col.toString().padStart(2, "0");
+          let top = cell.top ? "t" : "f";
+          let right = cell.right ? "t" : "f";
+          let bottom = cell.bottom ? "t" : "f";
+          let left = cell.left ? "t" : "f";
+
+          if (col == targetJ && row == targetI) {
+            type = "n";
+          }
+
+          inputString += `${type}${row}${col}${top}${right}${bottom}${left}`;
+        }
+      }
+
+      return inputString;
+    }
+    const wynik = arrayToInputString(gameCtx.grid);
+    setInputString(wynik);
   };
 
   useEffect(() => {
@@ -156,7 +220,55 @@ function Create(props) {
     setResult(twoDimensionalArray);
   }, [inputString]);
 
-  // console.log(result);
+  const handleDrop = (event, i, j, cellType) => {
+    event.preventDefault();
+    const svgId = event.dataTransfer.getData("text/plain");
+
+    if (cellType !== "n") {
+      notificationCtx.showNotification({
+        title: "Warning!",
+        message: "clear this field before placing a different block on it",
+        status: "error",
+      });
+      return;
+    }
+
+    gameCtx.setItemBoundaries((currentItems) =>
+      currentItems.map((item) =>
+        item.type === svgId ? { ...item, avaiable: item.avaiable - 1 } : item
+      )
+    );
+
+    const targetI = i;
+    const targetJ = j;
+    function arrayToInputString(twoDimensionalArray) {
+      let inputString = "";
+
+      for (let i = 0; i < dynamicGridCount; i++) {
+        for (let j = 0; j < dynamicGridCount; j++) {
+          const cell = twoDimensionalArray[i][j];
+
+          let type = cell.type;
+          let row = cell.row.toString().padStart(2, "0");
+          let col = cell.col.toString().padStart(2, "0");
+          let top = cell.top ? "t" : "f";
+          let right = cell.right ? "t" : "f";
+          let bottom = cell.bottom ? "t" : "f";
+          let left = cell.left ? "t" : "f";
+
+          if (col == targetJ && row == targetI) {
+            type = svgId;
+          }
+
+          inputString += `${type}${row}${col}${top}${right}${bottom}${left}`;
+        }
+      }
+
+      return inputString;
+    }
+    const wynik = arrayToInputString(gameCtx.grid);
+    setInputString(wynik);
+  };
 
   const borderGridItems = useMemo(() => {
     // const componentMap = {
@@ -204,6 +316,7 @@ function Create(props) {
       row.map((cell, j) => (
         <CreateBorderBlock
           key={`border-row${i}col${j}`}
+          type={cell.type}
           i={cell.row}
           j={cell.col}
           top={cell.top}
@@ -213,13 +326,24 @@ function Create(props) {
           gridCount={dynamicGridCount}
           isSelected={false}
           func={pullData}
+          deleteElementFunc={clearElementHandler}
           inputString={inputString}
+          onDrop={(e) => handleDrop(e, cell.row, cell.col, cell.type)}
         />
       ))
     );
 
     return borderGridItems;
   }, [pointPosition, result, gameCtx.keyPressedCount, inputString]);
+
+  const handleDragStart = (event) => {
+    const blockType = event.target.id;
+    event.dataTransfer.setData("text/plain", blockType);
+  };
+
+  const handleDragEnd = () => {
+    console.log("dragging stopped");
+  };
 
   return (
     <div ref={ref} className="w-full h-full">
@@ -415,10 +539,945 @@ function Create(props) {
                     </div>
                   </div>
                 </div>
-                <div className="w-full h-[12rem] border-2 border-pageMenu"></div>
-                <div className="w-full h-[12rem] border-2 border-pageMenu"></div>
-                <div className="w-full h-[12rem] border-2 border-pageMenu"></div>
-                <div className="w-full h-[12rem] border-2 border-pageMenu"></div>
+                <div className="w-full h-[12rem] border-2 border-pageMenu">
+                  <div className="w-full h-full flex items-center justify-center">
+                    <div className="w-full h-[10rem]">
+                      <div className="w-full h-[5rem] flex items-center justify-center">
+                        <div
+                          className="bg-pageMenu w-12 h-12 md:w-12 md:h-12 lg:w-16 lg:h-16 relative shadow-[rgba(0,_0,_0,_0.4)_0px_15px_45px] flex items-center justify-center hover:cursor-grab"
+                          draggable="true"
+                          id="f"
+                          onDragStart={handleDragStart}
+                          onDragEnd={handleDragEnd}
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            className="w-[90%] h-[90%]"
+                          >
+                            <path
+                              className="fill-page1"
+                              fill="#000"
+                              fillRule="evenodd"
+                              d="M19 21a1 1 0 01-1 1H6a1 1 0 01-1-1v-2.25A1.75 1.75 0 003.25 17C2.56 17 2 16.44 2 15.75V11C2 5.477 6.477 1 12 1s10 4.477 10 10v4.75c0 .69-.56 1.25-1.25 1.25A1.75 1.75 0 0019 18.75V21zm-2-1v-1.25a3.751 3.751 0 013-3.675V11a8 8 0 10-16 0v4.075c1.712.348 3 1.86 3 3.675V20h2v-2a1 1 0 112 0v2h2v-2a1 1 0 112 0v2h2zm-6-7.5c0 1.38-2.368 2.5-3.748 2.5-1.267 0-1.26-.945-1.25-2.17l.001-.33a2.5 2.5 0 114.997 0zm6.998.33l-.001-.33a2.5 2.5 0 10-4.997 0c0 1.38 2.368 2.5 3.747 2.5 1.268 0 1.26-.945 1.251-2.17z"
+                              clipRule="evenodd"
+                            ></path>
+                          </svg>
+                        </div>
+                        <div className="w-14 h-16 md:w-12 md:h-12 lg:w-14 lg:h-16 relative flex items-center justify-center">
+                          <span className="font-page text-5xl md:text-3xl lg:text-5xl font-extrabold text-pageMenu pb-2 md:pb-1 lg:pb-2">
+                            x
+                          </span>
+                        </div>
+                        <div className="w-14 h-16 md:w-12 md:h-12 lg:w-14 lg:h-16 relative flex items-center justify-start">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 -64 640 640"
+                            className="w-20 h-20"
+                          >
+                            <path
+                              className="fill-pageMenu"
+                              d="M471.1 96C405 96 353.3 137.3 320 174.6 286.7 137.3 235 96 168.9 96 75.8 96 0 167.8 0 256s75.8 160 168.9 160c66.1 0 117.8-41.3 151.1-78.6 33.3 37.3 85 78.6 151.1 78.6 93.1 0 168.9-71.8 168.9-160S564.2 96 471.1 96zM168.9 320c-40.2 0-72.9-28.7-72.9-64s32.7-64 72.9-64c38.2 0 73.4 36.1 94 64-20.4 27.6-55.9 64-94 64zm302.2 0c-38.2 0-73.4-36.1-94-64 20.4-27.6 55.9-64 94-64 40.2 0 72.9 28.7 72.9 64s-32.7 64-72.9 64z"
+                            ></path>
+                          </svg>
+                        </div>
+                      </div>
+                      <div className="w-full h-[5rem] text-center pt-3">
+                        <span className="bg-pageMenu text-center font-page text-md text-page1 tracking-wide font-bold">
+                          A blinking block that blinks every 1250 milliseconds
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="w-full h-[12rem] border-2 border-pageMenu">
+                  <div className="w-full h-full flex items-center justify-center">
+                    <div className="w-full h-[10rem]">
+                      <div className="w-full h-[5rem] flex items-center justify-center">
+                        <div
+                          className="bg-pageMenu w-12 h-12 md:w-12 md:h-12 lg:w-16 lg:h-16 relative shadow-[rgba(0,_0,_0,_0.4)_0px_15px_45px] flex items-center justify-center hover:cursor-grab"
+                          draggable="true"
+                          id="F"
+                          onDragStart={handleDragStart}
+                          onDragEnd={handleDragEnd}
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            className="w-[90%] h-[90%]"
+                          >
+                            <path
+                              className="fill-page1"
+                              fill="#000"
+                              fillRule="evenodd"
+                              d="M19 21a1 1 0 01-1 1H6a1 1 0 01-1-1v-2.25A1.75 1.75 0 003.25 17C2.56 17 2 16.44 2 15.75V11C2 5.477 6.477 1 12 1s10 4.477 10 10v4.75c0 .69-.56 1.25-1.25 1.25A1.75 1.75 0 0019 18.75V21zm-2-1v-1.25a3.751 3.751 0 013-3.675V11a8 8 0 10-16 0v4.075c1.712.348 3 1.86 3 3.675V20h2v-2a1 1 0 112 0v2h2v-2a1 1 0 112 0v2h2zm-6-7.5c0 1.38-2.368 2.5-3.748 2.5-1.267 0-1.26-.945-1.25-2.17l.001-.33a2.5 2.5 0 114.997 0zm6.998.33l-.001-.33a2.5 2.5 0 10-4.997 0c0 1.38 2.368 2.5 3.747 2.5 1.268 0 1.26-.945 1.251-2.17z"
+                              clipRule="evenodd"
+                            ></path>
+                          </svg>
+                        </div>
+                        <div className="w-14 h-16 md:w-12 md:h-12 lg:w-14 lg:h-16 relative flex items-center justify-center">
+                          <span className="font-page text-5xl md:text-3xl lg:text-5xl font-extrabold text-pageMenu pb-2 md:pb-1 lg:pb-2">
+                            x
+                          </span>
+                        </div>
+                        <div className="w-14 h-16 md:w-12 md:h-12 lg:w-14 lg:h-16 relative flex items-center justify-start">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 -64 640 640"
+                            className="w-20 h-20"
+                          >
+                            <path
+                              className="fill-pageMenu"
+                              d="M471.1 96C405 96 353.3 137.3 320 174.6 286.7 137.3 235 96 168.9 96 75.8 96 0 167.8 0 256s75.8 160 168.9 160c66.1 0 117.8-41.3 151.1-78.6 33.3 37.3 85 78.6 151.1 78.6 93.1 0 168.9-71.8 168.9-160S564.2 96 471.1 96zM168.9 320c-40.2 0-72.9-28.7-72.9-64s32.7-64 72.9-64c38.2 0 73.4 36.1 94 64-20.4 27.6-55.9 64-94 64zm302.2 0c-38.2 0-73.4-36.1-94-64 20.4-27.6 55.9-64 94-64 40.2 0 72.9 28.7 72.9 64s-32.7 64-72.9 64z"
+                            ></path>
+                          </svg>
+                        </div>
+                      </div>
+                      <div className="w-full h-[5rem] text-center pt-3">
+                        <span className="bg-pageMenu text-center font-page text-md text-page1 tracking-wide font-bold">
+                          A blinking block that blinks every 1000 milliseconds
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="w-full h-[12rem] border-2 border-pageMenu">
+                  <div className="w-full h-full flex items-center justify-center">
+                    <div className="w-full h-[10rem]">
+                      <div className="w-full h-[5rem] flex items-center justify-center">
+                        <div
+                          className="bg-pageMenu w-12 h-12 md:w-12 md:h-12 lg:w-16 lg:h-16 relative shadow-[rgba(0,_0,_0,_0.4)_0px_15px_45px] flex items-center justify-center hover:cursor-grab"
+                          draggable="true"
+                          id="x"
+                          onDragStart={handleDragStart}
+                          onDragEnd={handleDragEnd}
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            className="w-[90%] h-[90%]"
+                          >
+                            <path
+                              className="fill-page1"
+                              fill="#000"
+                              fillRule="evenodd"
+                              d="M19 21a1 1 0 01-1 1H6a1 1 0 01-1-1v-2.25A1.75 1.75 0 003.25 17C2.56 17 2 16.44 2 15.75V11C2 5.477 6.477 1 12 1s10 4.477 10 10v4.75c0 .69-.56 1.25-1.25 1.25A1.75 1.75 0 0019 18.75V21zm-2-1v-1.25a3.751 3.751 0 013-3.675V11a8 8 0 10-16 0v4.075c1.712.348 3 1.86 3 3.675V20h2v-2a1 1 0 112 0v2h2v-2a1 1 0 112 0v2h2zm-6-7.5c0 1.38-2.368 2.5-3.748 2.5-1.267 0-1.26-.945-1.25-2.17l.001-.33a2.5 2.5 0 114.997 0zm6.998.33l-.001-.33a2.5 2.5 0 10-4.997 0c0 1.38 2.368 2.5 3.747 2.5 1.268 0 1.26-.945 1.251-2.17z"
+                              clipRule="evenodd"
+                            ></path>
+                          </svg>
+                        </div>
+                        <div className="w-14 h-16 md:w-12 md:h-12 lg:w-14 lg:h-16 relative flex items-center justify-center">
+                          <span className="font-page text-5xl md:text-3xl lg:text-5xl font-extrabold text-pageMenu pb-2 md:pb-1 lg:pb-2">
+                            x
+                          </span>
+                        </div>
+                        <div className="w-14 h-16 md:w-12 md:h-12 lg:w-14 lg:h-16 relative flex items-center justify-start">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 -64 640 640"
+                            className="w-20 h-20"
+                          >
+                            <path
+                              className="fill-pageMenu"
+                              d="M471.1 96C405 96 353.3 137.3 320 174.6 286.7 137.3 235 96 168.9 96 75.8 96 0 167.8 0 256s75.8 160 168.9 160c66.1 0 117.8-41.3 151.1-78.6 33.3 37.3 85 78.6 151.1 78.6 93.1 0 168.9-71.8 168.9-160S564.2 96 471.1 96zM168.9 320c-40.2 0-72.9-28.7-72.9-64s32.7-64 72.9-64c38.2 0 73.4 36.1 94 64-20.4 27.6-55.9 64-94 64zm302.2 0c-38.2 0-73.4-36.1-94-64 20.4-27.6 55.9-64 94-64 40.2 0 72.9 28.7 72.9 64s-32.7 64-72.9 64z"
+                            ></path>
+                          </svg>
+                        </div>
+                      </div>
+                      <div className="w-full h-[5rem] text-center pt-3">
+                        <span className="bg-pageMenu text-center font-page text-md text-page1 tracking-wide font-bold">
+                          A blinking block that blinks every 750 milliseconds
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="w-full h-[12rem] border-2 border-pageMenu">
+                  <div className="w-full h-full flex items-center justify-center">
+                    <div className="w-full h-[10rem]">
+                      <div className="w-full h-[5rem] flex items-center justify-center">
+                        <div
+                          className="bg-pageMenu w-12 h-12 md:w-12 md:h-12 lg:w-16 lg:h-16 relative shadow-[rgba(0,_0,_0,_0.4)_0px_15px_45px] flex items-center justify-center hover:cursor-grab"
+                          draggable="true"
+                          id="X"
+                          onDragStart={handleDragStart}
+                          onDragEnd={handleDragEnd}
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            className="w-[90%] h-[90%]"
+                          >
+                            <path
+                              className="fill-page1"
+                              fill="#000"
+                              fillRule="evenodd"
+                              d="M19 21a1 1 0 01-1 1H6a1 1 0 01-1-1v-2.25A1.75 1.75 0 003.25 17C2.56 17 2 16.44 2 15.75V11C2 5.477 6.477 1 12 1s10 4.477 10 10v4.75c0 .69-.56 1.25-1.25 1.25A1.75 1.75 0 0019 18.75V21zm-2-1v-1.25a3.751 3.751 0 013-3.675V11a8 8 0 10-16 0v4.075c1.712.348 3 1.86 3 3.675V20h2v-2a1 1 0 112 0v2h2v-2a1 1 0 112 0v2h2zm-6-7.5c0 1.38-2.368 2.5-3.748 2.5-1.267 0-1.26-.945-1.25-2.17l.001-.33a2.5 2.5 0 114.997 0zm6.998.33l-.001-.33a2.5 2.5 0 10-4.997 0c0 1.38 2.368 2.5 3.747 2.5 1.268 0 1.26-.945 1.251-2.17z"
+                              clipRule="evenodd"
+                            ></path>
+                          </svg>
+                        </div>
+                        <div className="w-14 h-16 md:w-12 md:h-12 lg:w-14 lg:h-16 relative flex items-center justify-center">
+                          <span className="font-page text-5xl md:text-3xl lg:text-5xl font-extrabold text-pageMenu pb-2 md:pb-1 lg:pb-2">
+                            x
+                          </span>
+                        </div>
+                        <div className="w-14 h-16 md:w-12 md:h-12 lg:w-14 lg:h-16 relative flex items-center justify-start">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 -64 640 640"
+                            className="w-20 h-20"
+                          >
+                            <path
+                              className="fill-pageMenu"
+                              d="M471.1 96C405 96 353.3 137.3 320 174.6 286.7 137.3 235 96 168.9 96 75.8 96 0 167.8 0 256s75.8 160 168.9 160c66.1 0 117.8-41.3 151.1-78.6 33.3 37.3 85 78.6 151.1 78.6 93.1 0 168.9-71.8 168.9-160S564.2 96 471.1 96zM168.9 320c-40.2 0-72.9-28.7-72.9-64s32.7-64 72.9-64c38.2 0 73.4 36.1 94 64-20.4 27.6-55.9 64-94 64zm302.2 0c-38.2 0-73.4-36.1-94-64 20.4-27.6 55.9-64 94-64 40.2 0 72.9 28.7 72.9 64s-32.7 64-72.9 64z"
+                            ></path>
+                          </svg>
+                        </div>
+                      </div>
+                      <div className="w-full h-[5rem] text-center pt-3">
+                        <span className="bg-pageMenu text-center font-page text-md text-page1 tracking-wide font-bold">
+                          A blinking block that blinks every 500 milliseconds
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="w-full h-[12rem] border-2 border-pageMenu">
+                  <div className="w-full h-full flex items-center justify-center">
+                    <div className="w-full h-[10rem]">
+                      <div
+                        className={`relative w-full h-[5rem] flex items-center justify-center ${
+                          gameCtx.itemBoundaries.find(
+                            (item) => item.type === "s"
+                          ).avaiable == 0
+                            ? "opacity-25"
+                            : "opacity-100"
+                        }`}
+                      >
+                        {gameCtx.itemBoundaries.find(
+                          (item) => item.type === "s"
+                        ).avaiable == 0 && (
+                          <div className="w-full h-full z-50 absolute"></div>
+                        )}
+                        <div
+                          className="bg-pageMenu w-12 h-12 md:w-12 md:h-12 lg:w-16 lg:h-16 relative shadow-[rgba(0,_0,_0,_0.4)_0px_15px_45px] flex items-center justify-center hover:cursor-grab"
+                          draggable="true"
+                          id="s"
+                          onDragStart={handleDragStart}
+                          onDragEnd={handleDragEnd}
+                        >
+                          <div className="w-full h-full bg-page2">
+                            {startDesignSVG}
+                          </div>
+                        </div>
+                        <div className="w-14 h-16 md:w-12 md:h-12 lg:w-14 lg:h-16 relative flex items-center justify-center">
+                          <span className="font-page text-5xl md:text-3xl lg:text-5xl font-extrabold text-pageMenu pb-2 md:pb-1 lg:pb-2">
+                            x
+                          </span>
+                        </div>
+                        <div className="w-14 h-16 md:w-12 md:h-12 lg:w-14 lg:h-16 relative flex items-center justify-start">
+                          <span className="font-page text-5xl md:text-3xl lg:text-5xl font-extrabold text-pageMenu pb-2 md:pb-1 lg:pb-2">
+                            {
+                              gameCtx.itemBoundaries.find(
+                                (item) => item.type === "s"
+                              ).avaiable
+                            }
+                          </span>
+                        </div>
+                      </div>
+                      <div className="w-full h-[5rem] text-center pt-3">
+                        <span className="bg-pageMenu text-center font-page text-md text-page1 tracking-wide font-bold">
+                          Spawn point
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="w-full h-[12rem] border-2 border-pageMenu">
+                  <div className="w-full h-full flex items-center justify-center">
+                    <div className="w-full h-[10rem]">
+                      <div
+                        className={`relative w-full h-[5rem] flex items-center justify-center ${
+                          gameCtx.itemBoundaries.find(
+                            (item) => item.type === "e"
+                          ).avaiable == 0
+                            ? "opacity-25"
+                            : "opacity-100"
+                        }`}
+                      >
+                        {gameCtx.itemBoundaries.find(
+                          (item) => item.type === "e"
+                        ).avaiable == 0 && (
+                          <div className="w-full h-full z-50 absolute"></div>
+                        )}
+                        <div
+                          className="bg-pageMenu w-12 h-12 md:w-12 md:h-12 lg:w-16 lg:h-16 relative shadow-[rgba(0,_0,_0,_0.4)_0px_15px_45px] flex items-center justify-center hover:cursor-grab"
+                          draggable="true"
+                          id="e"
+                          onDragStart={handleDragStart}
+                          onDragEnd={handleDragEnd}
+                        >
+                          <div className="relative w-full h-full bg-page2">
+                            <div className="w-full h-full absolute">
+                              {checkeredSVG}
+                            </div>
+                            <div className="w-full h-full absolute">
+                              {trophySVG}
+                            </div>
+                          </div>
+                        </div>
+                        <div className="w-14 h-16 md:w-12 md:h-12 lg:w-14 lg:h-16 relative flex items-center justify-center">
+                          <span className="font-page text-5xl md:text-3xl lg:text-5xl font-extrabold text-pageMenu pb-2 md:pb-1 lg:pb-2">
+                            x
+                          </span>
+                        </div>
+                        <div className="w-14 h-16 md:w-12 md:h-12 lg:w-14 lg:h-16 relative flex items-center justify-start">
+                          <span className="font-page text-5xl md:text-3xl lg:text-5xl font-extrabold text-pageMenu pb-2 md:pb-1 lg:pb-2">
+                            {
+                              gameCtx.itemBoundaries.find(
+                                (item) => item.type === "e"
+                              ).avaiable
+                            }
+                          </span>
+                        </div>
+                      </div>
+                      <div className="w-full h-[5rem] text-center pt-3">
+                        <span className="bg-pageMenu text-center font-page text-md text-page1 tracking-wide font-bold">
+                          Finish block
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="w-full h-[12rem] border-2 border-pageMenu">
+                  <div className="w-full h-full flex items-center justify-center">
+                    <div className="w-full h-[10rem]">
+                      <div
+                        className={`relative w-full h-[5rem] flex items-center justify-center ${
+                          gameCtx.itemBoundaries.find(
+                            (item) => item.type === "t"
+                          ).avaiable == 0
+                            ? "opacity-25"
+                            : "opacity-100"
+                        }`}
+                      >
+                        {gameCtx.itemBoundaries.find(
+                          (item) => item.type === "t"
+                        ).avaiable == 0 && (
+                          <div className="w-full h-full z-50 absolute"></div>
+                        )}
+                        <div
+                          className="bg-pageMenu w-12 h-12 md:w-12 md:h-12 lg:w-16 lg:h-16 relative shadow-[rgba(0,_0,_0,_0.4)_0px_15px_45px] flex items-center justify-center hover:cursor-grab"
+                          draggable="true"
+                          id="t"
+                          onDragStart={handleDragStart}
+                          onDragEnd={handleDragEnd}
+                        >
+                          <div className="w-full h-full bg-page2 flex items-center justify-center">
+                            <svg
+                              className="absolute w-[80%] h-[80%] fill-pageMenu"
+                              xmlns="http://www.w3.org/2000/svg"
+                              viewBox="0 -40 40 47.5"
+                            >
+                              <path d="M0 0c0 10 40 10 40 0S0-10 0 0m0-6v-34h4v34H0m13-5v-16h4v16h-4m23 5v-28h4v28h-4m-9-3v-10h4v10h-4"></path>
+                            </svg>
+                          </div>
+                        </div>
+                        <div className="w-14 h-16 md:w-12 md:h-12 lg:w-14 lg:h-16 relative flex items-center justify-center">
+                          <span className="font-page text-5xl md:text-3xl lg:text-5xl font-extrabold text-pageMenu pb-2 md:pb-1 lg:pb-2">
+                            x
+                          </span>
+                        </div>
+                        <div className="w-14 h-16 md:w-12 md:h-12 lg:w-14 lg:h-16 relative flex items-center justify-start">
+                          <span className="font-page text-5xl md:text-3xl lg:text-5xl font-extrabold text-pageMenu pb-2 md:pb-1 lg:pb-2">
+                            {
+                              gameCtx.itemBoundaries.find(
+                                (item) => item.type === "t"
+                              ).avaiable
+                            }
+                          </span>
+                        </div>
+                      </div>
+                      <div className="w-full h-[5rem] text-center pt-3">
+                        <span className="bg-pageMenu text-center font-page text-md text-page1 tracking-wide font-bold">
+                          The entrance to the first teleportation block
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="w-full h-[12rem] border-2 border-pageMenu">
+                  <div className="w-full h-full flex items-center justify-center">
+                    <div className="w-full h-[10rem]">
+                      <div
+                        className={`relative w-full h-[5rem] flex items-center justify-center ${
+                          gameCtx.itemBoundaries.find(
+                            (item) => item.type === "T"
+                          ).avaiable == 0
+                            ? "opacity-25"
+                            : "opacity-100"
+                        }`}
+                      >
+                        {gameCtx.itemBoundaries.find(
+                          (item) => item.type === "T"
+                        ).avaiable == 0 && (
+                          <div className="w-full h-full z-50 absolute"></div>
+                        )}
+                        <div
+                          className="bg-pageMenu w-12 h-12 md:w-12 md:h-12 lg:w-16 lg:h-16 relative shadow-[rgba(0,_0,_0,_0.4)_0px_15px_45px] flex items-center justify-center hover:cursor-grab"
+                          draggable="true"
+                          id="T"
+                          onDragStart={handleDragStart}
+                          onDragEnd={handleDragEnd}
+                        >
+                          <div className="w-full h-full bg-page2 flex items-center justify-center">
+                            <svg
+                              className="absolute w-[80%] h-[80%] fill-pageMenu animate-pulse"
+                              xmlns="http://www.w3.org/2000/svg"
+                              viewBox="0 -32.834 40 40.33"
+                            >
+                              <path d="M0 0c0 10 40 10 40 0S0-10 0 0m0-9c16-11 14-21 5-21 5-5 11-3 13 3S7-15 11-9H0m18 0h4l-1-8 4 4h3l-8-8-8 8h3l4-4-1 8m22 0c-16-11-14-21-5-21-5-5-11-3-13 3s11 12 8 18h10"></path>
+                            </svg>
+                          </div>
+                        </div>
+                        <div className="w-14 h-16 md:w-12 md:h-12 lg:w-14 lg:h-16 relative flex items-center justify-center">
+                          <span className="font-page text-5xl md:text-3xl lg:text-5xl font-extrabold text-pageMenu pb-2 md:pb-1 lg:pb-2">
+                            x
+                          </span>
+                        </div>
+                        <div className="w-14 h-16 md:w-12 md:h-12 lg:w-14 lg:h-16 relative flex items-center justify-start">
+                          <span className="font-page text-5xl md:text-3xl lg:text-5xl font-extrabold text-pageMenu pb-2 md:pb-1 lg:pb-2">
+                            {
+                              gameCtx.itemBoundaries.find(
+                                (item) => item.type === "T"
+                              ).avaiable
+                            }
+                          </span>
+                        </div>
+                      </div>
+                      <div className="w-full h-[5rem] text-center pt-3">
+                        <span className="bg-pageMenu text-center font-page text-md text-page1 tracking-wide font-bold">
+                          The exit from the first teleport
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="w-full h-[12rem] border-2 border-pageMenu">
+                  <div className="w-full h-full flex items-center justify-center">
+                    <div className="w-full h-[10rem]">
+                      <div
+                        className={`relative w-full h-[5rem] flex items-center justify-center ${
+                          gameCtx.itemBoundaries.find(
+                            (item) => item.type === "o"
+                          ).avaiable == 0
+                            ? "opacity-25"
+                            : "opacity-100"
+                        }`}
+                      >
+                        {gameCtx.itemBoundaries.find(
+                          (item) => item.type === "o"
+                        ).avaiable == 0 && (
+                          <div className="w-full h-full z-50 absolute"></div>
+                        )}
+                        <div
+                          className="bg-pageMenu w-12 h-12 md:w-12 md:h-12 lg:w-16 lg:h-16 relative shadow-[rgba(0,_0,_0,_0.4)_0px_15px_45px] flex items-center justify-center hover:cursor-grab"
+                          draggable="true"
+                          id="o"
+                          onDragStart={handleDragStart}
+                          onDragEnd={handleDragEnd}
+                        >
+                          <div className="w-full h-full bg-page2 flex items-center justify-center">
+                            <svg
+                              className="absolute w-[80%] h-[80%] fill-pageMenu"
+                              xmlns="http://www.w3.org/2000/svg"
+                              viewBox="0 -35 40 42"
+                            >
+                              <path d="M0 0l20 7 20-7-20-7L0 0m0-2v-28h4v26L0-2m10-3l4-2v-16h-4m0 0v18m17-1v-29h4v30l-4-1m13 4v-21h-4v19l4 2"></path>
+                            </svg>
+                          </div>
+                        </div>
+                        <div className="w-14 h-16 md:w-12 md:h-12 lg:w-14 lg:h-16 relative flex items-center justify-center">
+                          <span className="font-page text-5xl md:text-3xl lg:text-5xl font-extrabold text-pageMenu pb-2 md:pb-1 lg:pb-2">
+                            x
+                          </span>
+                        </div>
+                        <div className="w-14 h-16 md:w-12 md:h-12 lg:w-14 lg:h-16 relative flex items-center justify-start">
+                          <span className="font-page text-5xl md:text-3xl lg:text-5xl font-extrabold text-pageMenu pb-2 md:pb-1 lg:pb-2">
+                            {
+                              gameCtx.itemBoundaries.find(
+                                (item) => item.type === "o"
+                              ).avaiable
+                            }
+                          </span>
+                        </div>
+                      </div>
+                      <div className="w-full h-[5rem] text-center pt-3">
+                        <span className="bg-pageMenu text-center font-page text-md text-page1 tracking-wide font-bold">
+                          The entrance to the first teleportation block
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="w-full h-[12rem] border-2 border-pageMenu">
+                  <div className="w-full h-full flex items-center justify-center">
+                    <div className="w-full h-[10rem]">
+                      <div
+                        className={`relative w-full h-[5rem] flex items-center justify-center ${
+                          gameCtx.itemBoundaries.find(
+                            (item) => item.type === "O"
+                          ).avaiable == 0
+                            ? "opacity-25"
+                            : "opacity-100"
+                        }`}
+                      >
+                        {gameCtx.itemBoundaries.find(
+                          (item) => item.type === "O"
+                        ).avaiable == 0 && (
+                          <div className="w-full h-full z-50 absolute"></div>
+                        )}
+                        <div
+                          className="bg-pageMenu w-12 h-12 md:w-12 md:h-12 lg:w-16 lg:h-16 relative shadow-[rgba(0,_0,_0,_0.4)_0px_15px_45px] flex items-center justify-center hover:cursor-grab"
+                          draggable="true"
+                          id="O"
+                          onDragStart={handleDragStart}
+                          onDragEnd={handleDragEnd}
+                        >
+                          <div className="w-full h-full bg-page2 flex items-center justify-center">
+                            <svg
+                              className="absolute w-[80%] h-[80%] fill-pageMenu animate-pulse"
+                              xmlns="http://www.w3.org/2000/svg"
+                              viewBox="0 -33 40 40"
+                            >
+                              <path d="M0 0l20 7 20-7-20-7L0 0m0-9c16-11 14-21 5-21l9-3 4 6L8-9H0m18 0h4l-1-8 4 4h3l-8-8-8 8h3l4-4-1 8m22 0c-16-11-14-21-5-21l-9-3-4 6L32-9h8"></path>
+                            </svg>
+                          </div>
+                        </div>
+                        <div className="w-14 h-16 md:w-12 md:h-12 lg:w-14 lg:h-16 relative flex items-center justify-center">
+                          <span className="font-page text-5xl md:text-3xl lg:text-5xl font-extrabold text-pageMenu pb-2 md:pb-1 lg:pb-2">
+                            x
+                          </span>
+                        </div>
+                        <div className="w-14 h-16 md:w-12 md:h-12 lg:w-14 lg:h-16 relative flex items-center justify-start">
+                          <span className="font-page text-5xl md:text-3xl lg:text-5xl font-extrabold text-pageMenu pb-2 md:pb-1 lg:pb-2">
+                            {
+                              gameCtx.itemBoundaries.find(
+                                (item) => item.type === "O"
+                              ).avaiable
+                            }
+                          </span>
+                        </div>
+                      </div>
+                      <div className="w-full h-[5rem] text-center pt-3">
+                        <span className="bg-pageMenu text-center font-page text-md text-page1 tracking-wide font-bold">
+                          The exit from the second teleport
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="w-full h-[12rem] border-2 border-pageMenu">
+                  <div className="w-full h-full flex items-center justify-center">
+                    <div className="w-full h-[10rem]">
+                      <div
+                        className={`relative w-full h-[5rem] flex items-center justify-center ${
+                          gameCtx.itemBoundaries.find(
+                            (item) => item.type === "v"
+                          ).avaiable == 0
+                            ? "opacity-25"
+                            : "opacity-100"
+                        }`}
+                      >
+                        {gameCtx.itemBoundaries.find(
+                          (item) => item.type === "v"
+                        ).avaiable == 0 && (
+                          <div className="w-full h-full z-50 absolute"></div>
+                        )}
+                        <div
+                          className="bg-pageMenu w-12 h-12 md:w-12 md:h-12 lg:w-16 lg:h-16 relative shadow-[rgba(0,_0,_0,_0.4)_0px_15px_45px] flex items-center justify-center hover:cursor-grab"
+                          draggable="true"
+                          id="v"
+                          onDragStart={handleDragStart}
+                          onDragEnd={handleDragEnd}
+                        >
+                          <div className="w-full h-full bg-page2 relative">
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              viewBox="-7.5 0 32 32"
+                              className="w-10 h-10 absolute -top-1 -right-1"
+                            >
+                              <path
+                                className="fill-pageMenu"
+                                d="M16.52 12.72l-4.84-4.84c-.16-.16-.44-.28-.68-.24s-.48.16-.6.36l-3.52 5.16-3.72.84c-.28.08-.52.28-.64.6-.08.28 0 .6.2.84l2.52 2.52-5 5c-.32.32-.32.84 0 1.2.16.16.36.24.6.24s.44-.08.6-.24l5.04-5.04L9 21.64c.16.16.36.24.6.24.08 0 .16 0 .24-.04.28-.08.52-.32.6-.64l.84-3.72L16.44 14c.2-.16.32-.36.36-.6-.04-.28-.08-.52-.28-.68zm-6.44 3.6c-.16.12-.28.32-.36.52l-.6 2.56L5 15.28l2.56-.56c.2-.04.4-.16.52-.36L11.2 9.8l3.4 3.4-4.52 3.12z"
+                              ></path>
+                            </svg>
+                            <span className="font-page font-extrabold text-xl md:text-3xl text-pageMenu bottom-0 absolute ml-1">
+                              3
+                            </span>
+                          </div>
+                        </div>
+                        <div className="w-14 h-16 md:w-12 md:h-12 lg:w-14 lg:h-16 relative flex items-center justify-center">
+                          <span className="font-page text-5xl md:text-3xl lg:text-5xl font-extrabold text-pageMenu pb-2 md:pb-1 lg:pb-2">
+                            x
+                          </span>
+                        </div>
+                        <div className="w-14 h-16 md:w-12 md:h-12 lg:w-14 lg:h-16 relative flex items-center justify-start">
+                          <span className="font-page text-5xl md:text-3xl lg:text-5xl font-extrabold text-pageMenu pb-2 md:pb-1 lg:pb-2">
+                            {
+                              gameCtx.itemBoundaries.find(
+                                (item) => item.type === "v"
+                              ).avaiable
+                            }
+                          </span>
+                        </div>
+                      </div>
+                      <div className="w-full h-[5rem] text-center pt-3">
+                        <span className="bg-pageMenu text-center font-page text-md text-page1 tracking-wide font-bold">
+                          Press on this block 3 times to unlock the pathway
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="w-full h-[12rem] border-2 border-pageMenu">
+                  <div className="w-full h-full flex items-center justify-center">
+                    <div className="w-full h-[10rem]">
+                      <div
+                        className={`relative w-full h-[5rem] flex items-center justify-center ${
+                          gameCtx.itemBoundaries.find(
+                            (item) => item.type === "V"
+                          ).avaiable == 0
+                            ? "opacity-25"
+                            : "opacity-100"
+                        }`}
+                      >
+                        {gameCtx.itemBoundaries.find(
+                          (item) => item.type === "V"
+                        ).avaiable == 0 && (
+                          <div className="w-full h-full z-50 absolute"></div>
+                        )}
+                        <div
+                          className="bg-pageMenu w-12 h-12 md:w-12 md:h-12 lg:w-16 lg:h-16 relative shadow-[rgba(0,_0,_0,_0.4)_0px_15px_45px] flex items-center justify-center hover:cursor-grab"
+                          draggable="true"
+                          id="V"
+                          onDragStart={handleDragStart}
+                          onDragEnd={handleDragEnd}
+                        >
+                          <div className="w-full h-full bg-page2 relative">
+                            <div className="relative w-full h-full bg-pageMenu flex items-center justify-center">
+                              {unlockSVG}
+                              <div className="absolute w-full h-full font-page text-sm text-page1 font-extrabold ml-2">
+                                3
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="w-14 h-16 md:w-12 md:h-12 lg:w-14 lg:h-16 relative flex items-center justify-center">
+                          <span className="font-page text-5xl md:text-3xl lg:text-5xl font-extrabold text-pageMenu pb-2 md:pb-1 lg:pb-2">
+                            x
+                          </span>
+                        </div>
+                        <div className="w-14 h-16 md:w-12 md:h-12 lg:w-14 lg:h-16 relative flex items-center justify-start">
+                          <span className="font-page text-5xl md:text-3xl lg:text-5xl font-extrabold text-pageMenu pb-2 md:pb-1 lg:pb-2">
+                            {
+                              gameCtx.itemBoundaries.find(
+                                (item) => item.type === "V"
+                              ).avaiable
+                            }
+                          </span>
+                        </div>
+                      </div>
+                      <div className="w-full h-[5rem] text-center pt-3">
+                        <span className="bg-pageMenu text-center font-page text-md text-page1 tracking-wide font-bold">
+                          The path that will be opened after 3 visits
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="w-full h-[12rem] border-2 border-pageMenu">
+                  <div className="w-full h-full flex items-center justify-center">
+                    <div className="w-full h-[10rem]">
+                      <div
+                        className={`relative w-full h-[5rem] flex items-center justify-center ${
+                          gameCtx.itemBoundaries.find(
+                            (item) => item.type === "w"
+                          ).avaiable == 0
+                            ? "opacity-25"
+                            : "opacity-100"
+                        }`}
+                      >
+                        {gameCtx.itemBoundaries.find(
+                          (item) => item.type === "w"
+                        ).avaiable == 0 && (
+                          <div className="w-full h-full z-50 absolute"></div>
+                        )}
+                        <div
+                          className="bg-pageMenu w-12 h-12 md:w-12 md:h-12 lg:w-16 lg:h-16 relative shadow-[rgba(0,_0,_0,_0.4)_0px_15px_45px] flex items-center justify-center hover:cursor-grab"
+                          draggable="true"
+                          id="w"
+                          onDragStart={handleDragStart}
+                          onDragEnd={handleDragEnd}
+                        >
+                          <div className="w-full h-full bg-page2 relative">
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              viewBox="-7.5 0 32 32"
+                              className="w-10 h-10 absolute -top-1 -right-1"
+                            >
+                              <path
+                                className="fill-pageMenu"
+                                d="M16.52 12.72l-4.84-4.84c-.16-.16-.44-.28-.68-.24s-.48.16-.6.36l-3.52 5.16-3.72.84c-.28.08-.52.28-.64.6-.08.28 0 .6.2.84l2.52 2.52-5 5c-.32.32-.32.84 0 1.2.16.16.36.24.6.24s.44-.08.6-.24l5.04-5.04L9 21.64c.16.16.36.24.6.24.08 0 .16 0 .24-.04.28-.08.52-.32.6-.64l.84-3.72L16.44 14c.2-.16.32-.36.36-.6-.04-.28-.08-.52-.28-.68zm-6.44 3.6c-.16.12-.28.32-.36.52l-.6 2.56L5 15.28l2.56-.56c.2-.04.4-.16.52-.36L11.2 9.8l3.4 3.4-4.52 3.12z"
+                              ></path>
+                            </svg>
+                            <span className="font-page font-extrabold text-xl md:text-3xl text-pageMenu bottom-0 absolute ml-1">
+                              5
+                            </span>
+                          </div>
+                        </div>
+                        <div className="w-14 h-16 md:w-12 md:h-12 lg:w-14 lg:h-16 relative flex items-center justify-center">
+                          <span className="font-page text-5xl md:text-3xl lg:text-5xl font-extrabold text-pageMenu pb-2 md:pb-1 lg:pb-2">
+                            x
+                          </span>
+                        </div>
+                        <div className="w-14 h-16 md:w-12 md:h-12 lg:w-14 lg:h-16 relative flex items-center justify-start">
+                          <span className="font-page text-5xl md:text-3xl lg:text-5xl font-extrabold text-pageMenu pb-2 md:pb-1 lg:pb-2">
+                            {
+                              gameCtx.itemBoundaries.find(
+                                (item) => item.type === "w"
+                              ).avaiable
+                            }
+                          </span>
+                        </div>
+                      </div>
+                      <div className="w-full h-[5rem] text-center pt-3">
+                        <span className="bg-pageMenu text-center font-page text-md text-page1 tracking-wide font-bold">
+                          Press on this block 5 times to unlock the pathway
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="w-full h-[12rem] border-2 border-pageMenu">
+                  <div className="w-full h-full flex items-center justify-center">
+                    <div className="w-full h-[10rem]">
+                      <div
+                        className={`relative w-full h-[5rem] flex items-center justify-center ${
+                          gameCtx.itemBoundaries.find(
+                            (item) => item.type === "W"
+                          ).avaiable == 0
+                            ? "opacity-25"
+                            : "opacity-100"
+                        }`}
+                      >
+                        {gameCtx.itemBoundaries.find(
+                          (item) => item.type === "V"
+                        ).avaiable == 0 && (
+                          <div className="w-full h-full z-50 absolute"></div>
+                        )}
+                        <div
+                          className="bg-pageMenu w-12 h-12 md:w-12 md:h-12 lg:w-16 lg:h-16 relative shadow-[rgba(0,_0,_0,_0.4)_0px_15px_45px] flex items-center justify-center hover:cursor-grab"
+                          draggable="true"
+                          id="W"
+                          onDragStart={handleDragStart}
+                          onDragEnd={handleDragEnd}
+                        >
+                          <div className="w-full h-full bg-page2 relative">
+                            <div className="relative w-full h-full bg-pageMenu flex items-center justify-center">
+                              {unlockSVG}
+                              <div className="absolute w-full h-full font-page text-sm text-page1 font-extrabold ml-2">
+                                5
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="w-14 h-16 md:w-12 md:h-12 lg:w-14 lg:h-16 relative flex items-center justify-center">
+                          <span className="font-page text-5xl md:text-3xl lg:text-5xl font-extrabold text-pageMenu pb-2 md:pb-1 lg:pb-2">
+                            x
+                          </span>
+                        </div>
+                        <div className="w-14 h-16 md:w-12 md:h-12 lg:w-14 lg:h-16 relative flex items-center justify-start">
+                          <span className="font-page text-5xl md:text-3xl lg:text-5xl font-extrabold text-pageMenu pb-2 md:pb-1 lg:pb-2">
+                            {
+                              gameCtx.itemBoundaries.find(
+                                (item) => item.type === "W"
+                              ).avaiable
+                            }
+                          </span>
+                        </div>
+                      </div>
+                      <div className="w-full h-[5rem] text-center pt-3">
+                        <span className="bg-pageMenu text-center font-page text-md text-page1 tracking-wide font-bold">
+                          The path that will be opened after 5 visits
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="w-full h-[12rem] border-2 border-pageMenu">
+                  <div className="w-full h-full flex items-center justify-center">
+                    <div className="w-full h-[10rem]">
+                      <div className="w-full h-[5rem] flex items-center justify-center">
+                        <div
+                          className="bg-pageMenu w-12 h-12 md:w-12 md:h-12 lg:w-16 lg:h-16 relative shadow-[rgba(0,_0,_0,_0.4)_0px_15px_45px] flex items-center justify-center hover:cursor-grab"
+                          draggable="true"
+                          id="b"
+                          onDragStart={handleDragStart}
+                          onDragEnd={handleDragEnd}
+                        >
+                          <div className="w-full h-full flex items-center justify-center">
+                            <div className="w-full h-1/2 bg-pageMenu grid grid-cols-2 grid-rows-1">
+                              <div className="col-span-1 row-span-1 bg-page3 border-2 border-pageMenu">
+                                {leftSVG}
+                              </div>
+                              <div className="col-span-1 row-span-1 bg-page3 border-2 border-pageMenu">
+                                {rightSVG}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="w-14 h-16 md:w-12 md:h-12 lg:w-14 lg:h-16 relative flex items-center justify-center">
+                          <span className="font-page text-5xl md:text-3xl lg:text-5xl font-extrabold text-pageMenu pb-2 md:pb-1 lg:pb-2">
+                            x
+                          </span>
+                        </div>
+                        <div className="w-14 h-16 md:w-12 md:h-12 lg:w-14 lg:h-16 relative flex items-center justify-start">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 -64 640 640"
+                            className="w-20 h-20"
+                          >
+                            <path
+                              className="fill-pageMenu"
+                              d="M471.1 96C405 96 353.3 137.3 320 174.6 286.7 137.3 235 96 168.9 96 75.8 96 0 167.8 0 256s75.8 160 168.9 160c66.1 0 117.8-41.3 151.1-78.6 33.3 37.3 85 78.6 151.1 78.6 93.1 0 168.9-71.8 168.9-160S564.2 96 471.1 96zM168.9 320c-40.2 0-72.9-28.7-72.9-64s32.7-64 72.9-64c38.2 0 73.4 36.1 94 64-20.4 27.6-55.9 64-94 64zm302.2 0c-38.2 0-73.4-36.1-94-64 20.4-27.6 55.9-64 94-64 40.2 0 72.9 28.7 72.9 64s-32.7 64-72.9 64z"
+                            ></path>
+                          </svg>
+                        </div>
+                      </div>
+                      <div className="w-full h-[5rem] text-center pt-3">
+                        <span className="bg-pageMenu text-center font-page text-md text-page1 tracking-wide font-bold">
+                          Mini-game: alternate clicking right and left
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="w-full h-[12rem] border-2 border-pageMenu">
+                  <div className="w-full h-full flex items-center justify-center">
+                    <div className="w-full h-[10rem]">
+                      <div className="w-full h-[5rem] flex items-center justify-center">
+                        <div
+                          className="bg-pageMenu w-12 h-12 md:w-12 md:h-12 lg:w-16 lg:h-16 relative shadow-[rgba(0,_0,_0,_0.4)_0px_15px_45px] flex items-center justify-center hover:cursor-grab"
+                          draggable="true"
+                          id="c"
+                          onDragStart={handleDragStart}
+                          onDragEnd={handleDragEnd}
+                        >
+                          <div className="w-full h-full flex items-center justify-center">
+                            <div className="w-full h-[70%] grid grid-cols-3 grid-rows-2">
+                              <div className="col-span-3 row-span-1">
+                                <div className="w-full h-full flex items-center justify-center">
+                                  <div className="w-1/3 h-full border-2 border-pageMenu bg-page3">
+                                    {upSVG}
+                                  </div>
+                                </div>
+                              </div>
+                              <div className="col-span-1 row-span-1 bg-page3 border-2 border-pageMenu">
+                                {leftSVG}
+                              </div>
+                              <div className="col-span-1 row-span-1 bg-page3 border-2 border-pageMenu">
+                                {downSVG}
+                              </div>
+                              <div className="col-span-1 row-span-1 bg-page3 border-2 border-pageMenu">
+                                {rightSVG}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="w-14 h-16 md:w-12 md:h-12 lg:w-14 lg:h-16 relative flex items-center justify-center">
+                          <span className="font-page text-5xl md:text-3xl lg:text-5xl font-extrabold text-pageMenu pb-2 md:pb-1 lg:pb-2">
+                            x
+                          </span>
+                        </div>
+                        <div className="w-14 h-16 md:w-12 md:h-12 lg:w-14 lg:h-16 relative flex items-center justify-start">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 -64 640 640"
+                            className="w-20 h-20"
+                          >
+                            <path
+                              className="fill-pageMenu"
+                              d="M471.1 96C405 96 353.3 137.3 320 174.6 286.7 137.3 235 96 168.9 96 75.8 96 0 167.8 0 256s75.8 160 168.9 160c66.1 0 117.8-41.3 151.1-78.6 33.3 37.3 85 78.6 151.1 78.6 93.1 0 168.9-71.8 168.9-160S564.2 96 471.1 96zM168.9 320c-40.2 0-72.9-28.7-72.9-64s32.7-64 72.9-64c38.2 0 73.4 36.1 94 64-20.4 27.6-55.9 64-94 64zm302.2 0c-38.2 0-73.4-36.1-94-64 20.4-27.6 55.9-64 94-64 40.2 0 72.9 28.7 72.9 64s-32.7 64-72.9 64z"
+                            ></path>
+                          </svg>
+                        </div>
+                      </div>
+                      <div className="w-full h-[5rem] text-center pt-3">
+                        <span className="bg-pageMenu text-center font-page text-md text-page1 tracking-wide font-bold">
+                          Mini-game: circle around the arrows on the keyboard
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="w-full h-[12rem] border-2 border-pageMenu">
+                  <div className="w-full h-full flex items-center justify-center">
+                    <div className="w-full h-[10rem]">
+                      <div className="w-full h-[5rem] flex items-center justify-center">
+                        <div
+                          className="bg-pageMenu w-12 h-12 md:w-12 md:h-12 lg:w-16 lg:h-16 relative shadow-[rgba(0,_0,_0,_0.4)_0px_15px_45px] flex items-center justify-center hover:cursor-grab"
+                          draggable="true"
+                          id="u"
+                          onDragStart={handleDragStart}
+                          onDragEnd={handleDragEnd}
+                        >
+                          <div className="w-full h-full flex items-center justify-center">
+                            <div className="w-full h-[90%] grid grid-cols-1 grid-rows-2">
+                              <div className="col-span-1 row-span-1 flex justify-center">
+                                <div className="h-full aspect-square border-2 border-pageMenu bg-page3">
+                                  {upSVG}
+                                </div>
+                              </div>
+                              <div className="col-span-1 row-span-1 flex justify-center">
+                                <div className="h-full aspect-square border-2 border-pageMenu bg-page3">
+                                  {downSVG}
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="w-14 h-16 md:w-12 md:h-12 lg:w-14 lg:h-16 relative flex items-center justify-center">
+                          <span className="font-page text-5xl md:text-3xl lg:text-5xl font-extrabold text-pageMenu pb-2 md:pb-1 lg:pb-2">
+                            x
+                          </span>
+                        </div>
+                        <div className="w-14 h-16 md:w-12 md:h-12 lg:w-14 lg:h-16 relative flex items-center justify-start">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 -64 640 640"
+                            className="w-20 h-20"
+                          >
+                            <path
+                              className="fill-pageMenu"
+                              d="M471.1 96C405 96 353.3 137.3 320 174.6 286.7 137.3 235 96 168.9 96 75.8 96 0 167.8 0 256s75.8 160 168.9 160c66.1 0 117.8-41.3 151.1-78.6 33.3 37.3 85 78.6 151.1 78.6 93.1 0 168.9-71.8 168.9-160S564.2 96 471.1 96zM168.9 320c-40.2 0-72.9-28.7-72.9-64s32.7-64 72.9-64c38.2 0 73.4 36.1 94 64-20.4 27.6-55.9 64-94 64zm302.2 0c-38.2 0-73.4-36.1-94-64 20.4-27.6 55.9-64 94-64 40.2 0 72.9 28.7 72.9 64s-32.7 64-72.9 64z"
+                            ></path>
+                          </svg>
+                        </div>
+                      </div>
+                      <div className="w-full h-[5rem] text-center pt-3">
+                        <span className="bg-pageMenu text-center font-page text-md text-page1 tracking-wide font-bold">
+                          Mini-game: alternate clicking up and down
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>

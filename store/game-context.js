@@ -12,6 +12,18 @@ const GameContext = createContext({
   secondTeleportEndPoint: { x: 0, y: 0 },
   firstVisitBlockCount: 0,
   secondVisitBlockCount: 0,
+  itemBoundaries: [
+    { type: "s", avaiable: 1 },
+    { type: "e", avaiable: 1 },
+    { type: "t", avaiable: 1 },
+    { type: "T", avaiable: 1 },
+    { type: "o", avaiable: 1 },
+    { type: "O", avaiable: 1 },
+    { type: "v", avaiable: 1 },
+    { type: "V", avaiable: 1 },
+    { type: "w", avaiable: 1 },
+    { type: "W", avaiable: 1 },
+  ],
   setKeyPressed: () => {},
   setIsGameOver: () => {},
   setGrid: () => {},
@@ -23,6 +35,7 @@ const GameContext = createContext({
   setSecondTeleportEndPoint: () => {},
   setFirstVisitBlockCount: () => {},
   setSecondVisitBlockCount: () => {},
+  setItemBoundaries: () => {},
 });
 
 export function GameContextProvider(props) {
@@ -43,6 +56,18 @@ export function GameContextProvider(props) {
   });
   const [firstVisitBlockCount, setFirstVisitBlockCount] = useState(0);
   const [secondVisitBlockCount, setSecondVisitBlockCount] = useState(0);
+  const [itemBoundaries, setItemBoundaries] = useState([
+    { type: "s", avaiable: 1 },
+    { type: "e", avaiable: 1 },
+    { type: "t", avaiable: 1 },
+    { type: "T", avaiable: 1 },
+    { type: "o", avaiable: 1 },
+    { type: "O", avaiable: 1 },
+    { type: "v", avaiable: 1 },
+    { type: "V", avaiable: 1 },
+    { type: "w", avaiable: 1 },
+    { type: "W", avaiable: 1 },
+  ]);
 
   const setKeyPressedCount = () => {
     setKeyPressedCountState((prevCount) => prevCount + 1);
@@ -52,12 +77,9 @@ export function GameContextProvider(props) {
     setKeyPressed(null);
     setIsGameOver(false);
     setGrid([]);
-    // setPointPosition({ x: 0, y: 0 });
     setKeyPressedCountState(0);
     setWin(false);
     setIsTeleporting(false);
-    // setFirstTeleportEndPoint({ x: 0, y: 0 });
-    // setSecondTeleportEndPoint({ x: 0, y: 0 });
     setFirstVisitBlockCount(0);
     setSecondVisitBlockCount(0);
   };
@@ -74,6 +96,7 @@ export function GameContextProvider(props) {
     secondTeleportEndPoint,
     firstVisitBlockCount,
     secondVisitBlockCount,
+    itemBoundaries,
     setKeyPressed,
     setIsGameOver,
     setGrid,
@@ -86,6 +109,7 @@ export function GameContextProvider(props) {
     setFirstVisitBlockCount,
     setSecondVisitBlockCount,
     resetGameContext,
+    setItemBoundaries,
   };
 
   return (

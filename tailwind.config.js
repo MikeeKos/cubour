@@ -28,6 +28,10 @@ module.exports = {
         'swing-slow': 'swing 10s infinite',
         'growUp': 'growUp 0.5s ease-out',
         'scale-swing-rotate': 'scaleSwingRotate 4s infinite',
+        'blink-500': 'blink-500 1000ms infinite',
+        'blink-750': 'blink-750 1500ms infinite',
+        'blink-1000': 'blink-900 2000ms infinite',
+        'blink-1250': 'blink-1000 2500ms infinite',
       },
       keyframes: {
         swing: {
@@ -65,6 +69,30 @@ module.exports = {
           '75%': {
             transform: 'scale(1.1) translateX(-5%) rotate(-3deg)',
           },
+        },
+        'blink-500': {
+          '0%, 100%': { opacity: 1 },
+          '49.999%': { opacity: 1 },
+          '50%': { opacity: 0 },
+          '99.999%': { opacity: 0 },
+        },
+        'blink-750': {
+          '0%, 100%': { opacity: 1 },
+          '49.999%': { opacity: 1 },
+          '50%': { opacity: 0 },
+          '99.999%': { opacity: 0 },
+        },
+        'blink-900': {
+          '0%, 100%': { opacity: 1 },
+          '49.999%': { opacity: 1 },
+          '50%': { opacity: 0 },
+          '99.999%': { opacity: 0 },
+        },
+        'blink-1000': {
+          '0%, 100%': { opacity: 1 },
+          '49.999%': { opacity: 1 },
+          '50%': { opacity: 0 },
+          '99.999%': { opacity: 0 },
         },
       },
       gridTemplateColumns: {
