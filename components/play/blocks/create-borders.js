@@ -18,9 +18,6 @@ function CreateBorderBlock(props) {
 
   let elementInside;
 
-  // useEffect(() => {
-
-  // }, [])
   switch (props.type) {
     case "n":
       elementInside = <div className="w-full h-full"></div>;
