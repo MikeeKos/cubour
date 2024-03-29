@@ -3,24 +3,6 @@ import useMeasure from "react-use-measure";
 import GameContext from "../../store/game-context";
 import NotificationContext from "../../store/notification-context";
 import Grid from "./grid";
-// import NormalBlock from "../play/blocks/normal";
-// import StartBlock from "../play/blocks/start";
-// import EndBlock from "../play/blocks/end";
-// import FlashingBlock from "../play/blocks/flashing/flashing";
-// import FastFlashingBlock from "../play/blocks/flashing/fast-flashing";
-// import XFasterFlashingBlock from "../play/blocks/flashing/x-faster-flashing";
-// import XFastestFlashingBlock from "../play/blocks/flashing/x-fastest-flashing";
-// import TeleportBlock from "../play/blocks/teleport/teleport";
-// import TeleportEndPointBlock from "../play/blocks/teleport/teleport-end-point";
-// import SecondTeleportBlock from "../play/blocks/teleport/second-teleport";
-// import SecondTeleportEndPointBlock from "../play/blocks/teleport/second-teleport-endpoint";
-// import VisitBlock from "../play/blocks/visit/visit";
-// import VisitTargetBlock from "../play/blocks/visit/visit-target";
-// import SecondVisitBlock from "../play/blocks/visit/second-visit";
-// import SecondVisitTargetBlock from "../play/blocks/visit/second-visit-target";
-// import BackAndForthSpecial from "../play/blocks/special/back-and-forth";
-// import CircleSpecial from "../play/blocks/special/circle";
-// import UpAndDownSpecial from "../play/blocks/special/up-and-down";
 import CreateBorderBlock from "../play/blocks/create-borders";
 import {
   checkeredSVG,
@@ -29,6 +11,8 @@ import {
   unlockSVG,
 } from "../../SVG/game-grid";
 import { leftSVG, rightSVG, upSVG, downSVG } from "../../SVG/arrows";
+import SetTimeBlock from "./set-time";
+import GridCount from "./grid-count";
 
 function Create(props) {
   const [ref, { height, width }] = useMeasure();
@@ -37,8 +21,13 @@ function Create(props) {
   const gameCtx = useContext(GameContext);
   const notificationCtx = useContext(NotificationContext);
   const [inputString, setInputString] = useState(
-    "n0000ffffn0001ffffn0002ffffn0003ffffn0004ffffn0005ffffn0006ffffn0007ffffn0008ffffn0009ffffn0100ffffn0101ffffn0102ffffn0103ffffn0104ffffn0105ffffn0106ffffn0107ffffn0108ffffn0109ffffn0200ffffn0201ffffn0202ffffn0203ffffn0204ffffn0205ffffn0206ffffn0207ffffn0208ffffn0209ffffn0300ffffn0301ffffn0302ffffn0303ffffn0304ffffn0305ffffn0306ffffn0307ffffn0308ffffn0309ffffn0400ffffn0401ffffn0402ffffn0403ffffn0404ffffn0405ffffn0406ffffn0407ffffn0408ffffn0409ffffn0500ffffn0501ffffn0502ffffn0503ffffn0504ffffn0505ffffn0506ffffn0507ffffn0508ffffn0509ffffn0600ffffn0601ffffn0602ffffn0603ffffn0604ffffn0605ffffn0606ffffn0607ffffn0608ffffn0609ffffn0700ffffn0701ffffn0702ffffn0703ffffn0704ffffn0705ffffn0706ffffn0707ffffn0708ffffn0709ffffn0800ffffn0801ffffn0802ffffn0803ffffn0804ffffn0805ffffn0806ffffn0807ffffn0808ffffn0809ffffn0900ffffn0901ffffn0902ffffn0903ffffn0904ffffn0905ffffn0906ffffn0907ffffn0908ffffn0909ffff"
+    "n0000ffffn0001ffffn0002ffffn0003ffffn0004ffffn0005ffffn0006ffffn0007ffffn0100ffffn0101ffffn0102ffffn0103ffffn0104ffffn0105ffffn0106ffffn0107ffffn0200ffffn0201ffffn0202ffffn0203ffffn0204ffffn0205ffffn0206ffffn0207ffffn0300ffffn0301ffffn0302ffffn0303ffffn0304ffffn0305ffffn0306ffffn0307ffffn0400ffffn0401ffffn0402ffffn0403ffffn0404ffffn0405ffffn0406ffffn0407ffffn0500ffffn0501ffffn0502ffffn0503ffffn0504ffffn0505ffffn0506ffffn0507ffffn0600ffffn0601ffffn0602ffffn0603ffffn0604ffffn0605ffffn0606ffffn0607ffffn0700ffffn0701ffffn0702ffffn0703ffffn0704ffffn0705ffffn0706ffffn0707ffff"
   );
+  // n0000ffffn0001ffffn0002ffffn0003ffffn0004ffffn0005ffffn0006ffffn0007ffffn0100ffffn0101ffffn0102ffffn0103ffffn0104ffffn0105ffffn0106ffffn0107ffffn0200ffffn0201ffffn0202ffffn0203ffffn0204ffffn0205ffffn0206ffffn0207ffffn0300ffffn0301ffffn0302ffffn0303ffffn0304ffffn0305ffffn0306ffffn0307ffffn0400ffffn0401ffffn0402ffffn0403ffffn0404ffffn0405ffffn0406ffffn0407ffffn0500ffffn0501ffffn0502ffffn0503ffffn0504ffffn0505ffffn0506ffffn0507ffffn0600ffffn0601ffffn0602ffffn0603ffffn0604ffffn0605ffffn0606ffffn0607ffffn0700ffffn0701ffffn0702ffffn0703ffffn0704ffffn0705ffffn0706ffffn0707ffff
+  // n0000ffffn0001ffffn0002ffffn0003ffffn0004ffffn0005ffffn0006ffffn0007ffffn0008ffffn0009ffffn0100ffffn0101ffffn0102ffffn0103ffffn0104ffffn0105ffffn0106ffffn0107ffffn0108ffffn0109ffffn0200ffffn0201ffffn0202ffffn0203ffffn0204ffffn0205ffffn0206ffffn0207ffffn0208ffffn0209ffffn0300ffffn0301ffffn0302ffffn0303ffffn0304ffffn0305ffffn0306ffffn0307ffffn0308ffffn0309ffffn0400ffffn0401ffffn0402ffffn0403ffffn0404ffffn0405ffffn0406ffffn0407ffffn0408ffffn0409ffffn0500ffffn0501ffffn0502ffffn0503ffffn0504ffffn0505ffffn0506ffffn0507ffffn0508ffffn0509ffffn0600ffffn0601ffffn0602ffffn0603ffffn0604ffffn0605ffffn0606ffffn0607ffffn0608ffffn0609ffffn0700ffffn0701ffffn0702ffffn0703ffffn0704ffffn0705ffffn0706ffffn0707ffffn0708ffffn0709ffffn0800ffffn0801ffffn0802ffffn0803ffffn0804ffffn0805ffffn0806ffffn0807ffffn0808ffffn0809ffffn0900ffffn0901ffffn0902ffffn0903ffffn0904ffffn0905ffffn0906ffffn0907ffffn0908ffffn0909ffff
+  // n0000ffffn0001ffffn0002ffffn0003ffffn0004ffffn0005ffffn0006ffffn0007ffffn0008ffffn0009ffffn0010ffffn0011ffffn0100ffffn0101ffffn0102ffffn0103ffffn0104ffffn0105ffffn0106ffffn0107ffffn0108ffffn0109ffffn0110ffffn0111ffffn0200ffffn0201ffffn0202ffffn0203ffffn0204ffffn0205ffffn0206ffffn0207ffffn0208ffffn0209ffffn0210ffffn0211ffffn0300ffffn0301ffffn0302ffffn0303ffffn0304ffffn0305ffffn0306ffffn0307ffffn0308ffffn0309ffffn0310ffffn0311ffffn0400ffffn0401ffffn0402ffffn0403ffffn0404ffffn0405ffffn0406ffffn0407ffffn0408ffffn0409ffffn0410ffffn0411ffffn0500ffffn0501ffffn0502ffffn0503ffffn0504ffffn0505ffffn0506ffffn0507ffffn0508ffffn0509ffffn0510ffffn0511ffffn0600ffffn0601ffffn0602ffffn0603ffffn0604ffffn0605ffffn0606ffffn0607ffffn0608ffffn0609ffffn0610ffffn0611ffffn0700ffffn0701ffffn0702ffffn0703ffffn0704ffffn0705ffffn0706ffffn0707ffffn0708ffffn0709ffffn0710ffffn0711ffffn0800ffffn0801ffffn0802ffffn0803ffffn0804ffffn0805ffffn0806ffffn0807ffffn0808ffffn0809ffffn0810ffffn0811ffffn0900ffffn0901ffffn0902ffffn0903ffffn0904ffffn0905ffffn0906ffffn0907ffffn0908ffffn0909ffffn0910ffffn0911ffffn1000ffffn1001ffffn1002ffffn1003ffffn1004ffffn1005ffffn1006ffffn1007ffffn1008ffffn1009ffffn1010ffffn1011ffffn1100ffffn1101ffffn1102ffffn1103ffffn1104ffffn1105ffffn1106ffffn1107ffffn1108ffffn1109ffffn1110ffffn1111ffff
+  // n0000ffffn0001ffffn0002ffffn0003ffffn0004ffffn0005ffffn0006ffffn0007ffffn0008ffffn0009ffffn0010ffffn0011ffffn0012ffffn0013ffffn0100ffffn0101ffffn0102ffffn0103ffffn0104ffffn0105ffffn0106ffffn0107ffffn0108ffffn0109ffffn0110ffffn0111ffffn0112ffffn0113ffffn0200ffffn0201ffffn0202ffffn0203ffffn0204ffffn0205ffffn0206ffffn0207ffffn0208ffffn0209ffffn0210ffffn0211ffffn0212ffffn0213ffffn0300ffffn0301ffffn0302ffffn0303ffffn0304ffffn0305ffffn0306ffffn0307ffffn0308ffffn0309ffffn0310ffffn0311ffffn0312ffffn0313ffffn0400ffffn0401ffffn0402ffffn0403ffffn0404ffffn0405ffffn0406ffffn0407ffffn0408ffffn0409ffffn0410ffffn0411ffffn0412ffffn0413ffffn0500ffffn0501ffffn0502ffffn0503ffffn0504ffffn0505ffffn0506ffffn0507ffffn0508ffffn0509ffffn0510ffffn0511ffffn0512ffffn0513ffffn0600ffffn0601ffffn0602ffffn0603ffffn0604ffffn0605ffffn0606ffffn0607ffffn0608ffffn0609ffffn0610ffffn0611ffffn0612ffffn0613ffffn0700ffffn0701ffffn0702ffffn0703ffffn0704ffffn0705ffffn0706ffffn0707ffffn0708ffffn0709ffffn0710ffffn0711ffffn0712ffffn0713ffffn0800ffffn0801ffffn0802ffffn0803ffffn0804ffffn0805ffffn0806ffffn0807ffffn0808ffffn0809ffffn0810ffffn0811ffffn0812ffffn0813ffffn0900ffffn0901ffffn0902ffffn0903ffffn0904ffffn0905ffffn0906ffffn0907ffffn0908ffffn0909ffffn0910ffffn0911ffffn0912ffffn0913ffffn1000ffffn1001ffffn1002ffffn1003ffffn1004ffffn1005ffffn1006ffffn1007ffffn1008ffffn1009ffffn1010ffffn1011ffffn1012ffffn1013ffffn1100ffffn1101ffffn1102ffffn1103ffffn1104ffffn1105ffffn1106ffffn1107ffffn1108ffffn1109ffffn1110ffffn1111ffffn1112ffffn1113ffffn1200ffffn1201ffffn1202ffffn1203ffffn1204ffffn1205ffffn1206ffffn1207ffffn1208ffffn1209ffffn1210ffffn1211ffffn1212ffffn1213ffffn1300ffffn1301ffffn1302ffffn1303ffffn1304ffffn1305ffffn1306ffffn1307ffffn1308ffffn1309ffffn1310ffffn1311ffffn1312ffffn1313ffff
+  //
   // const [itemsBoundaries, setItemBoundaries] = useState([
   //   { type: "s", avaiable: 5 },
   //   { type: "l", avaiable: 5 },
@@ -63,7 +52,35 @@ function Create(props) {
     // keyPressedCount,
   } = useContext(GameContext);
 
-  const dynamicGridCount = 10;
+  // const dynamicGridCount = 10;
+  const [dynamicGridCount, setDynamicGridCount] = useState(8);
+
+  const pullDataChangeGridCount = (gridCount) => {
+    if (gridCount == 8) {
+      setInputString(
+        "n0000ffffn0001ffffn0002ffffn0003ffffn0004ffffn0005ffffn0006ffffn0007ffffn0100ffffn0101ffffn0102ffffn0103ffffn0104ffffn0105ffffn0106ffffn0107ffffn0200ffffn0201ffffn0202ffffn0203ffffn0204ffffn0205ffffn0206ffffn0207ffffn0300ffffn0301ffffn0302ffffn0303ffffn0304ffffn0305ffffn0306ffffn0307ffffn0400ffffn0401ffffn0402ffffn0403ffffn0404ffffn0405ffffn0406ffffn0407ffffn0500ffffn0501ffffn0502ffffn0503ffffn0504ffffn0505ffffn0506ffffn0507ffffn0600ffffn0601ffffn0602ffffn0603ffffn0604ffffn0605ffffn0606ffffn0607ffffn0700ffffn0701ffffn0702ffffn0703ffffn0704ffffn0705ffffn0706ffffn0707ffff"
+      );
+      setDynamicGridCount(8);
+    }
+    if (gridCount == 10) {
+      setInputString(
+        "n0000ffffn0001ffffn0002ffffn0003ffffn0004ffffn0005ffffn0006ffffn0007ffffn0008ffffn0009ffffn0100ffffn0101ffffn0102ffffn0103ffffn0104ffffn0105ffffn0106ffffn0107ffffn0108ffffn0109ffffn0200ffffn0201ffffn0202ffffn0203ffffn0204ffffn0205ffffn0206ffffn0207ffffn0208ffffn0209ffffn0300ffffn0301ffffn0302ffffn0303ffffn0304ffffn0305ffffn0306ffffn0307ffffn0308ffffn0309ffffn0400ffffn0401ffffn0402ffffn0403ffffn0404ffffn0405ffffn0406ffffn0407ffffn0408ffffn0409ffffn0500ffffn0501ffffn0502ffffn0503ffffn0504ffffn0505ffffn0506ffffn0507ffffn0508ffffn0509ffffn0600ffffn0601ffffn0602ffffn0603ffffn0604ffffn0605ffffn0606ffffn0607ffffn0608ffffn0609ffffn0700ffffn0701ffffn0702ffffn0703ffffn0704ffffn0705ffffn0706ffffn0707ffffn0708ffffn0709ffffn0800ffffn0801ffffn0802ffffn0803ffffn0804ffffn0805ffffn0806ffffn0807ffffn0808ffffn0809ffffn0900ffffn0901ffffn0902ffffn0903ffffn0904ffffn0905ffffn0906ffffn0907ffffn0908ffffn0909ffff"
+      );
+      setDynamicGridCount(10);
+    }
+    if (gridCount == 12) {
+      setInputString(
+        "n0000ffffn0001ffffn0002ffffn0003ffffn0004ffffn0005ffffn0006ffffn0007ffffn0008ffffn0009ffffn0010ffffn0011ffffn0100ffffn0101ffffn0102ffffn0103ffffn0104ffffn0105ffffn0106ffffn0107ffffn0108ffffn0109ffffn0110ffffn0111ffffn0200ffffn0201ffffn0202ffffn0203ffffn0204ffffn0205ffffn0206ffffn0207ffffn0208ffffn0209ffffn0210ffffn0211ffffn0300ffffn0301ffffn0302ffffn0303ffffn0304ffffn0305ffffn0306ffffn0307ffffn0308ffffn0309ffffn0310ffffn0311ffffn0400ffffn0401ffffn0402ffffn0403ffffn0404ffffn0405ffffn0406ffffn0407ffffn0408ffffn0409ffffn0410ffffn0411ffffn0500ffffn0501ffffn0502ffffn0503ffffn0504ffffn0505ffffn0506ffffn0507ffffn0508ffffn0509ffffn0510ffffn0511ffffn0600ffffn0601ffffn0602ffffn0603ffffn0604ffffn0605ffffn0606ffffn0607ffffn0608ffffn0609ffffn0610ffffn0611ffffn0700ffffn0701ffffn0702ffffn0703ffffn0704ffffn0705ffffn0706ffffn0707ffffn0708ffffn0709ffffn0710ffffn0711ffffn0800ffffn0801ffffn0802ffffn0803ffffn0804ffffn0805ffffn0806ffffn0807ffffn0808ffffn0809ffffn0810ffffn0811ffffn0900ffffn0901ffffn0902ffffn0903ffffn0904ffffn0905ffffn0906ffffn0907ffffn0908ffffn0909ffffn0910ffffn0911ffffn1000ffffn1001ffffn1002ffffn1003ffffn1004ffffn1005ffffn1006ffffn1007ffffn1008ffffn1009ffffn1010ffffn1011ffffn1100ffffn1101ffffn1102ffffn1103ffffn1104ffffn1105ffffn1106ffffn1107ffffn1108ffffn1109ffffn1110ffffn1111ffff"
+      );
+      setDynamicGridCount(12);
+    }
+    if (gridCount == 14) {
+      setInputString(
+        "n0000ffffn0001ffffn0002ffffn0003ffffn0004ffffn0005ffffn0006ffffn0007ffffn0008ffffn0009ffffn0010ffffn0011ffffn0012ffffn0013ffffn0100ffffn0101ffffn0102ffffn0103ffffn0104ffffn0105ffffn0106ffffn0107ffffn0108ffffn0109ffffn0110ffffn0111ffffn0112ffffn0113ffffn0200ffffn0201ffffn0202ffffn0203ffffn0204ffffn0205ffffn0206ffffn0207ffffn0208ffffn0209ffffn0210ffffn0211ffffn0212ffffn0213ffffn0300ffffn0301ffffn0302ffffn0303ffffn0304ffffn0305ffffn0306ffffn0307ffffn0308ffffn0309ffffn0310ffffn0311ffffn0312ffffn0313ffffn0400ffffn0401ffffn0402ffffn0403ffffn0404ffffn0405ffffn0406ffffn0407ffffn0408ffffn0409ffffn0410ffffn0411ffffn0412ffffn0413ffffn0500ffffn0501ffffn0502ffffn0503ffffn0504ffffn0505ffffn0506ffffn0507ffffn0508ffffn0509ffffn0510ffffn0511ffffn0512ffffn0513ffffn0600ffffn0601ffffn0602ffffn0603ffffn0604ffffn0605ffffn0606ffffn0607ffffn0608ffffn0609ffffn0610ffffn0611ffffn0612ffffn0613ffffn0700ffffn0701ffffn0702ffffn0703ffffn0704ffffn0705ffffn0706ffffn0707ffffn0708ffffn0709ffffn0710ffffn0711ffffn0712ffffn0713ffffn0800ffffn0801ffffn0802ffffn0803ffffn0804ffffn0805ffffn0806ffffn0807ffffn0808ffffn0809ffffn0810ffffn0811ffffn0812ffffn0813ffffn0900ffffn0901ffffn0902ffffn0903ffffn0904ffffn0905ffffn0906ffffn0907ffffn0908ffffn0909ffffn0910ffffn0911ffffn0912ffffn0913ffffn1000ffffn1001ffffn1002ffffn1003ffffn1004ffffn1005ffffn1006ffffn1007ffffn1008ffffn1009ffffn1010ffffn1011ffffn1012ffffn1013ffffn1100ffffn1101ffffn1102ffffn1103ffffn1104ffffn1105ffffn1106ffffn1107ffffn1108ffffn1109ffffn1110ffffn1111ffffn1112ffffn1113ffffn1200ffffn1201ffffn1202ffffn1203ffffn1204ffffn1205ffffn1206ffffn1207ffffn1208ffffn1209ffffn1210ffffn1211ffffn1212ffffn1213ffffn1300ffffn1301ffffn1302ffffn1303ffffn1304ffffn1305ffffn1306ffffn1307ffffn1308ffffn1309ffffn1310ffffn1311ffffn1312ffffn1313ffff"
+      );
+      setDynamicGridCount(14);
+    }
+  };
 
   const pullData = (data) => {
     setInputString(data);
@@ -271,47 +288,6 @@ function Create(props) {
   };
 
   const borderGridItems = useMemo(() => {
-    // const componentMap = {
-    //   n: NormalBlock,
-    //   s: StartBlock,
-    //   e: EndBlock,
-    //   f: FlashingBlock,
-    //   F: FastFlashingBlock,
-    //   x: XFasterFlashingBlock,
-    //   X: XFastestFlashingBlock,
-    //   t: TeleportBlock,
-    //   T: TeleportEndPointBlock,
-    //   o: SecondTeleportBlock,
-    //   O: SecondTeleportEndPointBlock,
-    //   v: VisitBlock,
-    //   V: VisitTargetBlock,
-    //   w: SecondVisitBlock,
-    //   W: SecondVisitTargetBlock,
-    //   b: BackAndForthSpecial,
-    //   c: CircleSpecial,
-    //   u: UpAndDownSpecial,
-    // };
-
-    // Tworzenie gridItems na podstawie oryginalnych danych
-    // const gridItems = result.flatMap((row, i) =>
-    //   row.map((cell, j) => {
-    //     const Component = componentMap[cell.type] || NormalBlock;
-    //     return (
-    //       <Component
-    //         key={`row${i}col${j}`}
-    //         i={cell.row}
-    //         j={cell.col}
-    //         top={cell.top}
-    //         right={cell.right}
-    //         bottom={cell.bottom}
-    //         left={cell.left}
-    //         gridCount={dynamicGridCount}
-    //         isSelected={i === pointPosition.y && j === pointPosition.x}
-    //       />
-    //     );
-    //   })
-    // );
-
     const borderGridItems = result.flatMap((row, i) =>
       row.map((cell, j) => (
         <CreateBorderBlock
@@ -500,6 +476,12 @@ function Create(props) {
                     </div>
                   </div>
                 </div>
+              </div>
+              <div className="w-full h-[14rem]">
+                <SetTimeBlock />
+              </div>
+              <div className="w-full h-[14rem]">
+                <GridCount func={pullDataChangeGridCount} />
               </div>
               <div className="w-full bg-page4 shadow-[inset_-24px_-16px_200px_#46464620]">
                 <div className="w-full h-[3rem] flex items-center justify-start ps-4 pt-6">

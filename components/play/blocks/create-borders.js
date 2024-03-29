@@ -539,7 +539,7 @@ function CreateBorderBlock(props) {
                     <div className="w-full h-[20%] absolute z-50 bottom-0 flex items-center justify-center">
                       <div
                         className={`w-[90%] h-full opacity-0 hover:opacity-100 duration-200 ${
-                          props.type == "f" ? "bg-page4" : "bg-pageMenu"
+                          ["f", "F", "x", "X"].includes(props.type) ? "bg-page4" : "bg-pageMenu"
                         } hover:animate-pulse hover:cursor-pointer`}
                         onClick={changeBottomBorderHandler}
                       ></div>
@@ -547,7 +547,7 @@ function CreateBorderBlock(props) {
                     <div className="w-[20%] h-full absolute z-50 right-0 flex items-center justify-center">
                       <div
                         className={`w-full h-[90%] opacity-0 hover:opacity-100 duration-200 ${
-                          props.type == "f" ? "bg-page4" : "bg-pageMenu"
+                          ["f", "F", "x", "X"].includes(props.type) ? "bg-page4" : "bg-pageMenu"
                         } hover:animate-pulse hover:cursor-pointer`}
                         onClick={changeRightBorderHandler}
                       ></div>
@@ -555,7 +555,7 @@ function CreateBorderBlock(props) {
                     <div className="w-full h-[20%] absolute z-50 top-0 flex items-center justify-center">
                       <div
                         className={`w-[90%] h-full opacity-0 hover:opacity-100 duration-200 ${
-                          props.type == "f" ? "bg-page4" : "bg-pageMenu"
+                          ["f", "F", "x", "X"].includes(props.type) ? "bg-page4" : "bg-pageMenu"
                         } hover:animate-pulse hover:cursor-pointer`}
                         onClick={changeTopBorderHandler}
                       ></div>
@@ -563,7 +563,7 @@ function CreateBorderBlock(props) {
                     <div className="w-[20%] h-full absolute z-50 left-0 flex items-center justify-center">
                       <div
                         className={`w-full h-[90%] opacity-0 hover:opacity-100 duration-200 ${
-                          props.type == "f" ? "bg-page4" : "bg-pageMenu"
+                          ["f", "F", "x", "X"].includes(props.type) ? "bg-page4" : "bg-pageMenu"
                         } hover:animate-pulse hover:cursor-pointer`}
                         onClick={changeLeftBorderHandler}
                       ></div>
