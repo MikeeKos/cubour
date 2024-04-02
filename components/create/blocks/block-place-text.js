@@ -2,7 +2,7 @@ import React from "react";
 
 function BlockPlaceText() {
   return (
-    <div className="w-full h-[12rem] md:h-[14rem] border-pageMenu relative">
+    <div className="w-full h-[12rem] md:h-[14rem] border-pageMenu relative overflow-hidden">
       <div className="w-full h-full absolute flex items-end justify-start left-7 bottom-7 opacity-100 md:opacity-0 lg:opacity-100">
         <div className="w-12 h-12 bg-page2 rounded-2xl shadow-[rgba(0,_0,_0,_0.4)_0px_30px_90px] animate-growUp hover:scale-110 z-50 duration-300"></div>
       </div>

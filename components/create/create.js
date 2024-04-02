@@ -440,7 +440,7 @@ function Create(props) {
                   handleDragStart={handleDragStart}
                 />
               </div>
-              <div className="w-full h-[14rem] lg:h-[10rem] bg-page3">
+              <div className="w-full h-[14rem] lg:h-[10rem] bg-page3 overflow-hidden">
                 <div className="relative w-full h-full">
                   <div className="absolute w-full h-full flex items-center justify-center">
                     <div className="w-[50%] sm:w-[40%] md:w-[90%] lg:w-[40%] h-[30%] md:h-[25%] bg-pageMenu z-50 rounded-xl flex items-center justify-center">
@@ -453,16 +453,16 @@ function Create(props) {
                     </div>
                   </div>
                   <div className="absolute w-full h-full overflow-hidden">
-                    <div className="w-full h-full absolute flex items-start justify-end top-7 right-7">
+                    <div className="w-full h-full absolute flex items-start justify-end top-7 right-7 overflow-hidden">
                       <div className="w-12 h-12 bg-page2 rounded-2xl shadow-[rgba(0,_0,_0,_0.4)_0px_30px_90px] animate-growUp hover:scale-110 z-50 duration-300"></div>
                     </div>
-                    <div className="w-full h-full absolute flex items-start justify-end top-4 right-4">
+                    <div className="w-full h-full absolute flex items-start justify-end top-4 right-4 overflow-hidden">
                       <div className="w-12 h-12 bg-page1 rounded-2xl shadow-[rgba(0,_0,_0,_0.4)_0px_30px_90px] animate-growUp hover:scale-110 z-50 duration-300"></div>
                     </div>
-                    <div className="w-full h-full absolute flex items-end justify-start left-7 bottom-7">
+                    <div className="w-full h-full absolute flex items-end justify-start left-7 bottom-7 overflow-hidden">
                       <div className="w-12 h-12 bg-page2 rounded-2xl shadow-[rgba(0,_0,_0,_0.4)_0px_30px_90px] animate-growUp hover:scale-110 z-50 duration-300"></div>
                     </div>
-                    <div className="w-full h-full absolute flex items-end justify-start left-4 bottom-4">
+                    <div className="w-full h-full absolute flex items-end justify-start left-4 bottom-4 overflow-hidden">
                       <div className="w-12 h-12 bg-page1 rounded-2xl shadow-[rgba(0,_0,_0,_0.4)_0px_30px_90px] animate-growUp hover:scale-110 z-50 duration-300"></div>
                     </div>
                   </div>
