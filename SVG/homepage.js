@@ -1,3 +1,4 @@
+import React from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 const reflectorSVG = (
@@ -54,64 +55,62 @@ const desktopReflectorSVG = (
 );
 
 const cubourSVG = (
-  <div className="w-full h-[15rem]">
-    <div className="w-full h-full flex items-center justify-center flex-row mix-blend-difference mt-7">
-      <motion.span
+  <React.Fragment>
+    <motion.span
+      animate={{
+        rotate: [5, -5],
+        y: [-5, 0],
+      }}
+      transition={{
+        repeat: Infinity,
+        repeatType: "mirror",
+        duration: 5,
+      }}
+      className="text-page2 font-extrabold text-7xl sm:text-8xl md:text-9xl tracking-wider"
+    >
+      Cub
+    </motion.span>
+    <span>
+      <motion.svg
         animate={{
-          rotate: [5, -5],
-          y: [-5, 0],
+          rotate: [0, 360],
+          y: [0, -10],
         }}
         transition={{
           repeat: Infinity,
           repeatType: "mirror",
           duration: 5,
         }}
-        className="text-page2 font-extrabold text-7xl sm:text-8xl md:text-9xl tracking-wider"
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        className="w-[3.7rem] sm:w-[4.5rem] md:w-[6rem] fill-page4 mt-2"
       >
-        Cub
-      </motion.span>
-      <span>
-        <motion.svg
-          animate={{
-            rotate: [0, 360],
-            y: [0, -10],
-          }}
-          transition={{
-            repeat: Infinity,
-            repeatType: "mirror",
-            duration: 5,
-          }}
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          className="w-[3.7rem] sm:w-[4.5rem] md:w-[6rem] fill-page4 mt-2"
-        >
-          <motion.path
-            className="stroke-page2"
-            stroke="#000"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth="2.5"
-            d="M11.223 2.432c.284-.158.425-.237.575-.267a1 1 0 01.403 0c.15.03.292.11.576.267l7.4 4.11c.3.167.45.25.558.369a1 1 0 01.215.364c.05.153.05.324.05.667v8.117c0 .342 0 .514-.05.666a.999.999 0 01-.215.364c-.109.119-.258.202-.558.368l-7.4 4.111c-.284.158-.425.237-.575.268a.998.998 0 01-.403 0c-.15-.031-.292-.11-.576-.268l-7.4-4.11c-.3-.167-.45-.25-.558-.369a1 1 0 01-.215-.364C3 16.573 3 16.401 3 16.06V7.942c0-.343 0-.514.05-.667a1 1 0 01.215-.364c.109-.119.258-.202.558-.368l7.4-4.111z"
-          ></motion.path>
-        </motion.svg>
-      </span>
-      <motion.span
-        animate={{
-          rotate: [-10, 10],
-          y: [0, 15],
-        }}
-        transition={{
-          repeat: Infinity,
-          repeatType: "mirror",
-          duration: 5,
-        }}
-        className="text-page2 font-extrabold text-7xl sm:text-8xl md:text-9xl tracking-wider"
-      >
-        ur
-      </motion.span>
-    </div>
-  </div>
+        <motion.path
+          className="stroke-page2"
+          stroke="#000"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth="2.5"
+          d="M11.223 2.432c.284-.158.425-.237.575-.267a1 1 0 01.403 0c.15.03.292.11.576.267l7.4 4.11c.3.167.45.25.558.369a1 1 0 01.215.364c.05.153.05.324.05.667v8.117c0 .342 0 .514-.05.666a.999.999 0 01-.215.364c-.109.119-.258.202-.558.368l-7.4 4.111c-.284.158-.425.237-.575.268a.998.998 0 01-.403 0c-.15-.031-.292-.11-.576-.268l-7.4-4.11c-.3-.167-.45-.25-.558-.369a1 1 0 01-.215-.364C3 16.573 3 16.401 3 16.06V7.942c0-.343 0-.514.05-.667a1 1 0 01.215-.364c.109-.119.258-.202.558-.368l7.4-4.111z"
+        ></motion.path>
+      </motion.svg>
+    </span>
+    <motion.span
+      animate={{
+        rotate: [-10, 10],
+        y: [0, 15],
+      }}
+      transition={{
+        repeat: Infinity,
+        repeatType: "mirror",
+        duration: 5,
+      }}
+      className="text-page2 font-extrabold text-7xl sm:text-8xl md:text-9xl tracking-wider"
+    >
+      ur
+    </motion.span>
+  </React.Fragment>
 );
 
 const primaryLeafSVG = (
@@ -242,4 +241,13 @@ const lastLeafSVG = (
   </motion.svg>
 );
 
-export { reflectorSVG, desktopReflectorSVG, cubourSVG, primaryLeafSVG, secondaryLeafSVG, nextLeafSVG, commonLeafSVG, lastLeafSVG };
+export {
+  reflectorSVG,
+  desktopReflectorSVG,
+  cubourSVG,
+  primaryLeafSVG,
+  secondaryLeafSVG,
+  nextLeafSVG,
+  commonLeafSVG,
+  lastLeafSVG,
+};

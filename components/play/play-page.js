@@ -58,6 +58,9 @@ function PlayPage(props) {
           dynamicGridCount={resultStringSeed.dynamicGridCount}
           inputString={resultStringSeed.inputString}
           timeBoundary={resultStringSeed.timeBoundary}
+          // dynamicGridCount={8}
+          // inputString={"s0000tfftn0001tfffn0002tftfn0003ttffn0004tfftn0005tfffn0006tfffn0007ttffn0100ffftn0101ffffn0102ttffb0103ftftn0104ffftn0105ffffn0106ffffn0107ftffn0200ffftn0201ffffn0202ftffn0203ftftn0204ffftn0205ffffn0206ffffn0207ftffn0300ffttn0301fftfn0302fttfe0303ftttn0304ffftn0305ffffn0306ffffn0307ftffn0400tfftn0401tfffn0402tfffn0403tfffn0404ffffn0405ffffn0406ffffn0407ftffn0500ffftn0501ffffn0502ffffn0503ffffn0504ffffn0505ffffn0506ffffn0507ftffn0600ffftn0601ffffn0602ffffn0603ffffn0604ffffn0605ffffn0606ffffn0607ftffn0700ffttn0701fftfn0702fftfn0703fftfn0704fftfn0705fftfn0706fftfn0707fttf"}
+          // timeBoundary={"5959590"}
           onRestart={restartGame}
         />
       )}

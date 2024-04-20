@@ -4,19 +4,15 @@ import React, { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import useMeasure from "react-use-measure";
 import Image from "next/image";
+import {
+  primaryLeafSVG,
+  secondaryLeafSVG,
+  nextLeafSVG,
+  commonLeafSVG,
+  lastLeafSVG,
+} from "../../SVG/homepage";
 
-function TutorialCarousel(props) {
-  // const lake = props.lake;
-
-  const firstObj = [
-    "https://res.cloudinary.com/dmy0hhph9/image/upload/v1702329952/Lakkes-project/paibvofli0wmk5boxbsi.jpg",
-    "https://res.cloudinary.com/dmy0hhph9/image/upload/v1702329952/Lakkes-project/egg5vf2hywj3vqdny6bj.jpg",
-  ];
-  // lake.images.map((img) => {
-  //   firstObj.push(img.url);
-  // });
-
-  const [count, setCount] = useState(0);
+function TutorialCarousel({ count, firstObj }) {
   const [ref, { width }] = useMeasure();
   const [tuple, setTuple] = useState([null, count]);
 
@@ -28,74 +24,32 @@ function TutorialCarousel(props) {
 
   const direction = count > prev ? "increasing" : "decreasing";
 
-  function increaseCounter() {
-    if (count >= 0 && count < firstObj.length - 1) {
-      setCount(count + 1);
-    } else {
-      setCount(firstObj.length - 1);
-    }
-  }
-
-  function decreaseCounter() {
-    if (count > 0 && count < firstObj.length) {
-      setCount(count - 1);
-    } else {
-      setCount(0);
-    }
-  }
-
   return (
-    <div className="w-full h-full">
+    <div className="w-full h-full md:border-4 md:border-pageMenu">
       <div className="relative text-4xl text-pageMenu w-full h-full">
-        <div className="absolute z-10 flex justify-between w-full h-full">
-          <button
-            className={` ${
-              count > 0 && count < firstObj.length ? "opacity-100" : "opacity-0"
-            } flex items-center justify-start h-full w-1/2`}
-            onClick={decreaseCounter}
-          >
-            <motion.div
-              whileTap={{ scale: 1.5 }}
-              className="mx-1 sm:mx-2 w-8 h-8 bg-page2 rounded-full flex justify-center items-center shadow-2xl"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  fill="#383434"
-                  d="M14.29 5.707a1 1 0 00-1.415 0L7.988 10.6a2 2 0 000 2.828l4.89 4.89a1 1 0 001.415-1.414l-4.186-4.185a1 1 0 010-1.415l4.182-4.182a1 1 0 000-1.414z"
-                ></path>
-              </svg>
-            </motion.div>
-          </button>
-          <button
-            className={` ${
-              count >= 0 && count < firstObj.length - 1
-                ? "opacity-100"
-                : "opacity-0"
-            } flex items-center justify-end h-full w-1/2`}
-            onClick={increaseCounter}
-          >
-            <motion.div
-              whileTap={{ scale: 1.5 }}
-              className="mx-1 sm:mx-2 w-8 h-8 bg-page2 rounded-full flex justify-center items-center shadow-2xl"
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                <path
-                  fill="#383434"
-                  d="M9.71 18.293a1 1 0 001.415 0l4.887-4.892a2 2 0 000-2.828l-4.89-4.89a1 1 0 00-1.415 1.414l4.186 4.185a1 1 0 010 1.415L9.71 16.879a1 1 0 000 1.414z"
-                ></path>
-              </svg>
-            </motion.div>
-          </button>
-        </div>
         <div className="flex justify-center w-full h-full">
           <div
             ref={ref}
             className="relative flex w-full h-full bg-page1 items-center justify-center overflow-hidden"
           >
+            <div className="w-full h-full absolute">
+              <Image
+                src={"/bigreflector.png"}
+                alt="Image"
+                placeholder="blur"
+                height={3400}
+                width={5500}
+                blurDataURL={"/bigreflector.png"}
+                className="w-full h-full object-cover absolute hue-rotate-[-30deg] saturate-[1.2] object-right brightness-105"
+              />
+            </div>
+            <div className="w-[50%] h-full z-10 absolute left-0 top-20">
+              {primaryLeafSVG}
+              {secondaryLeafSVG}
+              {nextLeafSVG}
+              {commonLeafSVG}
+              {lastLeafSVG}
+            </div>
             <AnimatePresence custom={{ direction, width }}>
               <motion.div
                 key={count}
@@ -104,17 +58,29 @@ function TutorialCarousel(props) {
                 animate="center"
                 exit="exit"
                 custom={{ direction, width }}
-                className="contrast-[0.80] grayscale-[15%] brightness-110 absolute flex justify-center items-center w-full h-full"
+                className="absolute z-50 flex justify-center items-center w-full h-full"
               >
-                <Image
-                  src={firstObj[count]}
-                  alt="Image"
-                  placeholder="blur"
-                  height={1000}
-                  width={1000}
-                  blurDataURL={firstObj[count]}
-                  className="w-full h-full object-cover"
-                />
+                <div className="w-full h-full relative">
+                  <div className="w-full h-full">
+                    <div className="w-[50%] md:w-full lg:w-[50%] h-full grid grid-rows-6">
+                      <div className="row-span-2"></div>
+                      <div className="row-span-4 p-4 md:p-28 flex items-center justify-center">
+                        <div className="h-full aspect-square bg-pageMenu shadow-[rgba(0,_0,_0,_0.2)_0px_30px_60px]">
+                          <Image
+                            src={firstObj[count]}
+                            alt="Image"
+                            placeholder="blur"
+                            height={600}
+                            width={600}
+                            blurDataURL={firstObj[count]}
+                            className="w-full h-full object-cover"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                    {/* <span>{firstObj[count]}</span> */}
+                  </div>
+                </div>
               </motion.div>
             </AnimatePresence>
           </div>

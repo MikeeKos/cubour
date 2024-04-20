@@ -80,7 +80,7 @@ function Homepage() {
     if (session) {
       signOut();
     }
-  }
+  };
 
   const auth = (
     <div>
@@ -153,7 +153,11 @@ function Homepage() {
         </div>
         {width <= 768 && reflectorSVG}
         {width > 768 && desktopReflectorSVG}
-        {cubourSVG}
+        <div className="w-full h-[15rem]">
+          <div className="w-full h-full flex items-center justify-center flex-row mix-blend-difference mt-7">
+            {cubourSVG}
+          </div>
+        </div>
         {primaryLeafSVG}
         {secondaryLeafSVG}
         {nextLeafSVG}
