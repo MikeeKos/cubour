@@ -164,7 +164,7 @@ function Homepage() {
           <div className="absolute w-full h-full grid grid-rows-4 z-50">
             <HomepageButton text={"play"} link={"play"} />
             <HomepageButton text={"tutorial"} link={"tutorial"} />
-            <HomepageButton text={"leaderboard"} link={"create"} />
+            <HomepageButton text={"leaderboard"} link={"leaderboard"} />
             <HomepageButton text={"create map"} link={"create"} />
           </div>
         </div>
