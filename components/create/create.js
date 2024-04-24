@@ -315,13 +315,49 @@ function Create(props) {
     setTimeLimit(time);
   };
 
-  const submitHandler = () => {
+  const submitHandler = async () => {
     console.log("dynamic grid count");
     console.log(dynamicGridCount);
     console.log("time limit");
     console.log(timeLimit);
     console.log("input string");
     console.log(inputString);
+    const mapData = [{ dynamicGridCount }, { timeLimit }, { inputString }];
+
+    notificationCtx.showNotification({
+      title: "sending map...",
+      message: "sending comment data for verification",
+      status: "pending",
+    });
+    try {
+      const response = await fetch("/api/create/seed-upload", {
+        method: "POST",
+        body: JSON.stringify(mapData),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      //if response is NOT 200-299
+      if (!response.ok) {
+        const text = await response.text();
+        throw new Error(text);
+      }
+
+      const data = await response.json();
+      notificationCtx.showNotification({
+        title: "success!",
+        message: "The map has been successfully sent for verification",
+        status: "success",
+      });
+      console.log("Successfully reached endpoint in front end")
+    } catch (error) {
+      notificationCtx.showNotification({
+        title: "Error!",
+        message: "Something went wrong...",
+        status: "error",
+      });
+    }
   };
 
   return (

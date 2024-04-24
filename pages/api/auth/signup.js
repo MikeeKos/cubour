@@ -113,6 +113,7 @@ async function handler(req, res) {
       email: email,
       password: hashedPassword,
       username: username,
+      currentLevel: 1,
     });
     await user.save();
     res.status(201).json({ message: "successfully created user" });
