@@ -59,7 +59,7 @@ function TesseractLevels(props) {
               <div className="w-[80%] h-full border-b-8 border-pageMenu flex items-end justify-end pb-1">
                 {higherDimCube("stroke-page1", props.level8.id)}
                 <Link
-                  href={`/play/${props.level8.id}`}an className="opacity-90 hover:cursor-pointer shadow-[rgba(0,_0,_0,_0.8)_0px_15px_45px] p-1 rounded-xl font-page text-sm bg-page1 md:text-xl lg:text-2xl text-pageMenu font-extrabold tracking-widest animate-levitate-delay">
+                  href={`/play/${props.level8.id}`} className="opacity-90 hover:cursor-pointer shadow-[rgba(0,_0,_0,_0.8)_0px_15px_45px] p-1 rounded-xl font-page text-sm bg-page1 md:text-xl lg:text-2xl text-pageMenu font-extrabold tracking-widest animate-levitate-delay">
                   lvl 8
                 </Link>
               </div>

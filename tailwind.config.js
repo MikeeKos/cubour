@@ -34,6 +34,7 @@ module.exports = {
         "blink-1250": "blink-1000 2500ms infinite",
         'levitate': "levitate 3s ease-in-out infinite",
         'levitate-delay': 'levitate 3s ease-in-out infinite 0.2s',
+        'wave-smooth': 'wave 3s ease-in-out infinite',
       },
       keyframes: {
         swing: {
@@ -103,6 +104,10 @@ module.exports = {
           "50%": {
             transform: "translateY(-20%)",
           },
+        },
+        wave: {
+          '0%, 100%': { transform: 'translateY(0)' },
+          '50%': { transform: 'translateY(-10%)' },
         },
       },
       gridTemplateColumns: {

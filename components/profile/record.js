@@ -26,12 +26,20 @@ function SingleRecord(props) {
     </svg>
   );
 
+  function formatTimeString(timeString) {
+    const minutes = timeString.substring(0, 2);
+    const seconds = timeString.substring(2, 4);
+    const milliseconds = timeString.substring(4);
+
+    return `${minutes}:${seconds}.${milliseconds}`;
+  }
+
   return (
     <div className="w-full h-32 bg-page3 mb-6">
       <div className="w-full h-1/3 bg-pageMenu flex">
         <div className="w-[30%] h-full bg-page1 flex items-center justify-center">
           <span className="w-full h-full font-page text-lg md:text-xl lg:text-2xl text-pageMenu font-extrabold tracking-widest text-center truncate flex items-center justify-center shadow-[rgba(0,_0,_0,_0.4)_0px_30px_90px]">
-            LVL {11}
+            LVL {props.level}
           </span>
         </div>
         <div className="w-[50%] h-full flex items-center justify-center">
@@ -51,13 +59,15 @@ function SingleRecord(props) {
       </div>
       <div className="w-full h-2/3 bg-page2 flex">
         <div className="w-[40%] h-full">
-          <span className="w-full h-full font-page text-lg md:text-xl lg:text-2xl text-pageMenu font-extrabold tracking-widest text-center truncate flex items-center justify-center shadow-[rgba(0,_0,_0,_0.4)_0px_30px_90px]">
-            {crownSVG}: 2
+          <span className="w-full h-full font-page text-lg md:text-base lg:text-lg text-pageMenu font-extrabold tracking-widest text-center truncate flex items-center justify-center shadow-[rgba(0,_0,_0,_0.4)_0px_30px_90px]">
+            <div className={`flex items-center justify-center ${props.place === 1 && "bg-page4 p-1 rounded-2xl"}`}>
+              {crownSVG}: {props.place}
+            </div>
           </span>
         </div>
         <div className="w-[60%] h-full bg-page4">
-          <span className="w-full h-full font-page text-lg md:text-xl lg:text-2xl text-pageMenu font-extrabold tracking-widest text-center truncate flex items-center justify-center shadow-[rgba(0,_0,_0,_0.4)_0px_30px_90px]">
-            TIME: 11:11:111
+          <span className="w-full h-full font-page text-lg md:text-base lg:text-lg text-pageMenu font-extrabold tracking-widest text-center truncate flex items-center justify-center shadow-[rgba(0,_0,_0,_0.4)_0px_30px_90px]">
+            TIME: {formatTimeString(props.time)}
           </span>
         </div>
       </div>

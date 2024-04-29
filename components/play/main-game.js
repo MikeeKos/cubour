@@ -28,6 +28,8 @@ import SecondVisitTargetBlock from "./blocks/visit/second-visit-target";
 import BackAndForthSpecial from "./blocks/special/back-and-forth";
 import CircleSpecial from "./blocks/special/circle";
 import UpAndDownSpecial from "./blocks/special/up-and-down";
+import NotificationContext from "../../store/notification-context";
+import { useRouter } from "next/router";
 import {
   timerSVG,
   controllerSVG,
@@ -35,12 +37,86 @@ import {
   lightningSVG,
 } from "../../SVG/game-grid";
 
+const littleStarSVG = (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    fill="none"
+    viewBox="0 0 24 24"
+    className="w-full h-full rotate-12"
+  >
+    <path
+      className="stroke-pageMenu"
+      stroke="#000"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth="2.5"
+      d="M11.27 4.411c.23-.52.346-.779.508-.859a.5.5 0 01.444 0c.161.08.277.34.508.86l1.845 4.136c.068.154.102.23.155.29a.5.5 0 00.168.121c.072.032.156.041.323.059l4.505.475c.565.06.848.09.974.218a.5.5 0 01.137.423c-.026.178-.237.368-.66.75l-3.364 3.031c-.125.113-.188.17-.227.238a.5.5 0 00-.064.197c-.009.079.009.161.044.326l.94 4.43c.117.557.176.835.093.994a.5.5 0 01-.36.261c-.177.03-.423-.111-.916-.396l-3.924-2.263c-.145-.084-.218-.126-.295-.142a.502.502 0 00-.208 0c-.078.017-.15.058-.296.142l-3.923 2.263c-.493.285-.74.427-.917.396a.5.5 0 01-.36-.26c-.083-.16-.024-.438.094-.995l.94-4.43c.035-.165.052-.247.044-.326a.5.5 0 00-.064-.197c-.04-.069-.102-.125-.227-.238l-3.365-3.032c-.422-.38-.633-.57-.66-.749a.5.5 0 01.138-.423c.126-.128.409-.158.974-.218l4.504-.475c.168-.018.251-.027.323-.059a.5.5 0 00.168-.122c.053-.059.088-.135.156-.289l1.844-4.137z"
+    ></path>
+  </svg>
+);
+
+const levelReflectorSVG = (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    fill="#000"
+    version="1.1"
+    viewBox="0 0 289.717 289.717"
+    xmlSpace="preserve"
+    className="w-full h-auto lg:h-full lg:w-auto"
+  >
+    <path
+      className="fill-pageMenu"
+      d="M143.157 116.859v18.233c0 14.623-11.855 26.479-26.478 26.479-14.623 0-26.479-11.855-26.479-26.479V90.057c-25.448-9.834-54.731.941-67.451 25.759l-.001.001c-13.602 26.537-3.115 59.076 23.422 72.678l87.438 44.817 49.258-96.1-39.709-20.353zM271.077 163.582a16.851 16.851 0 00-12.454-8.985l-59.656-9.131-49.255 96.099 42.245 43.098a16.85 16.85 0 0027.03-4.11L271.07 178.94a16.85 16.85 0 00.007-15.358z"
+    ></path>
+    <path
+      className="fill-pageMenu"
+      d="M116.678 148.332c7.312 0 13.239-5.928 13.239-13.239V13.239C129.917 5.928 123.99 0 116.678 0c-7.312 0-13.239 5.928-13.239 13.239v121.854c0 7.311 5.927 13.239 13.239 13.239z"
+    ></path>
+  </svg>
+);
+
+const leaderboardSVG = (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    fill="#000"
+    className="h-full pb-1 md:h-[60%] md:pl-1"
+    data-name="Line Color"
+    viewBox="0 0 24 24"
+  >
+    <path
+      className="stroke-pageMenu"
+      fill="none"
+      stroke="#2CA9BC"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth="2"
+      d="M11.54 3.94L10.5 4.09 11.25 4.82 11.07 5.85 12 5.37 12.93 5.85 12.75 4.82 13.5 4.09 12.46 3.94 12 3 11.54 3.94z"
+    ></path>
+    <path
+      className="stroke-pageMenu"
+      fill="none"
+      stroke="#000"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth="2"
+      d="M9 21H3v-5h6zm6-11H9v11h6zm6 4h-6v7h6z"
+    ></path>
+  </svg>
+);
+
 function MainGame(props) {
   const gameCtx = useContext(GameContext);
+  const router = useRouter();
+  const { seedId } = router.query;
 
   const dynamicGridCount = props.dynamicGridCount;
   const inputString = props.inputString;
   const timeBoundary = props.timeBoundary;
+
+  const notificationCtx = useContext(NotificationContext);
+
+  // console.log(props.mapObject)
+  const leaderboard = props.mapObject.leaderboard;
 
   // const dynamicGridCount = 10;
   // const inputString =
@@ -499,6 +575,62 @@ function MainGame(props) {
     props.onRestart();
   };
 
+  // ------------------Sending win--------------------
+  useEffect(() => {
+    if (gameCtx.win) {
+      const newFinishTime = totalTimeInMs - timeLeft;
+      setFinishTime(newFinishTime);
+      clearInterval(timerRef.current);
+  
+      // Wywołaj sendData bezpośrednio po ustawieniu czasu zakończenia
+      const formattedFinishTime = formatTimeLeft(newFinishTime);
+      const sendData = async () => {
+        try {
+          const response = await fetch(`/api/player/${seedId}`, {
+            method: "POST",
+            body: JSON.stringify({
+              formattedFinishTime,
+              simpleFinishTime: newFinishTime,
+            }),
+            headers: {
+              "Content-Type": "application/json",
+            },
+          });
+  
+          if (!response.ok) {
+            const text = await response.text();
+            throw new Error(text);
+          }
+  
+          const data = await response.json();
+          console.log("Data response:", data);
+  
+          notificationCtx.showNotification({
+            title: "Success!",
+            message: `New record: ${formattedFinishTime}`,
+            status: "success",
+          });
+        } catch (error) {
+          console.error("Error submitting data:", error);
+          notificationCtx.showNotification({
+            title: "Error!",
+            message: "Something went wrong...",
+            status: "error",
+          });
+        }
+      };
+  
+      sendData();
+    }
+  }, [gameCtx.win, totalTimeInMs, timeLeft, seedId]);
+
+  function formatTimeString(timeString) {
+    return `${timeString.substring(0, 2)}:${timeString.substring(
+      2,
+      4
+    )}.${timeString.substring(4)}`;
+  }
+
   return (
     <React.Fragment>
       <div
@@ -522,23 +654,120 @@ function MainGame(props) {
                   </span>
                   <span>{timerSVG}</span>
                 </div>
-                <span className="w-full flex justify-center font-page text-page1 tracking-wider text-3xl font-extrabold">
+                <span className="w-full flex justify-center font-page text-page1 tracking-wider text-3xl font-extrabold bg-page3 md:bg-page4">
                   {formatTimeLeft(timeLeft)}
                 </span>
+                <div className="w-full h-32 md:h-64">
+                  <div className="w-full h-full p-5">
+                    <div className="w-full h-full bg-pageBlack relative shadow-[rgba(0,_0,_0,_0.4)_0px_30px_90px]">
+                      <div className="absolute w-full h-5 md:h-12 bg-page2 font-page text-pageMenu tracking-wider  md:text-base text-xs font-extrabold flex items-center justify-center">
+                        Leaderboard {leaderboardSVG}
+                      </div>
+                      <div className="w-full h-[calc(100%-20px)] md:h-[calc(100%-48px)] absolute bottom-0 bg-page2">
+                        <div className="w-full h-full relative">
+                          <div className="w-full h-5 md:h-12 bg-page4 absolute top-0 font-page text-pageMenu tracking-wider  md:text-base text-xs font-extrabold flex items-center justify-center underline truncate shadow-lg">
+                            <div className="absolute left-0 h-full aspect-square bg-pageMenu ml-1">
+                              <p className="w-full h-full font-page text-page1 tracking-wider  md:text-base text-xs font-extrabold flex items-center justify-center">
+                                1
+                              </p>
+                            </div>
+                            <p className="truncate mr-3 ml-8 md:ml-16">
+                              {leaderboard.find((item) => item.place === 1) ? (
+                                <React.Fragment>
+                                  {formatTimeString(
+                                    leaderboard.find((item) => item.place === 1)
+                                      .time
+                                  )}{" "}
+                                  -{" "}
+                                  {
+                                    leaderboard.find((item) => item.place === 1)
+                                      .leaderUsername
+                                  }
+                                </React.Fragment>
+                              ) : (
+                                "XXX"
+                              )}
+                            </p>
+                          </div>
+                          <div className="w-full h-full absolute flex items-center">
+                            <div className="w-full h-5 md:h-12 bg-page4 absolute font-page text-pageMenu tracking-wider  md:text-base text-xs font-extrabold flex items-center justify-center underline truncate shadow-lg">
+                              <div className="absolute left-0 h-full aspect-square bg-pageMenu ml-1">
+                                <p className="w-full h-full font-page text-page1 tracking-wider  md:text-base text-xs font-extrabold flex items-center justify-center">
+                                  2
+                                </p>
+                              </div>
+                              <p className="truncate mr-3 ml-8 md:ml-16">
+                                {leaderboard.find(
+                                  (item) => item.place === 2
+                                ) ? (
+                                  <React.Fragment>
+                                    {formatTimeString(
+                                      leaderboard.find(
+                                        (item) => item.place === 2
+                                      ).time
+                                    )}{" "}
+                                    -{" "}
+                                    {
+                                      leaderboard.find(
+                                        (item) => item.place === 2
+                                      ).leaderUsername
+                                    }
+                                  </React.Fragment>
+                                ) : (
+                                  "XXX"
+                                )}
+                                {/* {formatTimeString(
+                                  leaderboard.find((item) => item.place === 2)
+                                    .time
+                                )}{" "}
+                                -{" "}
+                                {
+                                  leaderboard.find((item) => item.place === 2)
+                                    .leaderUsername
+                                } */}
+                              </p>
+                            </div>
+                          </div>
+                          <div className="w-full h-5 md:h-12 bg-page4 absolute bottom-0 font-page text-pageMenu tracking-wider  md:text-base text-xs font-extrabold flex items-center justify-center underline truncate shadow-lg">
+                            <div className="absolute left-0 h-full aspect-square bg-pageMenu ml-1">
+                              <p className="w-full h-full font-page text-page1 tracking-wider  md:text-base text-xs font-extrabold flex items-center justify-center">
+                                3
+                              </p>
+                            </div>
+                            <p className="truncate mr-3 ml-8 md:ml-16">
+                              {leaderboard.find((item) => item.place === 3) ? (
+                                <React.Fragment>
+                                  {formatTimeString(
+                                    leaderboard.find((item) => item.place === 3)
+                                      .time
+                                  )}{" "}
+                                  -{" "}
+                                  {
+                                    leaderboard.find((item) => item.place === 3)
+                                      .leaderUsername
+                                  }
+                                </React.Fragment>
+                              ) : (
+                                "XXX"
+                              )}
+
+                              {/* {formatTimeString(
+                                leaderboard.find((item) => item.place === 3)
+                                  .time
+                              )}{" "}
+                              -{" "}
+                              {
+                                leaderboard.find((item) => item.place === 3)
+                                  .leaderUsername
+                              } */}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
-              {/* <span className="block">{keyPressedCount}</span> */}
-              {/* <span className="block">
-                {specialBlockCtx.specialMode
-                  ? "special mode: true"
-                  : "special mode: false"}
-              </span> */}
-              {/* <span className="block">TIMER: {formatTimeLeft(timeLeft)}</span> */}
-              {/* {finishTime && (
-                <span className="block">
-                  FINISH TIME: {formatTimeLeft(finishTime)}
-                </span>
-              )} */}
-              {/* <span>Did win?: {gameCtx.win ? "true" : "false"}</span> */}
             </div>
           </div>
           <div className="order-1 col-span-2 row-span-4 md:order-2 md:col-span-6 flex items-center justify-center p-5 md:p-10 lg:p-16">
@@ -595,11 +824,6 @@ function MainGame(props) {
                             blurDataURL={"/blobs.png"}
                           />
                         </div>
-                        {/* <div className="w-full h-[50%] sm:h-[60%] lg:h-[65%] bg-page4 brightness-90">
-                          <span className="pt-5 flex items-center justify-center font-page text-xs md:text-base lg:text-xl text-pageMenu font-extrabold tracking-widest">
-                            your time: {formatTimeLeft(finishTime)}
-                          </span>
-                        </div> */}
                       </div>
                     </div>
                   </div>
@@ -642,25 +866,13 @@ function MainGame(props) {
             </div>
           </div>
           <div className="relative order-2 col-span-1 row-span-2 md:order-3 md:col-span-3 md:shadow-[rgba(0,_0,_0,_0.4)_0px_30px_90px]">
-            {/* {pointPosition.x}
-              {pointPosition.y} */}
             <div className="absolute w-full h-full overflow-hidden ">
               <div className="w-full h-full absolute flex items-end justify-center right-44 md:right-28 lg:right-44 max-[660px]:opacity-0">
                 {controllerSVG}
               </div>
               <div className="absolute max-[660px]:w-full w-[65%] h-full md:w-full md:h-[50%] lg:w-full lg:h-[50%] right-0 bg-page4 sm:bg-pageMenu shadow-[rgba(0,_0,_0,_0.4)_0px_30px_90px]">
-                {/* <span className="block">
-                  {gameCtx.isGameOver ? "game over" : "play"}
-                </span> */}
-                {/* <div className="px-2 pt-3 flex items-center justify-center w-full">
-                  <span className="w-full font-page text-page1 tracking-wider text-3xl font-extrabold flex items-center justify-center text-center">
-                    <span className="w-full flex-nowrap">MOVE TO</span>
-                    <span className="w-full">START</span>
-                    <span className="">{keyboardSVG}</span>
-                  </span>
-                </div> */}
                 {!hasTimerStarted && (
-                  <div className="pt-3 flex flex-col items-center justify-center w-full">
+                  <div className="pt-3 flex flex-col items-center justify-center w-full relative">
                     <div className="font-page text-page1 tracking-wider text-3xl font-extrabold flex flex-col items-center justify-center text-center animate-pulse">
                       <span>MOVE TO</span>
                       <div className="flex">
@@ -671,7 +883,7 @@ function MainGame(props) {
                   </div>
                 )}
                 {hasTimerStarted && !gameCtx.isGameOver && (
-                  <div className="pt-3 flex flex-col items-center justify-center w-full">
+                  <div className="pt-3 flex flex-col items-center justify-center w-full relative">
                     <div className="font-page text-page1 tracking-wider text-3xl font-extrabold flex flex-col items-center justify-center text-center">
                       <span>GOOD</span>
                       <div className="flex">
@@ -682,7 +894,7 @@ function MainGame(props) {
                   </div>
                 )}
                 {gameCtx.isGameOver && (
-                  <div className="pt-3 flex flex-col items-center justify-center w-full">
+                  <div className="pt-3 flex flex-col items-center justify-center w-full relative">
                     <div className="font-page text-page1 tracking-wider text-3xl font-extrabold flex flex-col items-center justify-center text-center">
                       <span>YOU LOSE!</span>
                       <span className="mx-1">
@@ -694,35 +906,30 @@ function MainGame(props) {
                       >
                         TRY AGAIN
                       </span>
-                      {/* <div className="flex">
-                        <span>LOSE LOSE</span>
-                        <span className="pl-2">{lightningSVG}</span>
-                      </div> */}
                     </div>
                   </div>
                 )}
-                {/* <span className="block bg-page5 hover:scale-105 hover:cursor-pointer" onClick={checkAPI}>
-                  seed check
-                </span> */}
+                {!gameCtx.isGameOver && (
+                  <div className="opacity-0 md:opacity-100 w-full h-full p-5">
+                    <div className="relative w-full h-[70%] bg-page2 shadow-[rgba(0,_0,_0,_0.4)_0px_30px_90px]">
+                      <div className="absolute w-[60%] h-[60%]">
+                        {levelReflectorSVG}
+                      </div>
+                      <div className="absolute w-full h-[40%] bottom-0">
+                        <div className=" font-page text-page1 tracking-wider text-3xl lg:text-5xl font-extrabold flex flex-col items-center justify-center text-center ml-10 lg:ml-24">
+                          <div className="bg-pageMenu p-1">lvl 1</div>
+                        </div>
+                      </div>
+                      <div className="absolute w-14 h-14 right-2 top-2 animate-scale-swing-rotate">
+                        {littleStarSVG}
+                      </div>
+                      <div className="absolute w-14 h-14 left-2 bottom-2 animate-scale-swing-rotate">
+                        {littleStarSVG}
+                      </div>
+                    </div>
+                  </div>
+                )}
               </div>
-
-              {/* <span className="block">{gameCtx.keyPressed}</span> */}
-              {/* <span className="block">
-                {gameCtx.isGameOver ? "game over" : "play"}
-              </span> */}
-              {/* <span className="block">{keyPressedCount}</span> */}
-              {/* <span className="block">
-                {specialBlockCtx.specialMode
-                  ? "special mode: true"
-                  : "special mode: false"}
-              </span> */}
-              {/* <span className="block">TIMER: {formatTimeLeft(timeLeft)}</span> */}
-              {/* {finishTime && (
-                <span className="block">
-                  FINISH TIME: {formatTimeLeft(finishTime)}
-                </span>
-              )} */}
-              {/* <span>Did win?: {gameCtx.win ? "true" : "false"}</span> */}
             </div>
           </div>
         </div>

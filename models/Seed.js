@@ -20,6 +20,10 @@ const SeedSchema = new mongoose.Schema({
         type: mongoose.SchemaTypes.ObjectId,
         ref: "User",
       },
+      leaderUsername: {
+        type: String,
+        required: true,
+      },
     },
   ],
   level: {

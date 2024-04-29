@@ -21,22 +21,22 @@ const UserSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
-  records: [
-    {
-      place: {
-        type: Number,
-        required: true,
-      },
-      lvl: {
-        type: Number,
-        required: true,
-      },
-      time: {
-        type: String,
-        required: true,
-      },
-    },
-  ],
+  // records: [
+  //   {
+  //     place: {
+  //       type: Number,
+  //       required: true,
+  //     },
+  //     lvl: {
+  //       type: Number,
+  //       required: true,
+  //     },
+  //     time: {
+  //       type: String,
+  //       required: true,
+  //     },
+  //   },
+  // ],
 });
 
 export default mongoose.models.User || mongoose.model("User", UserSchema);

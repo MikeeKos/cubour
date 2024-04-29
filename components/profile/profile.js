@@ -4,7 +4,40 @@ import SingleRecord from "./record";
 import MenuIcon from "./menu-icons";
 
 function ProfilePanel(props) {
+  console.log(props);
   const [playVisible, setPlayVisible] = useState(false);
+
+  const seeds = props.seeds;
+  console.log(seeds);
+
+  function filterAndSortLeaderboard(entries, username) {
+    const filteredAndProcessed = entries
+      .map((entry) => ({
+        ...entry,
+        leaderboard: entry.leaderboard.filter(
+          (leader) => leader.leaderUsername === username
+        ),
+      }))
+      .filter((entry) => entry.leaderboard.length > 0);
+    const sorted = filteredAndProcessed.sort(
+      (a, b) => Number(a.level) - Number(b.level)
+    );
+    let completeArray = [];
+    sorted.map((el) => {
+      let place;
+      let time;
+      let level = el.level;
+      el.leaderboard.map((entry) => {
+        place = entry.place;
+        time = entry.time;
+        completeArray.push({ level, place, time });
+      });
+    });
+    // console.log(completeArray);
+    return completeArray;
+  }
+  const checkedList = filterAndSortLeaderboard(seeds, props.username);
+  // console.log(checkedList);
 
   const pawnSVG = (
     <svg
@@ -138,8 +171,7 @@ function ProfilePanel(props) {
                               <span className="ml-1 absolute w-full h-full font-page text-sm md:text-sm lg:text-xl text-pageMenu font-extrabold tracking-widest text-center truncate flex items-center justify-center">
                                 current level :
                                 <span className="ml-2 truncate bg-page2 p-2 rounded-xl">
-                                  {/* {props.currentLevel} */}
-                                  12
+                                  {props.currentLevel}
                                 </span>
                               </span>
                             </div>
@@ -188,11 +220,18 @@ function ProfilePanel(props) {
             </div>
             <div className="w-full h-[calc(100%-7rem)] p-5">
               <div className="w-full h-full overflow-y-scroll">
-                <SingleRecord username={props.username} />
-                <SingleRecord username={props.username} />
-                <SingleRecord username={props.username} />
-                <SingleRecord username={props.username} />
-                <SingleRecord username={props.username} />
+                {checkedList.map((el) => (
+                  <SingleRecord
+                    key={`${el.level}-${el.place}-${el.time}`}
+                    username={props.username}
+                    level={el.level}
+                    place={el.place}
+                    time={el.time}
+                  />
+                ))}
+                {/* <SingleRecord
+                  username={props.username}
+                /> */}
               </div>
             </div>
           </div>
@@ -200,10 +239,10 @@ function ProfilePanel(props) {
       </div>
       <div className="w-full h-[24rem] md:h-[12rem] bg-page2">
         <div className="w-full h-full grid grid-rows-2 grid-cols-2 md:grid-rows-1 md:grid-cols-4">
-          <MenuIcon givenSVG={playSVG} text={"play"}/>
-          <MenuIcon givenSVG={tutorialSVG} text={"tutorial"}/>
-          <MenuIcon givenSVG={leaderboardSVG} text={"leaderboard"}/>
-          <MenuIcon givenSVG={createSVG} text={"create"}/>
+          <MenuIcon givenSVG={playSVG} text={"play"} />
+          <MenuIcon givenSVG={tutorialSVG} text={"tutorial"} />
+          <MenuIcon givenSVG={leaderboardSVG} text={"leaderboard"} />
+          <MenuIcon givenSVG={createSVG} text={"create"} />
           {/* <div className="col-span-1 row-span-1 border-2 border-pageMenu shadow-[inset_-24px_-16px_80px_#46464620] p-5">
             {tutorialSVG}
           </div>

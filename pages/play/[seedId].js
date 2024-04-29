@@ -43,7 +43,7 @@ export async function getServerSideProps(context) {
     mongoose.connection.close();
     return {
       props: {
-        seed: JSON.parse(JSON.stringify(seed.seed)),
+        seed: JSON.parse(JSON.stringify(seed)),
       },
     };
   } catch (error) {
