@@ -1,5 +1,6 @@
 import React from "react";
 import Record from "./record";
+import SideAction from "../ui/side-action";
 
 // beginner
 // easy
@@ -118,7 +119,10 @@ function LeaderboardPage(props) {
   });
 
   return (
-    <div className="w-full h-full bg-pageMenu">
+    <div className="w-full h-full bg-pageMenu relative">
+      <div className="w-full h-full absolute overflow-hidden">
+        <SideAction position={1} theme={"dark"} goBackPath={"/"} />
+      </div>
       {sortedSeeds.map((el) => {
         if (el.level <= 3) {
           return (

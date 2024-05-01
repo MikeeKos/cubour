@@ -12,12 +12,15 @@ import Flashing from "./blocks/flashing";
 import BlockPlaceText from "./blocks/block-place-text";
 import FunctionalBlock from "./blocks/functional-block";
 import SpecialBlockTemplate from "./blocks/special-block-template";
+import { useSession } from "next-auth/react";
+import SideAction from "../ui/side-action";
 
 function Create(props) {
   const [ref, { height, width }] = useMeasure();
   const [result, setResult] = useState([]);
   const gameCtx = useContext(GameContext);
   const notificationCtx = useContext(NotificationContext);
+  const { data: session, status } = useSession();
   const [inputString, setInputString] = useState(
     "n0000ffffn0001ffffn0002ffffn0003ffffn0004ffffn0005ffffn0006ffffn0007ffffn0100ffffn0101ffffn0102ffffn0103ffffn0104ffffn0105ffffn0106ffffn0107ffffn0200ffffn0201ffffn0202ffffn0203ffffn0204ffffn0205ffffn0206ffffn0207ffffn0300ffffn0301ffffn0302ffffn0303ffffn0304ffffn0305ffffn0306ffffn0307ffffn0400ffffn0401ffffn0402ffffn0403ffffn0404ffffn0405ffffn0406ffffn0407ffffn0500ffffn0501ffffn0502ffffn0503ffffn0504ffffn0505ffffn0506ffffn0507ffffn0600ffffn0601ffffn0602ffffn0603ffffn0604ffffn0605ffffn0606ffffn0607ffffn0700ffffn0701ffffn0702ffffn0703ffffn0704ffffn0705ffffn0706ffffn0707ffff"
   );
@@ -350,7 +353,7 @@ function Create(props) {
         message: "The map has been successfully sent for verification",
         status: "success",
       });
-      console.log("Successfully reached endpoint in front end")
+      console.log("Successfully reached endpoint in front end");
     } catch (error) {
       notificationCtx.showNotification({
         title: "Error!",
@@ -361,170 +364,204 @@ function Create(props) {
   };
 
   return (
-    <div ref={ref} className="w-full h-full">
-      <div className="w-full h-[45rem]">
-        <div className="w-full h-full bg-page5 grid grid-rows-6 grid-cols-1 md:grid-rows-1 md:grid-cols-12">
-          <div className=" row-span-2 col-span-1 md:row-span-1 md:col-span-4 bg-pageMenu p-6">
-            <div className="w-full h-full bg-page1 overflow-y-scroll">
-              {/* <div className="w-full h-[15rem] bg-page3 shadow-[inset_-24px_-16px_200px_#46464620] overflow-x-scroll">
+    // <div ref={ref} className="w-full h-full">
+    <div
+      ref={ref}
+      className="w-full h-screen relative bg-page4 overflow-y-scroll"
+    >
+      <div className="absolute w-full h-full overflow-hidden">
+        <SideAction position={2} theme={"dark"} goBackPath={"/"} />
+      </div>
+      <div
+        className={`absolute w-full ${height > 710 ? "h-full" : "h-[43rem]"}`}
+      >
+        <div className="w-full h-full">
+          <div className="w-full h-full bg-page5 grid grid-rows-6 grid-cols-1 md:grid-rows-1 md:grid-cols-12">
+            <div className=" row-span-2 col-span-1 md:row-span-1 md:col-span-4 bg-pageMenu p-6">
+              <div className="w-full h-full bg-page1 overflow-y-scroll">
+                {/* <div className="w-full h-[15rem] bg-page3 shadow-[inset_-24px_-16px_200px_#46464620] overflow-x-scroll">
                 {inputString}
               </div> */}
-              <CreateMapText />
-              <div className="w-full h-[14rem]">
-                <GridCount func={pullDataChangeGridCount} />
-              </div>
-              <div className="w-full h-[14rem]">
-                <SetTimeBlock timeFunc={pullTimeData} />
-              </div>
-              <BorederText />
-              <div className="w-full bg-page4 shadow-[inset_-24px_-16px_200px_#46464620]">
-                <div className="w-full h-[3rem] flex items-center justify-start ps-4 pt-6">
-                  <span className="shadow-[rgba(0,_0,_0,_0.4)_0px_15px_45px] animate-growUp p-1 rounded-xl font-page text-2xl bg-page1 md:text-xl lg:text-2xl text-pageMenu font-extrabold tracking-widest">
-                    Special Blocks
-                  </span>
+                <CreateMapText />
+                <div className="w-full h-[14rem]">
+                  <GridCount func={pullDataChangeGridCount} />
                 </div>
-                <BlockPlaceText />
-                <FunctionalBlock
-                  id={"s"}
-                  description={"Spawn point"}
-                  handleDragStart={handleDragStart}
-                />
-                <FunctionalBlock
-                  id={"e"}
-                  description={"Finish block"}
-                  handleDragStart={handleDragStart}
-                />
-                <FunctionalBlock
-                  id={"t"}
-                  description={"The entrance to the first teleportation block"}
-                  handleDragStart={handleDragStart}
-                />
-                <FunctionalBlock
-                  id={"T"}
-                  description={"The exit from the first teleport"}
-                  handleDragStart={handleDragStart}
-                />
-                <FunctionalBlock
-                  id={"o"}
-                  description={"The entrance to the second teleportation block"}
-                  handleDragStart={handleDragStart}
-                />
-                <FunctionalBlock
-                  id={"O"}
-                  description={"The exit from the second teleport"}
-                  handleDragStart={handleDragStart}
-                />
-                <FunctionalBlock
-                  id={"v"}
-                  description={
-                    "Press on this block 3 times to unlock the pathway"
-                  }
-                  handleDragStart={handleDragStart}
-                />
-                <FunctionalBlock
-                  id={"V"}
-                  description={"The path that will be opened after 3 visits"}
-                  handleDragStart={handleDragStart}
-                />
-                <FunctionalBlock
-                  id={"w"}
-                  description={
-                    "Press on this block 5 times to unlock the pathway"
-                  }
-                  handleDragStart={handleDragStart}
-                />
-                <FunctionalBlock
-                  id={"W"}
-                  description={"The path that will be opened after 5 visits"}
-                  handleDragStart={handleDragStart}
-                />
-                <Flashing
-                  time={1250}
-                  id={"f"}
-                  handleDragStart={handleDragStart}
-                />
-                <Flashing
-                  time={1000}
-                  id={"F"}
-                  handleDragStart={handleDragStart}
-                />
-                <Flashing
-                  time={750}
-                  id={"x"}
-                  handleDragStart={handleDragStart}
-                />
-                <Flashing
-                  time={500}
-                  id={"X"}
-                  handleDragStart={handleDragStart}
-                />
-                <SpecialBlockTemplate
-                  id={"b"}
-                  description={"Mini-game: alternate clicking right and left"}
-                  handleDragStart={handleDragStart}
-                />
-                <SpecialBlockTemplate
-                  id={"c"}
-                  description={
-                    "Mini-game: circle around the arrows on the keyboard"
-                  }
-                  handleDragStart={handleDragStart}
-                />
-                <SpecialBlockTemplate
-                  id={"u"}
-                  description={"Mini-game: alternate clicking up and down"}
-                  handleDragStart={handleDragStart}
-                />
-              </div>
-              <div className="w-full h-[14rem] lg:h-[10rem] bg-page3 overflow-hidden">
-                <div className="relative w-full h-full">
-                  <div className="absolute w-full h-full flex items-center justify-center">
-                    <div className="w-[50%] sm:w-[40%] md:w-[90%] lg:w-[40%] h-[30%] md:h-[25%] bg-pageMenu z-50 rounded-xl flex items-center justify-center">
-                      <span
-                        className="hover:scale-125 active:scale-75 duration-100 hover:cursor-pointer w-full h-full shadow-[rgba(0,_0,_0,_0.8)_0px_15px_45px] animate-growUp p-1 rounded-xl font-page text-3xl bg-pageMenu md:text-2xl lg:text-2xl text-page1 font-extrabold tracking-widest text-center flex items-center justify-center"
-                        onClick={submitHandler}
-                      >
-                        submit
-                      </span>
-                    </div>
+                <div className="w-full h-[14rem]">
+                  <SetTimeBlock timeFunc={pullTimeData} />
+                </div>
+                <BorederText />
+                <div className="w-full bg-page4 shadow-[inset_-24px_-16px_200px_#46464620]">
+                  <div className="w-full h-[3rem] flex items-center justify-start ps-4 pt-6">
+                    <span className="shadow-[rgba(0,_0,_0,_0.4)_0px_15px_45px] animate-growUp p-1 rounded-xl font-page text-2xl bg-page1 md:text-xl lg:text-2xl text-pageMenu font-extrabold tracking-widest">
+                      Special Blocks
+                    </span>
                   </div>
-                  <div className="absolute w-full h-full overflow-hidden">
-                    <div className="w-full h-full absolute flex items-start justify-end top-7 right-7 overflow-hidden">
-                      <div className="w-12 h-12 bg-page2 rounded-2xl shadow-[rgba(0,_0,_0,_0.4)_0px_30px_90px] animate-growUp hover:scale-110 z-50 duration-300"></div>
+                  <BlockPlaceText />
+                  <FunctionalBlock
+                    id={"s"}
+                    description={"Spawn point"}
+                    handleDragStart={handleDragStart}
+                  />
+                  <FunctionalBlock
+                    id={"e"}
+                    description={"Finish block"}
+                    handleDragStart={handleDragStart}
+                  />
+                  <FunctionalBlock
+                    id={"t"}
+                    description={
+                      "The entrance to the first teleportation block"
+                    }
+                    handleDragStart={handleDragStart}
+                  />
+                  <FunctionalBlock
+                    id={"T"}
+                    description={"The exit from the first teleport"}
+                    handleDragStart={handleDragStart}
+                  />
+                  <FunctionalBlock
+                    id={"o"}
+                    description={
+                      "The entrance to the second teleportation block"
+                    }
+                    handleDragStart={handleDragStart}
+                  />
+                  <FunctionalBlock
+                    id={"O"}
+                    description={"The exit from the second teleport"}
+                    handleDragStart={handleDragStart}
+                  />
+                  <FunctionalBlock
+                    id={"v"}
+                    description={
+                      "Press on this block 3 times to unlock the pathway"
+                    }
+                    handleDragStart={handleDragStart}
+                  />
+                  <FunctionalBlock
+                    id={"V"}
+                    description={"The path that will be opened after 3 visits"}
+                    handleDragStart={handleDragStart}
+                  />
+                  <FunctionalBlock
+                    id={"w"}
+                    description={
+                      "Press on this block 5 times to unlock the pathway"
+                    }
+                    handleDragStart={handleDragStart}
+                  />
+                  <FunctionalBlock
+                    id={"W"}
+                    description={"The path that will be opened after 5 visits"}
+                    handleDragStart={handleDragStart}
+                  />
+                  <Flashing
+                    time={1250}
+                    id={"f"}
+                    handleDragStart={handleDragStart}
+                  />
+                  <Flashing
+                    time={1000}
+                    id={"F"}
+                    handleDragStart={handleDragStart}
+                  />
+                  <Flashing
+                    time={750}
+                    id={"x"}
+                    handleDragStart={handleDragStart}
+                  />
+                  <Flashing
+                    time={500}
+                    id={"X"}
+                    handleDragStart={handleDragStart}
+                  />
+                  <SpecialBlockTemplate
+                    id={"b"}
+                    description={"Mini-game: alternate clicking right and left"}
+                    handleDragStart={handleDragStart}
+                  />
+                  <SpecialBlockTemplate
+                    id={"c"}
+                    description={
+                      "Mini-game: circle around the arrows on the keyboard"
+                    }
+                    handleDragStart={handleDragStart}
+                  />
+                  <SpecialBlockTemplate
+                    id={"u"}
+                    description={"Mini-game: alternate clicking up and down"}
+                    handleDragStart={handleDragStart}
+                  />
+                </div>
+                <div className="w-full h-[14rem] lg:h-[10rem] bg-page3 overflow-hidden">
+                  {session && (
+                    <div className="relative w-full h-full">
+                      <div className="absolute w-full h-full flex items-center justify-center">
+                        <div className="w-[50%] sm:w-[40%] md:w-[90%] lg:w-[40%] h-[30%] md:h-[25%] bg-pageMenu z-40 rounded-xl flex items-center justify-center">
+                          <span
+                            className="hover:scale-125 active:scale-75 duration-100 hover:cursor-pointer w-full h-full shadow-[rgba(0,_0,_0,_0.8)_0px_15px_45px] animate-growUp p-1 rounded-xl font-page text-3xl bg-pageMenu md:text-2xl lg:text-2xl text-page1 font-extrabold tracking-widest text-center flex items-center justify-center"
+                            onClick={submitHandler}
+                          >
+                            submit
+                          </span>
+                        </div>
+                      </div>
+                      <div className="absolute w-full h-full overflow-hidden">
+                        <div className="w-full h-full absolute flex items-start justify-end top-7 right-7 overflow-hidden">
+                          <div className="w-12 h-12 bg-page2 rounded-2xl shadow-[rgba(0,_0,_0,_0.4)_0px_30px_90px] animate-growUp hover:scale-110 z-40 duration-300"></div>
+                        </div>
+                        <div className="w-full h-full absolute flex items-start justify-end top-4 right-4 overflow-hidden">
+                          <div className="w-12 h-12 bg-page1 rounded-2xl shadow-[rgba(0,_0,_0,_0.4)_0px_30px_90px] animate-growUp hover:scale-110 z-40 duration-300"></div>
+                        </div>
+                        <div className="w-full h-full absolute flex items-end justify-start left-7 bottom-7 overflow-hidden">
+                          <div className="w-12 h-12 bg-page2 rounded-2xl shadow-[rgba(0,_0,_0,_0.4)_0px_30px_90px] animate-growUp hover:scale-110 z-40 duration-300"></div>
+                        </div>
+                        <div className="w-full h-full absolute flex items-end justify-start left-4 bottom-4 overflow-hidden">
+                          <div className="w-12 h-12 bg-page1 rounded-2xl shadow-[rgba(0,_0,_0,_0.4)_0px_30px_90px] animate-growUp hover:scale-110 z-40 duration-300"></div>
+                        </div>
+                      </div>
                     </div>
-                    <div className="w-full h-full absolute flex items-start justify-end top-4 right-4 overflow-hidden">
-                      <div className="w-12 h-12 bg-page1 rounded-2xl shadow-[rgba(0,_0,_0,_0.4)_0px_30px_90px] animate-growUp hover:scale-110 z-50 duration-300"></div>
+                  )}
+                  {!session && (
+                    <div className="w-full h-full flex items-center justify-center">
+                      <div className="w-[65%] h-[40%] sm:h-[30%] md:h-[50%] bg-page2 shadow-[rgba(0,_0,_0,_0.4)_0px_30px_90px] border-4 border-pageMenu flex items-center justify-center">
+                        <div className="font-page text-sm font-extrabold tracking-widest text-center text-pageMenu animate-pulse p-2 flex items-center justify-center">
+                          You must be logged in to submit this form
+                        </div>
+                      </div>
                     </div>
-                    <div className="w-full h-full absolute flex items-end justify-start left-7 bottom-7 overflow-hidden">
-                      <div className="w-12 h-12 bg-page2 rounded-2xl shadow-[rgba(0,_0,_0,_0.4)_0px_30px_90px] animate-growUp hover:scale-110 z-50 duration-300"></div>
-                    </div>
-                    <div className="w-full h-full absolute flex items-end justify-start left-4 bottom-4 overflow-hidden">
-                      <div className="w-12 h-12 bg-page1 rounded-2xl shadow-[rgba(0,_0,_0,_0.4)_0px_30px_90px] animate-growUp hover:scale-110 z-50 duration-300"></div>
-                    </div>
-                  </div>
+                  )}
                 </div>
               </div>
             </div>
-          </div>
-          <div className="row-span-4 col-span-1 md:row-span-1 md:col-span-8 bg-page1 shadow-[inset_-24px_-16px_100px_#46464620] md:flex md:items-center md:justify-center">
-            <div className="w-full h-full md:w-[90%] md:h-[90%] lg:w-[80%] lg:h-[80%] flex items-center justify-center p-5 md:p-10 lg:p-16">
-              <div className="w-full h-full relative flex items-center justify-center">
-                <div className="absolute w-[100%] h-fit min-[450px]:h-[27rem] min-[450px]:w-[27rem] md:h-fit md:w-full aspect-[50/50] bg-pageMenu shadow-[rgba(0,_0,_0,_0.4)_0px_30px_90px]">
-                  {result.length !== 0 && (
-                    <div className="w-full h-full z-40 absolute">
-                      <Grid
-                        dynamicGridCount={dynamicGridCount}
-                        gridItems={borderGridItems}
-                      />
-                    </div>
-                  )}
-                  {result.length === 0 && (
-                    <div className="w-full h-full flex items-center justify-center">
-                      <span className="font-page text-xl md:text-5xl text-page1 font-extrabold tracking-widest">
-                        Loading...
-                      </span>
-                    </div>
-                  )}
+            <div className="row-span-4 col-span-1 md:row-span-1 md:col-span-8 bg-page1 shadow-[inset_-24px_-16px_100px_#46464620] md:flex md:items-center md:justify-center">
+              <div className="w-full h-full md:w-[90%] md:h-[90%] lg:w-[80%] lg:h-[80%] flex items-center justify-center p-5 md:p-10 lg:p-16">
+                <div className="w-full h-full relative flex items-center justify-center">
+                  <div className="absolute w-[100%] h-fit min-[450px]:h-[27rem] min-[450px]:w-[27rem] md:h-fit md:w-full aspect-[50/50] bg-pageMenu shadow-[rgba(0,_0,_0,_0.4)_0px_30px_90px]">
+                    {width < 550 && (
+                      <div className="absolute z-40 border-4 border-pageMenu w-full h-full bg-pageMenu opacity-75 flex items-center justify-center">
+                        <div className="w-[60%] h-[60%] text-center font-page text-page1 tracking-widest text-3xl font-extrabold flex items-center justify-center">
+                          Please use a computer to create maps
+                        </div>
+                      </div>
+                    )}
+                    {result.length !== 0 && (
+                      <div className="w-full h-full z-30 absolute">
+                        <Grid
+                          dynamicGridCount={dynamicGridCount}
+                          gridItems={borderGridItems}
+                        />
+                      </div>
+                    )}
+                    {result.length === 0 && (
+                      <div className="w-full h-full flex items-center justify-center">
+                        <span className="font-page text-xl md:text-5xl text-page1 font-extrabold tracking-widest">
+                          Loading...
+                        </span>
+                      </div>
+                    )}
+                    {/* Tutaj */}
+                  </div>
                 </div>
               </div>
             </div>
@@ -532,6 +569,8 @@ function Create(props) {
         </div>
       </div>
     </div>
+
+    // </div>
   );
 }
 

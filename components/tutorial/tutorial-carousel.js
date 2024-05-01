@@ -58,7 +58,7 @@ function TutorialCarousel({ count, firstObj }) {
                 animate="center"
                 exit="exit"
                 custom={{ direction, width }}
-                className="absolute z-50 flex justify-center items-center w-full h-full"
+                className="absolute z-40 flex justify-center items-center w-full h-full"
               >
                 <div className="w-full h-full relative">
                   <div className="w-full h-full">

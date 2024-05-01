@@ -5,6 +5,9 @@ function SquareLevels(props) {
   // console.log(props.levelCompleted);
 
   const checkIsCompleted = (level) => {
+    if (props.levelCompleted === "notLoggedIn") {
+      return false;
+    }
     const thisLevel = props.levelCompleted.find((el) => {
       return el.level === level; // Dodanie return tutaj jest kluczowe
     });

@@ -26,7 +26,7 @@ async function handler(req, res) {
       //Check if user is logged in
       const session = await getServerSession(req, res, authOptions);
       if (!session) {
-        return res.status(401).json({ message: "User is not logged in" });
+        return res.status(401).json({ message: "User is not logged in", hideNotification: true });
       }
 
       //Find user with email that match email from session

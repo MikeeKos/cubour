@@ -36,6 +36,7 @@ import {
   keyboardSVG,
   lightningSVG,
 } from "../../SVG/game-grid";
+import SideAction from "../ui/side-action";
 
 const littleStarSVG = (
   <svg
@@ -615,11 +616,14 @@ function MainGame(props) {
           router.replace("/play");
         } catch (error) {
           console.error("Error submitting data:", error);
-          notificationCtx.showNotification({
-            title: "Error!",
-            message: "Something went wrong...",
-            status: "error",
-          });
+          console.log(error.hideNotification);
+          if (error.hideNotification) {
+            notificationCtx.showNotification({
+              title: "Error!",
+              message: "Something went wrong...",
+              status: "error",
+            });
+          }
         }
       };
 
@@ -641,6 +645,13 @@ function MainGame(props) {
         ref={ref}
         className="w-full h-screen relative bg-page4 overflow-y-scroll"
       >
+        <div className="w-full h-full overflow-hidden absolute">
+          <SideAction
+            position={2}
+            theme={width >= 768 ? "dark" : "light"}
+            goBackPath={"/play"}
+          />
+        </div>
         <div
           className={`absolute w-full ${
             height > 710 ? "h-full" : "h-[43rem]"
@@ -777,6 +788,14 @@ function MainGame(props) {
           <div className="order-1 col-span-2 row-span-4 md:order-2 md:col-span-6 flex items-center justify-center p-5 md:p-10 lg:p-16">
             <div className="w-full h-full relative flex items-center justify-center">
               <div className="absolute w-[100%] h-fit min-[450px]:h-[27rem] min-[450px]:w-[27rem] md:h-fit md:w-full aspect-[50/50] bg-pageMenu shadow-[rgba(0,_0,_0,_0.4)_0px_30px_90px]">
+                {width < 550 && (
+                  <div className="absolute z-50 border-4 border-pageMenu w-full h-full bg-pageMenu opacity-90 flex items-center justify-center">
+                    <div className="w-[60%] h-[60%] text-center font-page text-page1 tracking-widest text-xl font-extrabold flex items-center justify-center">
+                      Currently, the game does not support playing on phones due
+                      to the fast-paced nature of the gameplay
+                    </div>
+                  </div>
+                )}
                 {specialBlockCtx.specialMode && (
                   <div className="absolute z-50 w-full h-full flex items-center justify-center border-pageMenu">
                     <div className="absolute w-full h-full overflow-hidden">
@@ -920,8 +939,10 @@ function MainGame(props) {
                         {levelReflectorSVG}
                       </div>
                       <div className="absolute w-full h-[40%] bottom-0">
-                        <div className=" font-page text-page1 tracking-wider text-3xl lg:text-5xl font-extrabold flex flex-col items-center justify-center text-center ml-10 lg:ml-24">
-                          <div className="bg-pageMenu p-1">lvl 1</div>
+                        <div className=" font-page text-page1 tracking-wider text-3xl lg:text-4xl font-extrabold flex flex-col items-center justify-center text-center ml-10 lg:ml-24">
+                          <div className="bg-pageMenu p-1">
+                            lvl {props.mapObject.level}
+                          </div>
                         </div>
                       </div>
                       <div className="absolute w-14 h-14 right-2 top-2 animate-scale-swing-rotate">

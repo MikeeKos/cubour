@@ -12,7 +12,7 @@ function Play(props) {
 
   return (
     <React.Fragment>
-      <SelectLevels seeds={props.seeds} levelCompleted={props.levelCompleted}/>
+      <SelectLevels seeds={props.seeds} levelCompleted={props.levelCompleted} />
     </React.Fragment>
   );
 }
@@ -20,16 +20,21 @@ function Play(props) {
 export async function getServerSideProps(context) {
   const session = await getServerSession(context.req, context.res, authOptions);
 
-  if (!session) {
-    return {
-      redirect: {
-        destination: "/auth",
-        permanent: false,
-      },
-    };
-  }
+  // if (!session) {
+  //   return {
+  //     redirect: {
+  //       destination: "/auth",
+  //       permanent: false,
+  //     },
+  //   };
+  // }
 
-  const userEmail = session.user.email;
+  let userEmail;
+  if (session) {
+    userEmail = session.user.email;
+  } else {
+    userEmail = "";
+  }
   // const { params } = context;
   // const seedId = params.seedId;
   // console.log("here is seedId");
@@ -43,16 +48,24 @@ export async function getServerSideProps(context) {
     };
   }
 
+  let levelCompleted;
+
   try {
     const seeds = await Seed.find({ level: { $ne: "unverified" } });
     const thisUser = await User.findOne({ email: userEmail });
 
     if (!thisUser) {
-      mongoose.connection.close();
-      return {
-        notFound: true,
-      };
+      levelCompleted = "notLoggedIn";
+    } else {
+      levelCompleted = thisUser.levelCompleted;
     }
+
+    // if (!thisUser) {
+    //   mongoose.connection.close();
+    //   return {
+    //     notFound: true,
+    //   };
+    // }
 
     function simplifyDocuments(docs) {
       return docs.map((doc) => ({
@@ -74,7 +87,7 @@ export async function getServerSideProps(context) {
     return {
       props: {
         seeds: JSON.parse(JSON.stringify(simplifiedSeeds)),
-        levelCompleted: JSON.parse(JSON.stringify(thisUser.levelCompleted)),
+        levelCompleted: JSON.parse(JSON.stringify(levelCompleted)),
       },
     };
   } catch (error) {

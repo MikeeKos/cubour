@@ -1,5 +1,6 @@
 import React from "react";
 import Link from "next/link";
+import Podium from "./podium";
 
 const decorationSVG = (
   <svg
@@ -17,17 +18,9 @@ const decorationSVG = (
 );
 
 function Record(props) {
-  // console.log(props);
-
-  // props.leaderboard.map((el) => {
-  //   // console.log(el);
-  //   // leaderboard.find(el => el.place === place);
-  // });
-  // console.log(props.id)
-
-  function repeatString(word) {
-    return new Array(200).fill(word).join(" ");
-  }
+  // function repeatString(word) {
+  //   return new Array(200).fill(word).join(" ");
+  // }
 
   const leftArrowBoxSVG = (
     <svg
@@ -105,13 +98,13 @@ function Record(props) {
     </svg>
   );
 
-  function formatTimeString(timeString) {
-    const minutes = timeString.substring(0, 2);
-    const seconds = timeString.substring(2, 4);
-    const milliseconds = timeString.substring(4);
+  // function formatTimeString(timeString) {
+  //   const minutes = timeString.substring(0, 2);
+  //   const seconds = timeString.substring(2, 4);
+  //   const milliseconds = timeString.substring(4);
 
-    return `${minutes}:${seconds}.${milliseconds}`;
-  }
+  //   return `${minutes}:${seconds}.${milliseconds}`;
+  // }
 
   return (
     <React.Fragment>
@@ -140,7 +133,8 @@ function Record(props) {
             props.level % 2 === 0 && "order-2"
           } w-full h-[60%] md:col-span-5 md:w-full md:h-full border-t-4 border-x-4 md:border-r-4 border-pageMenu relative`}
         >
-          <div className="w-full h-full absolute overflow-hidden p-2 opacity-10">
+          <Podium level={props.level} leaderboard={props.leaderboard} />
+          {/* <div className="w-full h-full absolute overflow-hidden p-2 opacity-10">
             <span className="font-page text-pageMenu tracking-widest font-extrabold text-4xl animate-pulse">
               {repeatString(props.level)}
             </span>
@@ -287,7 +281,7 @@ function Record(props) {
                 </div>
               </div>
             </div>
-          </div>
+          </div> */}
         </div>
         <div
           className={`${

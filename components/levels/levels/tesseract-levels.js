@@ -3,6 +3,9 @@ import Link from "next/link";
 
 function TesseractLevels(props) {
   const checkIsCompleted = (level) => {
+    if (props.levelCompleted === "notLoggedIn") {
+      return false;
+    }
     const thisLevel = props.levelCompleted.find((el) => {
       return el.level === level; // Dodanie return tutaj jest kluczowe
     });
