@@ -2,19 +2,34 @@ import SelectLevels from "../../components/levels/select-levels";
 import React from "react";
 import mongoose from "mongoose";
 import { connectDatabase } from "../../helpers/db-util";
+import { getServerSession } from "next-auth";
+import { authOptions } from "../api/auth/[...nextauth]";
 import Seed from "../../models/Seed";
+import User from "../../models/User";
 
 function Play(props) {
   console.log(props.seeds);
 
   return (
     <React.Fragment>
-      <SelectLevels seeds={props.seeds}/>
+      <SelectLevels seeds={props.seeds} levelCompleted={props.levelCompleted}/>
     </React.Fragment>
   );
 }
 
 export async function getServerSideProps(context) {
+  const session = await getServerSession(context.req, context.res, authOptions);
+
+  if (!session) {
+    return {
+      redirect: {
+        destination: "/auth",
+        permanent: false,
+      },
+    };
+  }
+
+  const userEmail = session.user.email;
   // const { params } = context;
   // const seedId = params.seedId;
   // console.log("here is seedId");
@@ -30,9 +45,17 @@ export async function getServerSideProps(context) {
 
   try {
     const seeds = await Seed.find({ level: { $ne: "unverified" } });
+    const thisUser = await User.findOne({ email: userEmail });
+
+    if (!thisUser) {
+      mongoose.connection.close();
+      return {
+        notFound: true,
+      };
+    }
 
     function simplifyDocuments(docs) {
-      return docs.map(doc => ({
+      return docs.map((doc) => ({
         id: doc._id.toString(),
         level: doc.level,
       }));
@@ -51,6 +74,7 @@ export async function getServerSideProps(context) {
     return {
       props: {
         seeds: JSON.parse(JSON.stringify(simplifiedSeeds)),
+        levelCompleted: JSON.parse(JSON.stringify(thisUser.levelCompleted)),
       },
     };
   } catch (error) {

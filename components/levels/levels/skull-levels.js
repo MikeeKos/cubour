@@ -2,9 +2,16 @@ import React from "react";
 import Link from "next/link";
 
 function SkullLevels(props) {
+  const checkIsCompleted = (level) => {
+    const thisLevel = props.levelCompleted.find((el) => {
+      return el.level === level; // Dodanie return tutaj jest kluczowe
+    });
+    return thisLevel.isCompleted;
+  };
+
   const skullWithBonesSVG = (color, level) => {
     return (
-      <Link href={`/play/${props.level16.id}`}>
+      <Link href={`/play/${level}`}>
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
@@ -31,7 +38,7 @@ function SkullLevels(props) {
             <div className="col-span-1 row-span-1 flex justify-end">
               <div className="w-[90%] h-full"></div>
             </div>
-            <div className="col-span-1 row-span-1 flex justify-end">
+            <div className="col-span-1 row-span-1 flex justify-end relative">
               <div className="w-[90%] h-full border-b-8 border-pageMenu flex items-end pb-1">
                 {skullWithBonesSVG("fill-pageMenu", props.level17.id)}
                 <Link
@@ -41,6 +48,13 @@ function SkullLevels(props) {
                   lvl 17
                 </Link>
               </div>
+              {checkIsCompleted(17) && (
+                <div className="absolute w-full h-8 -bottom-8">
+                  <div className="font-page font-extrabold text-xs sm:text-sm text-page1 tracking-wider flex justify-center">
+                    completed
+                  </div>
+                </div>
+              )}
             </div>
             <div className="col-span-1 row-span-1 flex justify-end">
               <div className="w-[75%] h-full"></div>
@@ -49,7 +63,7 @@ function SkullLevels(props) {
         </div>
         <div className="col-span-1 row-span-1 border-l-4 border-pageMenu">
           <div className="w-full h-full grid grid-rows-3 grid-cols-1">
-            <div className="col-span-1 row-span-1 flex justify-start">
+            <div className="col-span-1 row-span-1 flex justify-start relative">
               <div className="w-[90%] h-full border-b-8 border-pageMenu flex items-end justify-end pb-1">
                 {skullWithBonesSVG("fill-pageMenu", props.level16.id)}
                 <Link
@@ -59,11 +73,18 @@ function SkullLevels(props) {
                   lvl 16
                 </Link>
               </div>
+              {checkIsCompleted(16) && (
+                <div className="absolute w-full h-8 -bottom-8">
+                  <div className="font-page font-extrabold text-xs sm:text-sm text-page1 tracking-wider flex justify-center">
+                    completed
+                  </div>
+                </div>
+              )}
             </div>
             <div className="col-span-1 row-span-1 flex justify-start">
               <div className="w-[80%] h-full"></div>
             </div>
-            <div className="col-span-1 row-span-1 flex justify-start">
+            <div className="col-span-1 row-span-1 flex justify-start relative">
               <div className="w-[90%] h-full border-b-8 border-pageMenu flex items-end justify-end pb-1">
                 {skullWithBonesSVG("fill-pageMenu", props.level18.id)}
                 <Link
@@ -73,6 +94,13 @@ function SkullLevels(props) {
                   lvl 18
                 </Link>
               </div>
+              {checkIsCompleted(18) && (
+                <div className="absolute w-full h-8 -bottom-8">
+                  <div className="font-page font-extrabold text-xs sm:text-sm text-page1 tracking-wider flex justify-center">
+                    completed
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </div>

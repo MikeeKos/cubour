@@ -2,6 +2,13 @@ import React from "react";
 import Link from "next/link";
 
 function KnifeLevels(props) {
+  const checkIsCompleted = (level) => {
+    const thisLevel = props.levelCompleted.find((el) => {
+      return el.level === level; // Dodanie return tutaj jest kluczowe
+    });
+    return thisLevel.isCompleted;
+  };
+  
   const knifeSVG = (color, level) => {
     return (
       <Link href={`/play/${level}`}>
@@ -29,7 +36,7 @@ function KnifeLevels(props) {
       <div className="w-full h-[20rem] grid grid-cols-2 grid-rows-1">
         <div className="col-span-1 row-span-1 border-r-4 border-pageMenu">
           <div className="w-full h-full grid grid-rows-3 grid-cols-1">
-            <div className="col-span-1 row-span-1 flex justify-end">
+            <div className="col-span-1 row-span-1 flex justify-end relative">
               <div className="w-[90%] h-full border-b-8 border-pageMenu flex items-end pb-1">
                 {knifeSVG("stroke-page1", props.level13.id)}
                 <Link
@@ -39,9 +46,16 @@ function KnifeLevels(props) {
                   lvl 13
                 </Link>
               </div>
+              {checkIsCompleted(13) && (
+                <div className="absolute w-full h-8 -bottom-8">
+                  <div className="font-page font-extrabold text-xs sm:text-sm text-page1 tracking-wider flex justify-center">
+                    completed
+                  </div>
+                </div>
+              )}
             </div>
             <div className="col-span-1 row-span-1 flex justify-end"></div>
-            <div className="col-span-1 row-span-1 flex justify-end">
+            <div className="col-span-1 row-span-1 flex justify-end relative">
               <div className="w-[80%] h-full border-b-8 border-pageMenu flex items-end pb-1">
                 {knifeSVG("stroke-page1", props.level15.id)}
                 <Link
@@ -51,13 +65,20 @@ function KnifeLevels(props) {
                   lvl 15
                 </Link>
               </div>
+              {checkIsCompleted(15) && (
+                <div className="absolute w-full h-8 -bottom-8">
+                  <div className="font-page font-extrabold text-xs sm:text-sm text-page1 tracking-wider flex justify-center">
+                    completed
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </div>
         <div className="col-span-1 row-span-1 border-l-4 border-pageMenu">
           <div className="w-full h-full grid grid-rows-3 grid-cols-1">
             <div className="col-span-1 row-span-1 flex justify-start"></div>
-            <div className="col-span-1 row-span-1 flex justify-start">
+            <div className="col-span-1 row-span-1 flex justify-start relative">
               <div className="w-[80%] h-full border-b-8 border-pageMenu flex items-end justify-end pb-1">
                 {knifeSVG("stroke-page1", props.level14.id)}
                 <Link
@@ -67,6 +88,13 @@ function KnifeLevels(props) {
                   lvl 14
                 </Link>
               </div>
+              {checkIsCompleted(14) && (
+                <div className="absolute w-full h-8 -bottom-8">
+                  <div className="font-page font-extrabold text-xs sm:text-sm text-page1 tracking-wider flex justify-center">
+                    completed
+                  </div>
+                </div>
+              )}
             </div>
             <div className="col-span-1 row-span-1 flex justify-start"></div>
           </div>

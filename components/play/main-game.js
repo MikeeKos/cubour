@@ -581,7 +581,7 @@ function MainGame(props) {
       const newFinishTime = totalTimeInMs - timeLeft;
       setFinishTime(newFinishTime);
       clearInterval(timerRef.current);
-  
+
       // Wywołaj sendData bezpośrednio po ustawieniu czasu zakończenia
       const formattedFinishTime = formatTimeLeft(newFinishTime);
       const sendData = async () => {
@@ -596,20 +596,23 @@ function MainGame(props) {
               "Content-Type": "application/json",
             },
           });
-  
+
           if (!response.ok) {
             const text = await response.text();
             throw new Error(text);
           }
-  
+
           const data = await response.json();
           console.log("Data response:", data);
-  
-          notificationCtx.showNotification({
-            title: "Success!",
-            message: `New record: ${formattedFinishTime}`,
-            status: "success",
-          });
+
+          if (data.shouldShowNotif) {
+            notificationCtx.showNotification({
+              title: "Success!",
+              message: `New record: ${formattedFinishTime}`,
+              status: "success",
+            });
+          }
+          router.replace("/play");
         } catch (error) {
           console.error("Error submitting data:", error);
           notificationCtx.showNotification({
@@ -619,8 +622,9 @@ function MainGame(props) {
           });
         }
       };
-  
+
       sendData();
+      // gameCtx.setWin(false);
     }
   }, [gameCtx.win, totalTimeInMs, timeLeft, seedId]);
 

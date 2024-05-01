@@ -1,5 +1,5 @@
 import Image from "next/image";
-import React from "react";
+import React, { useEffect, useContext } from "react";
 import { trophySVG } from "../../SVG/game-grid";
 import SquareLevels from "./levels/square-levels";
 import CubeLevels from "./levels/cube-levels";
@@ -7,9 +7,17 @@ import TesseractLevels from "./levels/tesseract-levels";
 import FireLevels from "./levels/fire-levels";
 import KnifeLevels from "./levels/knife-levels";
 import SkullLevels from "./levels/skull-levels";
+import GameContext from "../../store/game-context";
 
 function SelectLevels(props) {
-  console.log(props.seeds);
+  console.log("This is C H E C K");
+  console.log(props.levelCompleted);
+  const gameCtx = useContext(GameContext);
+
+  useEffect(() => {
+    gameCtx.resetGameContext();
+  }, []);
+  // console.log(props.seeds);
 
   function findIdByLevel(level) {
     const seed = props.seeds.find((seed) => seed.level === level);
@@ -93,31 +101,37 @@ function SelectLevels(props) {
                   level1={findIdByLevel("1")}
                   level2={findIdByLevel("2")}
                   level3={findIdByLevel("3")}
+                  levelCompleted={props.levelCompleted}
                 />
                 <CubeLevels
                   level4={findIdByLevel("4")}
                   level5={findIdByLevel("5")}
                   level6={findIdByLevel("6")}
+                  levelCompleted={props.levelCompleted}
                 />
                 <TesseractLevels
                   level7={findIdByLevel("7")}
                   level8={findIdByLevel("8")}
                   level9={findIdByLevel("9")}
+                  levelCompleted={props.levelCompleted}
                 />
                 <FireLevels
                   level10={findIdByLevel("10")}
                   level11={findIdByLevel("11")}
                   level12={findIdByLevel("12")}
+                  levelCompleted={props.levelCompleted}
                 />
                 <KnifeLevels
                   level13={findIdByLevel("13")}
                   level14={findIdByLevel("14")}
                   level15={findIdByLevel("15")}
+                  levelCompleted={props.levelCompleted}
                 />
                 <SkullLevels
                   level16={findIdByLevel("16")}
                   level17={findIdByLevel("17")}
                   level18={findIdByLevel("18")}
+                  levelCompleted={props.levelCompleted}
                 />
                 <div className="w-full h-[5rem] grid grid-cols-2 grid-rows-1">
                   <div className="col-span-1 row-span-1 border-r-4 border-pageMenu"></div>

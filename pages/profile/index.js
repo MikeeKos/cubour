@@ -40,7 +40,7 @@ function ProfilePage(props) {
           user={props.sessionObject}
           username={props.username}
           email={props.email}
-          currentLevel={props.currentLevel}
+          levelCompleted={props.levelCompleted}
           seeds={props.seeds}
         />
       </React.Fragment>
@@ -89,11 +89,11 @@ export async function getServerSideProps(context) {
     mongoose.connection.close();
     return {
       props: {
-        // lakes: JSON.parse(JSON.stringify(userLakes)),
         sessionObject: JSON.parse(JSON.stringify(session)),
         username: JSON.parse(JSON.stringify(thisUser.username)),
         email: JSON.parse(JSON.stringify(thisUser.email)),
-        currentLevel: JSON.parse(JSON.stringify(thisUser.currentLevel)),
+        levelCompleted: JSON.parse(JSON.stringify(thisUser.levelCompleted)),
+        // currentLevel: JSON.parse(JSON.stringify(thisUser.currentLevel)),
         seeds: JSON.parse(JSON.stringify(seeds)),
       },
     };

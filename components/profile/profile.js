@@ -3,9 +3,43 @@ import Image from "next/image";
 import SingleRecord from "./record";
 import MenuIcon from "./menu-icons";
 
+const checkSVG = (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    fill="none"
+    viewBox="0 0 24 24"
+    className="w-6 sm:w-10"
+  >
+    <g>
+      <path
+        className="stroke-pageMenu"
+        stroke="#000"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="3"
+        d="M6 12l4.243 4.243 8.484-8.486"
+      ></path>
+    </g>
+  </svg>
+);
+
+const crossSVG = (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 32 32"
+    className="w-6 sm:w-10 fill-pageMenu"
+  >
+    <path d="M18.8 16l5.5-5.5c.8-.8.8-2 0-2.8-.3-.4-.8-.7-1.3-.7s-1 .2-1.4.6L16 13.2l-5.5-5.5c-.8-.8-2.1-.8-2.8 0-.4.3-.7.8-.7 1.4s.2 1 .6 1.4l5.5 5.5-5.5 5.5c-.3.4-.6.9-.6 1.5 0 .5.2 1 .6 1.4.4.4.9.6 1.4.6.5 0 1-.2 1.4-.6l5.5-5.5 5.5 5.5c.8.8 2.1.8 2.8 0 .8-.8.8-2.1 0-2.8L18.8 16z"></path>
+  </svg>
+);
+
 function ProfilePanel(props) {
   console.log(props);
-  const [playVisible, setPlayVisible] = useState(false);
+  // const [playVisible, setPlayVisible] = useState(false);
+  props.levelCompleted.map((el) => {
+    console.log(el.level);
+    console.log(el.isCompleted);
+  });
 
   const seeds = props.seeds;
   console.log(seeds);
@@ -149,48 +183,40 @@ function ProfilePanel(props) {
                 </div>
                 <div className="w-full h-full p-8">
                   <div className="w-full h-[calc(100%-7rem)] bg-page3 border-4 border-pageMenu shadow-[rgba(0,_0,_0,_0.4)_0px_30px_90px]">
-                    <div className="w-full h-full grid grid-rows-3 gap-4">
-                      <div className="col-span-1">
-                        <div className="w-full h-full bg-page1 border-b-4 border-pageMenu">
-                          <div className="w-full h-full bg-page2 flex items-center justify-center">
-                            <div className="relative w-[80%] h-[60%] bg-page1 rounded-xl">
-                              <span className="p-1 ml-1 absolute w-full h-full font-page text-sm md:text-sm lg:text-xl text-pageMenu font-extrabold tracking-widest text-center truncate flex items-center justify-center">
-                                email :
-                                <span className="underline ml-2 truncate">
-                                  {props.email}
-                                </span>
-                              </span>
-                            </div>
-                          </div>
+                    <div className="w-full h-full">
+                      <div className="w-full h-[25%] bg-page3 border-b-4 border-pageMenu flex items-center justify-center">
+                        <div className="font-page text-pageMenu text-2xl bg-page1 p-1 font-extrabold tracking-wider rounded-xl shadow-2xl">
+
+                        completed levels
                         </div>
                       </div>
-                      <div className="col-span-1">
-                        <div className="w-full h-full bg-page1 border-y-4 border-pageMenu">
-                          <div className="w-full h-full bg-page2 flex items-center justify-center">
-                            <div className="relative w-[80%] h-[60%] bg-page1 rounded-xl">
-                              <span className="ml-1 absolute w-full h-full font-page text-sm md:text-sm lg:text-xl text-pageMenu font-extrabold tracking-widest text-center truncate flex items-center justify-center">
-                                current level :
-                                <span className="ml-2 truncate bg-page2 p-2 rounded-xl">
-                                  {props.currentLevel}
-                                </span>
-                              </span>
+                      <div className="w-full h-[75%] bg-page2">
+                        <div className="w-full h-full grid grid-cols-3 grid-rows-6 gap-1 p-1">
+                          {props.levelCompleted.map((el) => (
+                            <div
+                              key={el.level}
+                              className={`${
+                                el.level % 6 <= 3 &&
+                                el.level % 6 !== 0 &&
+                                "bg-page4"
+                              } row-span-1 col-span-1 border-4 border-pageMenu shadow-2xl`}
+                            >
+                              <div className="w-full h-full flex flex-row overflow-hidden relative">
+                                <div className="absolute w-[30%] h-full flex items-center justify-center">
+                                  <div className="font-page text-pageMenu bg-page1 font-extrabold flex items-center justify-center px-2 ">
+                                    {el.level}
+                                  </div>
+                                </div>
+                                <div className="absolute w-full h-full flex items-center justify-center">
+                                  {el.isCompleted ? (
+                                    <div>{checkSVG}</div>
+                                  ) : (
+                                    <div className="opacity-50">{crossSVG}</div>
+                                  )}
+                                </div>
+                              </div>
                             </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="col-span-1">
-                        <div className="w-full h-full bg-page1 border-t-4 border-pageMenu">
-                          <div className="w-full h-full bg-page2 flex items-center justify-center">
-                            <div className="relative w-[80%] h-[60%] bg-page1 rounded-xl">
-                              <span className="ml-1 absolute w-full h-full font-page text-sm md:text-sm lg:text-xl text-pageMenu font-extrabold tracking-widest text-center truncate flex items-center justify-center">
-                                records :
-                                <span className="ml-2 truncate bg-page2 p-2 rounded-xl">
-                                  {/* {props.recordsNumber} */}
-                                  12
-                                </span>
-                              </span>
-                            </div>
-                          </div>
+                          ))}
                         </div>
                       </div>
                     </div>
@@ -220,15 +246,21 @@ function ProfilePanel(props) {
             </div>
             <div className="w-full h-[calc(100%-7rem)] p-5">
               <div className="w-full h-full overflow-y-scroll">
-                {checkedList.map((el) => (
-                  <SingleRecord
-                    key={`${el.level}-${el.place}-${el.time}`}
-                    username={props.username}
-                    level={el.level}
-                    place={el.place}
-                    time={el.time}
-                  />
-                ))}
+                {checkedList.length === 0 ? (
+                  <div className="w-full h-full bg-page2 border-4 border-pageMenu flex items-center justify-center font-page font-extrabold tracking-wide text-lg sm:text-xl text-pageMenu">no records yet...</div>
+                ) : (
+                  <div className="w-full h-full">
+                    {checkedList.map((el) => (
+                      <SingleRecord
+                        key={`${el.level}-${el.place}-${el.time}`}
+                        username={props.username}
+                        level={el.level}
+                        place={el.place}
+                        time={el.time}
+                      />
+                    ))}
+                  </div>
+                )}
                 {/* <SingleRecord
                   username={props.username}
                 /> */}

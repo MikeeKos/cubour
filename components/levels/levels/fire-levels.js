@@ -2,6 +2,13 @@ import React from "react";
 import Link from "next/link";
 
 function FireLevels(props) {
+  const checkIsCompleted = (level) => {
+    const thisLevel = props.levelCompleted.find((el) => {
+      return el.level === level; // Dodanie return tutaj jest kluczowe
+    });
+    return thisLevel.isCompleted;
+  };
+  
   const fireSVG = (color, level) => {
     return (
       <Link href={`/play/${level}`}>
@@ -27,7 +34,7 @@ function FireLevels(props) {
             <div className="col-span-1 row-span-1 flex justify-end">
               <div className="w-[90%] h-full"></div>
             </div>
-            <div className="col-span-1 row-span-1 flex justify-end">
+            <div className="col-span-1 row-span-1 flex justify-end relative">
               <div className="w-[90%] h-full border-b-8 border-pageMenu flex items-end pb-1">
                 {fireSVG("fill-page2", props.level11.id)}
                 <Link
@@ -37,6 +44,13 @@ function FireLevels(props) {
                   lvl 11
                 </Link>
               </div>
+              {checkIsCompleted(11) && (
+                <div className="absolute w-full h-8 -bottom-8">
+                  <div className="font-page font-extrabold text-xs sm:text-sm text-page1 tracking-wider flex justify-center">
+                    completed
+                  </div>
+                </div>
+              )}
             </div>
             <div className="col-span-1 row-span-1 flex justify-end">
               <div className="w-[75%] h-full"></div>
@@ -45,7 +59,7 @@ function FireLevels(props) {
         </div>
         <div className="col-span-1 row-span-1 border-l-4 border-pageMenu">
           <div className="w-full h-full grid grid-rows-3 grid-cols-1">
-            <div className="col-span-1 row-span-1 flex justify-start">
+            <div className="col-span-1 row-span-1 flex justify-start relative">
               <div className="w-[90%] h-full border-b-8 border-pageMenu flex items-end justify-end pb-1">
                 {fireSVG("fill-page2", props.level10.id)}
                 <Link
@@ -55,11 +69,18 @@ function FireLevels(props) {
                   lvl 10
                 </Link>
               </div>
+              {checkIsCompleted(10) && (
+                <div className="absolute w-full h-8 -bottom-8">
+                  <div className="font-page font-extrabold text-xs sm:text-sm text-page1 tracking-wider flex justify-center">
+                    completed
+                  </div>
+                </div>
+              )}
             </div>
             <div className="col-span-1 row-span-1 flex justify-start">
               <div className="w-[80%] h-full"></div>
             </div>
-            <div className="col-span-1 row-span-1 flex justify-start">
+            <div className="col-span-1 row-span-1 flex justify-start relative">
               <div className="w-[90%] h-full border-b-8 border-pageMenu flex items-end justify-end pb-1">
                 {fireSVG("fill-page2", props.level12.id)}
                 <Link
@@ -69,6 +90,13 @@ function FireLevels(props) {
                   lvl 12
                 </Link>
               </div>
+              {checkIsCompleted(12) && (
+                <div className="absolute w-full h-8 -bottom-8">
+                  <div className="font-page font-extrabold text-xs sm:text-sm text-page1 tracking-wider flex justify-center">
+                    completed
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </div>

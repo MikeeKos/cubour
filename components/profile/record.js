@@ -60,14 +60,20 @@ function SingleRecord(props) {
       <div className="w-full h-2/3 bg-page2 flex">
         <div className="w-[40%] h-full">
           <span className="w-full h-full font-page text-lg md:text-base lg:text-lg text-pageMenu font-extrabold tracking-widest text-center truncate flex items-center justify-center shadow-[rgba(0,_0,_0,_0.4)_0px_30px_90px]">
-            <div className={`flex items-center justify-center ${props.place === 1 && "bg-page4 p-1 rounded-2xl"}`}>
+            <div
+              className={`flex items-center justify-center ${
+                props.place === 1 && "bg-page4 p-1 rounded-2xl"
+              }`}
+            >
               {crownSVG}: {props.place}
             </div>
           </span>
         </div>
         <div className="w-[60%] h-full bg-page4">
           <span className="w-full h-full font-page text-lg md:text-base lg:text-lg text-pageMenu font-extrabold tracking-widest text-center truncate flex items-center justify-center shadow-[rgba(0,_0,_0,_0.4)_0px_30px_90px]">
-            TIME: {formatTimeString(props.time)}
+            <span className="truncate mx-2">
+              TIME: {formatTimeString(props.time)}
+            </span>
           </span>
         </div>
       </div>

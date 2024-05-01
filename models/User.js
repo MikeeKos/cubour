@@ -17,26 +17,18 @@ const UserSchema = new mongoose.Schema({
     minlength: [3, "Username must have at least 3 characters"],
     maxlength: [30, "Username cannot be more than 30 characters"],
   },
-  currentLevel: {
-    type: Number,
-    required: true,
-  },
-  // records: [
-  //   {
-  //     place: {
-  //       type: Number,
-  //       required: true,
-  //     },
-  //     lvl: {
-  //       type: Number,
-  //       required: true,
-  //     },
-  //     time: {
-  //       type: String,
-  //       required: true,
-  //     },
-  //   },
-  // ],
+  levelCompleted: [
+    {
+      level: {
+        type: Number,
+        required: true,
+      },
+      isCompleted: {
+        type: Boolean,
+        required: true,
+      },
+    },
+  ],
 });
 
 export default mongoose.models.User || mongoose.model("User", UserSchema);
