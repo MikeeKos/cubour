@@ -8,6 +8,7 @@ import mongoose from "mongoose";
 import User from "../../models/User";
 import Seed from "../../models/Seed";
 import ProfilePanel from "../../components/profile/profile";
+import Head from "next/head";
 
 function ProfilePage(props) {
   const { data: session, status } = useSession();
@@ -36,6 +37,13 @@ function ProfilePage(props) {
   if (status === "authenticated") {
     return (
       <React.Fragment>
+        <Head>
+          <title>Cubour - User Panel</title>
+          <meta
+            name="description"
+            content="User Panel. Check your progress and records"
+          />
+        </Head>
         <ProfilePanel
           user={props.sessionObject}
           username={props.username}
@@ -73,10 +81,12 @@ export async function getServerSideProps(context) {
 
   try {
     const thisUser = await User.findOne({ email: userEmail });
-    console.log("This user")
+    console.log("This user");
     console.log(thisUser);
 
-    const seeds = await Seed.find({ level: { $ne: "unverified" } }).populate("leaderboard");
+    const seeds = await Seed.find({ level: { $ne: "unverified" } }).populate(
+      "leaderboard"
+    );
     if (!seeds) {
       mongoose.connection.close();
       return {
@@ -84,7 +94,6 @@ export async function getServerSideProps(context) {
       };
     }
     console.log(seeds);
-
 
     mongoose.connection.close();
     return {
@@ -104,7 +113,6 @@ export async function getServerSideProps(context) {
     };
   }
 }
-
 
 // export async function getServerSideProps(context) {
 //   // const { params } = context;

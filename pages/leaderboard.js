@@ -3,10 +3,18 @@ import Seed from "../models/Seed";
 import LeaderboardPage from "../components/leaderboard/leaderboard";
 import { connectDatabase } from "../helpers/db-util";
 import mongoose from "mongoose";
+import Head from "next/head";
 
 function Leaderboard(props) {
   return (
     <React.Fragment>
+      <Head>
+        <title>Cubour - Leaderboard</title>
+        <meta
+          name="description"
+          content="Records from each level presented in a single coherent list"
+        />
+      </Head>
       <LeaderboardPage seeds={props.seeds}/>
     </React.Fragment>
   );

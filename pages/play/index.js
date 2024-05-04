@@ -6,12 +6,20 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "../api/auth/[...nextauth]";
 import Seed from "../../models/Seed";
 import User from "../../models/User";
+import Head from "next/head";
 
 function Play(props) {
   console.log(props.seeds);
 
   return (
     <React.Fragment>
+      <Head>
+        <title>Cubour - Select Level</title>
+        <meta
+          name="description"
+          content="Choose the level you want to play. Good luck!"
+        />
+      </Head>
       <SelectLevels seeds={props.seeds} levelCompleted={props.levelCompleted} />
     </React.Fragment>
   );

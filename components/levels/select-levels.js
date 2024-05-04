@@ -42,7 +42,7 @@ function SelectLevels(props) {
         <div className="w-full h-full bg-pageMenu">
           <div className="relative w-full h-full overflow-hidden">
             <div className="absolute w-full h-full flex justify-center items-center z-30 shadow-[inset_-12px_-8px_40px_#46464620]">
-              <div className="w-[70%] sm:w-[50%] md:w-[45%] lg:w-[35%] h-[90%] bg-page4 opacity-80 rounded-xl">
+              <div className="w-[70%] sm:w-[50%] md:w-[45%] lg:w-[35%] h-[90%] bg-page4 opacity-75 rounded-xl">
                 <div className="w-full h-full overflow-y-scroll"></div>
               </div>
             </div>

@@ -80,10 +80,10 @@ function SideAction(props) {
     <div className={sideActionClasses}>
       <div className="relative w-full h-full flex items-center justify-center">
         {/* <div className="w-20 h-20 bg-page1 z-50 rounded-full shadow-[rgba(0,_0,_0,_0.6)_0px_30px_90px]"></div> */}
-        <Link href={"profile"} className={profileLinkClassess}>
+        <Link href={"/profile"} className={profileLinkClassess}>
           {profileSVG}
         </Link>
-        <Link href={`${props.goBackPath}`} className={goBackLinkClassess}>
+        <Link href={`/${props.goBackPath}`} className={goBackLinkClassess}>
           {goBackSVG}
         </Link>
       </div>

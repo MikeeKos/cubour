@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import Digit from "./digit/digit";
-import DigitUnit from "./digit/digit-unit";
+import Digit from "../digit/digit";
+import DigitUnit from "../digit/digit-unit";
 
 function SetTimeBlock(props) {
   const [timeLimit, setTimeLimit] = useState("0000000");

@@ -6,11 +6,21 @@ import PlayPage from "../../components/play/play-page";
 import mongoose from "mongoose";
 import { connectDatabase } from "../../helpers/db-util";
 import Seed from "../../models/Seed";
+import Head from "next/head";
 
 function Play(props) {
+  console.log("HELLLLOOOO")
+  console.log(props.seed.level);
   return (
     <React.Fragment>
       {/* <MainGame /> */}
+      <Head>
+        <title>Cubour - LVL {props.seed.level}</title>
+        <meta
+          name="description"
+          content="Good luck!"
+        />
+      </Head>
       <PlayPage seed={props.seed} />
     </React.Fragment>
   );
