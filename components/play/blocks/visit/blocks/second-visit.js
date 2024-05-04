@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
-import UniversalVisitBlock from "./universal-visit";
-import GameContext from "../../../../store/game-context";
+import UniversalVisitBlock from "../universal-visit";
+import GameContext from "../../../../../store/game-context";
 
 function SecondVisitBlock(props) {
   const gameCtx = useContext(GameContext);

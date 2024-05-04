@@ -1,4 +1,4 @@
-import UniversalFlashingBlock from "./universal-flashing-block";
+import UniversalFlashingBlock from "../universal-flashing-block";
 
 function XFastestFlashingBlock(props) {
   return <UniversalFlashingBlock {...props} intervalTime={500}></UniversalFlashingBlock>;

@@ -1,10 +1,6 @@
 import React from "react";
-import useMeasure from "react-use-measure";
-import { motion } from "framer-motion";
 import Homepage from "../components/homepage/homepage";
 import Head from "next/head";
-
-//md - 768
 
 export default function Home() {
   return (

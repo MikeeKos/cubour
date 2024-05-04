@@ -12,8 +12,6 @@ async function handler(req, res) {
   }
 
   const data = req.body;
-  console.log("DATA");
-  console.log(data);
   const { email, password, username, confirmPassword } = data;
 
   //server side validation
@@ -123,31 +121,6 @@ async function handler(req, res) {
       levelCompleted: levelCompletedArray,
     });
 
-    // const user = new User({
-    //   email: email,
-    //   password: hashedPassword,
-    //   username: username,
-      // levelCompleted: [
-      //   { level: 1, isCompleted: false },
-      //   { level: 2, isCompleted: false },
-      //   { level: 3, isCompleted: false },
-      //   { level: 4, isCompleted: false },
-      //   { level: 5, isCompleted: false },
-      //   { level: 6, isCompleted: false },
-      //   { level: 7, isCompleted: false },
-      //   { level: 8, isCompleted: false },
-      //   { level: 9, isCompleted: false },
-      //   { level: 10, isCompleted: false },
-      //   { level: 11, isCompleted: false },
-      //   { level: 12, isCompleted: false },
-      //   { level: 13, isCompleted: false },
-      //   { level: 14, isCompleted: false },
-      //   { level: 15, isCompleted: false },
-      //   { level: 16, isCompleted: false },
-      //   { level: 17, isCompleted: false },
-      //   { level: 18, isCompleted: false },
-      // ],
-    // });
     await user.save();
     res.status(201).json({ message: "successfully created user" });
   } catch (error) {

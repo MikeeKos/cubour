@@ -5,7 +5,6 @@ import Notification from "../ui/notification";
 function Layout(props) {
   const notificationCtx = useContext(NotificationContext);
 
-  //when notification isn't null then render notification in layout
   const activeNotification = notificationCtx.notification;
 
   return (

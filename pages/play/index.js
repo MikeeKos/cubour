@@ -9,8 +9,6 @@ import User from "../../models/User";
 import Head from "next/head";
 
 function Play(props) {
-  console.log(props.seeds);
-
   return (
     <React.Fragment>
       <Head>
@@ -28,24 +26,12 @@ function Play(props) {
 export async function getServerSideProps(context) {
   const session = await getServerSession(context.req, context.res, authOptions);
 
-  // if (!session) {
-  //   return {
-  //     redirect: {
-  //       destination: "/auth",
-  //       permanent: false,
-  //     },
-  //   };
-  // }
-
   let userEmail;
   if (session) {
     userEmail = session.user.email;
   } else {
     userEmail = "";
   }
-  // const { params } = context;
-  // const seedId = params.seedId;
-  // console.log("here is seedId");
 
   let client;
   try {
@@ -67,13 +53,6 @@ export async function getServerSideProps(context) {
     } else {
       levelCompleted = thisUser.levelCompleted;
     }
-
-    // if (!thisUser) {
-    //   mongoose.connection.close();
-    //   return {
-    //     notFound: true,
-    //   };
-    // }
 
     function simplifyDocuments(docs) {
       return docs.map((doc) => ({

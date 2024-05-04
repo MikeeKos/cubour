@@ -1,19 +1,19 @@
 import React, { useState } from "react";
-import UniversalSpecial from "./universal-special";
-import { upSVG, downSVG } from "../../../../SVG/arrows";
+import UniversalSpecial from "../universal-special";
+import { rightSVG, leftSVG, upSVG, downSVG } from "../../../../../SVG/arrows";
 
-function UpAndDownSpecial(props) {
+function CircleSpecial(props) {
   const arrowsArray = [
     "up",
+    "right",
     "down",
+    "left",
     "up",
+    "right",
     "down",
+    "left",
     "up",
-    "down",
-    "up",
-    "down",
-    "up",
-    "down",
+    "right",
   ];
 
   const [pressedKey, setPressedKey] = useState("");
@@ -23,7 +23,7 @@ function UpAndDownSpecial(props) {
   };
 
   function renderArrow(arrow, svg) {
-    const scaleClass = pressedKey === arrow ? "scale-75" : "scale-90";
+    const scaleClass = pressedKey === arrow ? "scale-[70%]" : "scale-90";
     const animationClass = `transition-transform duration-100 transform ${scaleClass}`;
     return (
       <div
@@ -40,7 +40,9 @@ function UpAndDownSpecial(props) {
         {renderArrow("up", upSVG)}
       </div>
       <div className="row-span-1 flex justify-center">
+        {renderArrow("left", leftSVG)}
         {renderArrow("down", downSVG)}
+        {renderArrow("right", rightSVG)}
       </div>
     </div>
   );
@@ -55,4 +57,4 @@ function UpAndDownSpecial(props) {
   );
 }
 
-export default UpAndDownSpecial;
+export default CircleSpecial;

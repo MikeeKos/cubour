@@ -270,10 +270,14 @@ function CreateBorderBlock(props) {
         <div className="w-full h-full flex items-center justify-center">
           <div className="w-full h-[90%] grid grid-cols-1 grid-rows-2">
             <div className="col-span-1 row-span-1 flex justify-center">
-              <div className="h-full aspect-square border-2 border-pageMenu bg-page3">{upSVG}</div>
+              <div className="h-full aspect-square border-2 border-pageMenu bg-page3">
+                {upSVG}
+              </div>
             </div>
             <div className="col-span-1 row-span-1 flex justify-center">
-              <div className="h-full aspect-square border-2 border-pageMenu bg-page3">{downSVG}</div>
+              <div className="h-full aspect-square border-2 border-pageMenu bg-page3">
+                {downSVG}
+              </div>
             </div>
           </div>
         </div>
@@ -318,10 +322,6 @@ function CreateBorderBlock(props) {
 
   const borderClassesString = borderClasses.join(" ");
   const borderFixClassessString = borderFixClasses.join(" ");
-
-  // const decreaseAvaiableHandler = (type) => {
-  //   props.decreateAvaiable(type);
-  // }
 
   const changeBottomBorderHandler = () => {
     function arrayToInputString(twoDimensionalArray) {
@@ -499,12 +499,6 @@ function CreateBorderBlock(props) {
     props.deleteElementFunc(props.i, props.j, props.type);
   };
 
-  // gameCtx.setItemBoundaries(currentItems =>
-  //   currentItems.map(item =>
-  //     item.type === "s" ? { ...item, avaiable: item.avaiable - 1 } : item
-  //   )
-  // );
-
   return (
     <React.Fragment>
       <div
@@ -536,7 +530,9 @@ function CreateBorderBlock(props) {
                     <div className="w-full h-[20%] absolute z-50 bottom-0 flex items-center justify-center">
                       <div
                         className={`w-[90%] h-full opacity-0 hover:opacity-100 duration-200 ${
-                          ["f", "F", "x", "X"].includes(props.type) ? "bg-page4" : "bg-pageMenu"
+                          ["f", "F", "x", "X"].includes(props.type)
+                            ? "bg-page4"
+                            : "bg-pageMenu"
                         } hover:animate-pulse hover:cursor-pointer`}
                         onClick={changeBottomBorderHandler}
                       ></div>
@@ -544,7 +540,9 @@ function CreateBorderBlock(props) {
                     <div className="w-[20%] h-full absolute z-50 right-0 flex items-center justify-center">
                       <div
                         className={`w-full h-[90%] opacity-0 hover:opacity-100 duration-200 ${
-                          ["f", "F", "x", "X"].includes(props.type) ? "bg-page4" : "bg-pageMenu"
+                          ["f", "F", "x", "X"].includes(props.type)
+                            ? "bg-page4"
+                            : "bg-pageMenu"
                         } hover:animate-pulse hover:cursor-pointer`}
                         onClick={changeRightBorderHandler}
                       ></div>
@@ -552,7 +550,9 @@ function CreateBorderBlock(props) {
                     <div className="w-full h-[20%] absolute z-50 top-0 flex items-center justify-center">
                       <div
                         className={`w-[90%] h-full opacity-0 hover:opacity-100 duration-200 ${
-                          ["f", "F", "x", "X"].includes(props.type) ? "bg-page4" : "bg-pageMenu"
+                          ["f", "F", "x", "X"].includes(props.type)
+                            ? "bg-page4"
+                            : "bg-pageMenu"
                         } hover:animate-pulse hover:cursor-pointer`}
                         onClick={changeTopBorderHandler}
                       ></div>
@@ -560,7 +560,9 @@ function CreateBorderBlock(props) {
                     <div className="w-[20%] h-full absolute z-50 left-0 flex items-center justify-center">
                       <div
                         className={`w-full h-[90%] opacity-0 hover:opacity-100 duration-200 ${
-                          ["f", "F", "x", "X"].includes(props.type) ? "bg-page4" : "bg-pageMenu"
+                          ["f", "F", "x", "X"].includes(props.type)
+                            ? "bg-page4"
+                            : "bg-pageMenu"
                         } hover:animate-pulse hover:cursor-pointer`}
                         onClick={changeLeftBorderHandler}
                       ></div>

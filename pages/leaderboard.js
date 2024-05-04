@@ -15,7 +15,7 @@ function Leaderboard(props) {
           content="Records from each level presented in a single coherent list"
         />
       </Head>
-      <LeaderboardPage seeds={props.seeds}/>
+      <LeaderboardPage seeds={props.seeds} />
     </React.Fragment>
   );
 }
@@ -31,15 +31,15 @@ export async function getServerSideProps(context) {
   }
 
   try {
-    const seeds = await Seed.find({ level: { $ne: "unverified" } }).populate("leaderboard");
+    const seeds = await Seed.find({ level: { $ne: "unverified" } }).populate(
+      "leaderboard"
+    );
     if (!seeds) {
       mongoose.connection.close();
       return {
         notFound: true,
       };
     }
-    console.log(seeds);
-
 
     mongoose.connection.close();
     return {

@@ -1,7 +1,4 @@
-//  http://localhost:3000/play/65eb3d702560a50a726979e6
-
 import React from "react";
-// import MainGame from "../../components/play/main-game";
 import PlayPage from "../../components/play/play-page";
 import mongoose from "mongoose";
 import { connectDatabase } from "../../helpers/db-util";
@@ -9,17 +6,11 @@ import Seed from "../../models/Seed";
 import Head from "next/head";
 
 function Play(props) {
-  console.log("HELLLLOOOO")
-  console.log(props.seed.level);
   return (
     <React.Fragment>
-      {/* <MainGame /> */}
       <Head>
         <title>Cubour - LVL {props.seed.level}</title>
-        <meta
-          name="description"
-          content="Good luck!"
-        />
+        <meta name="description" content="Good luck!" />
       </Head>
       <PlayPage seed={props.seed} />
     </React.Fragment>
@@ -29,7 +20,6 @@ function Play(props) {
 export async function getServerSideProps(context) {
   const { params } = context;
   const seedId = params.seedId;
-  console.log("here is seedId");
 
   let client;
   try {

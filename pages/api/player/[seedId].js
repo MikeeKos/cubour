@@ -26,7 +26,9 @@ async function handler(req, res) {
       //Check if user is logged in
       const session = await getServerSession(req, res, authOptions);
       if (!session) {
-        return res.status(401).json({ message: "User is not logged in", hideNotification: true });
+        return res
+          .status(401)
+          .json({ message: "User is not logged in", hideNotification: true });
       }
 
       //Find user with email that match email from session
@@ -49,28 +51,21 @@ async function handler(req, res) {
           return res.status(400).json({ message: "Failed to find lake" });
         }
 
-        console.log("Check whole seed object")
-        console.log(seed);
-        console.log("check whole user")
-        console.log(checkedUser);
-
         function markLevelAsCompleted(level, levelData) {
-          return levelData.map(item => {
-            const itemData = item.toObject(); // Konwertujemy każdy dokument na czysty obiekt JS
+          return levelData.map((item) => {
+            const itemData = item.toObject();
             if (itemData.level === level) {
-              itemData.isCompleted = true; // Zmieniamy status na zakończony
+              itemData.isCompleted = true;
             }
             return itemData;
           });
         }
 
-        const changedLevelArray = markLevelAsCompleted(parseInt(seed.level), checkedUser.levelCompleted)
-        console.log("Changed Level Array")
-        console.log(changedLevelArray);
+        const changedLevelArray = markLevelAsCompleted(
+          parseInt(seed.level),
+          checkedUser.levelCompleted
+        );
         checkedUser.levelCompleted = changedLevelArray;
-
-
-        // console.log(seed);
 
         const seedLeaderboardLength = seed.leaderboard.length;
 
@@ -82,39 +77,33 @@ async function handler(req, res) {
 
         const formattedTime = removeColonsAndDots(finishTime);
 
-        // Pobierz i posortuj istniejące wyniki rosnąco według czasu
         let leaderboard = [...seed.leaderboard].sort((a, b) =>
           a.time.localeCompare(b.time)
         );
 
-        // Znajdź miejsce, na które pasuje nowy czas
         let insertPosition = leaderboard.findIndex(
           (entry) => entry.time.localeCompare(formattedTime) > 0
         );
         const leaderPlace = insertPosition + 1;
 
-        // Stwórz nowy wpis dla leaderboarda
         const newEntry = {
-          place: 0, // Tymczasowe zero, aktualizujemy poniżej
+          place: 0,
           time: formattedTime,
           leader: checkedUser._id,
           leaderUsername: checkedUser.username,
         };
 
-        // Wstaw nowy wynik w odpowiednie miejsce lub na koniec, jeśli jest lepszy niż wszyscy
         if (insertPosition === -1 && leaderboard.length < 3) {
           leaderboard.push(newEntry);
         } else if (insertPosition !== -1) {
           leaderboard.splice(insertPosition, 0, newEntry);
-          leaderboard = leaderboard.slice(0, 3); // Zapewniamy, że nie ma więcej niż 3 wpisy
+          leaderboard = leaderboard.slice(0, 3);
         }
 
-        // Aktualizuj miejsca na podium po wstawieniu nowego wyniku
         leaderboard.forEach((entry, index) => {
           entry.place = index + 1;
         });
 
-        // Zaktualizuj leaderboard w dokumencie
         if (seedLeaderboardLength < 3 || leaderPlace > 0) {
           shouldShowNotif = true;
         }
@@ -129,7 +118,7 @@ async function handler(req, res) {
           shouldShowNotif,
         });
       } catch (error) {
-        res.status(500).json({ message: "Something went wrong in here" });
+        res.status(500).json({ message: "Something went wrong" });
         return;
       }
       break;

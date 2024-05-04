@@ -2,7 +2,6 @@ import Link from "next/link";
 import React from "react";
 
 function SideAction(props) {
-  console.log(props.position)
   let themePrimary;
   let themeSecondary;
   if (props.theme === "light") {
@@ -79,7 +78,6 @@ function SideAction(props) {
   return (
     <div className={sideActionClasses}>
       <div className="relative w-full h-full flex items-center justify-center">
-        {/* <div className="w-20 h-20 bg-page1 z-50 rounded-full shadow-[rgba(0,_0,_0,_0.6)_0px_30px_90px]"></div> */}
         <Link href={"/profile"} className={profileLinkClassess}>
           {profileSVG}
         </Link>

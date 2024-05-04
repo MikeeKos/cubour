@@ -141,7 +141,7 @@ function Block(props) {
       (className) => className !== "border-l-4"
     );
   }
-  
+
   const borderClassesString = borderClasses.join(" ");
   const borderFixClassessString = borderFixClasses.join(" ");
 

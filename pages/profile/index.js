@@ -81,8 +81,6 @@ export async function getServerSideProps(context) {
 
   try {
     const thisUser = await User.findOne({ email: userEmail });
-    console.log("This user");
-    console.log(thisUser);
 
     const seeds = await Seed.find({ level: { $ne: "unverified" } }).populate(
       "leaderboard"
@@ -93,7 +91,6 @@ export async function getServerSideProps(context) {
         notFound: true,
       };
     }
-    console.log(seeds);
 
     mongoose.connection.close();
     return {
@@ -102,7 +99,6 @@ export async function getServerSideProps(context) {
         username: JSON.parse(JSON.stringify(thisUser.username)),
         email: JSON.parse(JSON.stringify(thisUser.email)),
         levelCompleted: JSON.parse(JSON.stringify(thisUser.levelCompleted)),
-        // currentLevel: JSON.parse(JSON.stringify(thisUser.currentLevel)),
         seeds: JSON.parse(JSON.stringify(seeds)),
       },
     };
@@ -113,52 +109,5 @@ export async function getServerSideProps(context) {
     };
   }
 }
-
-// export async function getServerSideProps(context) {
-//   // const { params } = context;
-//   // const seedId = params.seedId;
-//   // console.log("here is seedId");
-
-//   let client;
-//   try {
-//     client = await connectDatabase();
-//   } catch (error) {
-//     return {
-//       notFound: true,
-//     };
-//   }
-
-//   try {
-//     const seeds = await Seed.find({ level: { $ne: "unverified" } });
-
-//     function simplifyDocuments(docs) {
-//       return docs.map(doc => ({
-//         id: doc._id.toString(),
-//         level: doc.level,
-//       }));
-//     }
-
-//     const simplifiedSeeds = simplifyDocuments(seeds);
-
-//     if (!seeds) {
-//       mongoose.connection.close();
-//       return {
-//         notFound: true,
-//       };
-//     }
-
-//     mongoose.connection.close();
-//     return {
-//       props: {
-//         seeds: JSON.parse(JSON.stringify(simplifiedSeeds)),
-//       },
-//     };
-//   } catch (error) {
-//     mongoose.connection.close();
-//     return {
-//       notFound: true,
-//     };
-//   }
-// }
 
 export default ProfilePage;

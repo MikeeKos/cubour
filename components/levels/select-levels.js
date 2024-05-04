@@ -13,14 +13,11 @@ import SideAction from "../ui/side-action";
 
 function SelectLevels(props) {
   const [ref, { height, width }] = useMeasure();
-  console.log("This is C H E C K");
-  console.log(props.levelCompleted);
   const gameCtx = useContext(GameContext);
 
   useEffect(() => {
     gameCtx.resetGameContext();
   }, []);
-  // console.log(props.seeds);
 
   function findIdByLevel(level) {
     const seed = props.seeds.find((seed) => seed.level === level);
@@ -38,7 +35,6 @@ function SelectLevels(props) {
       <div
         className={`absolute w-full ${height > 710 ? "h-full" : "h-[43rem]"}`}
       >
-        {/* <div className="w-full h-full"> */}
         <div className="w-full h-full bg-pageMenu">
           <div className="relative w-full h-full overflow-hidden">
             <div className="absolute w-full h-full flex justify-center items-center z-30 shadow-[inset_-12px_-8px_40px_#46464620]">
@@ -163,15 +159,12 @@ function SelectLevels(props) {
               height={3967}
               width={5950}
               alt="Stage"
-              // objectFit="cover"
-              // objectPosition="center"
               placeholder="blur"
               blurDataURL={"/stage.jpg"}
               className="w-full h-full object-cover overflow-hidden absolute saturate-[0.8] brightness-125"
             />
           </div>
         </div>
-        {/* </div> */}
       </div>
     </div>
   );

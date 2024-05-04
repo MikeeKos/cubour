@@ -5,7 +5,6 @@ import mongoose from "mongoose";
 import { verifyPassword } from "../../../helpers/auth-util";
 import User from "../../../models/User";
 
-// NextAuth() executes and returns a handler function
 export const authOptions = {
   // object used to configure NextAuth's behaviour
   session: {
