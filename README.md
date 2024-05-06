@@ -1,5 +1,7 @@
 # Cubour
 
+<a name="readme-top"></a>
+
 Cubour will be your first choice, when you want to play simple game on your browser.
 
 ## Overview
